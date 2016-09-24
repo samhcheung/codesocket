@@ -4,14 +4,14 @@ import { connect } from 'react-redux'
 import NavContainer from '../nav/container.js'
 
 const Home = (props) => {
-    return (
-      <div>
-        <NavContainer/>
-        <main>
-          {props.children}
-        </main>
-      </div>
-      )
+  return (
+    <div>
+      <NavContainer/>
+      <main>
+        {props.children}
+      </main>
+    </div>
+    )
 }
 
 export default Home;
