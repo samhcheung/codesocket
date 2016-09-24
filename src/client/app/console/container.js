@@ -10,13 +10,27 @@ class ConsoleContainer extends React.Component {
   }
 
   componentDidMount() {
+    var oldLog = console.log;
+    console.log = function (message) {
+        // DO MESSAGE HERE.
+        var messageNode = document.createElement("P");
+        var text = document.createTextNode(message);
+        messageNode.appendChild(text);
+        document.getElementById('test').appendChild(messageNode);
+
+        oldLog.apply(console, arguments);
+    };
+  }
+  runCode(e) {
+    var theCode = document.getElementById('editor').value;
+    eval(theCode);
   }
 
   render() {
     return(
       <div>
         <div className="body-container">
-          <ConsolePresentation userName={this.props.userName}/>
+          <ConsolePresentation userName={this.props.userName} runCode={this.runCode.bind(this)}/>
         </div>
       </div>
     )

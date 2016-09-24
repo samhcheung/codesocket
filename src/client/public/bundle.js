@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "6c0af380639ecd7ad106"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "516a046d9b3d3afb441e"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -46063,7 +46063,24 @@
 	
 	  _createClass(ConsoleContainer, [{
 	    key: 'componentDidMount',
-	    value: function componentDidMount() {}
+	    value: function componentDidMount() {
+	      var oldLog = console.log;
+	      console.log = function (message) {
+	        // DO MESSAGE HERE.
+	        var messageNode = document.createElement("P");
+	        var text = document.createTextNode(message);
+	        messageNode.appendChild(text);
+	        document.getElementById('test').appendChild(messageNode);
+	
+	        oldLog.apply(console, arguments);
+	      };
+	    }
+	  }, {
+	    key: 'runCode',
+	    value: function runCode(e) {
+	      var theCode = document.getElementById('editor').value;
+	      eval(theCode);
+	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -46073,7 +46090,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'body-container' },
-	          _react2.default.createElement(_presentation2.default, { userName: this.props.userName })
+	          _react2.default.createElement(_presentation2.default, { userName: this.props.userName, runCode: this.runCode.bind(this) })
 	        )
 	      );
 	    }
@@ -46135,7 +46152,20 @@
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'loadingscreen' },
-	    'I am the console!!!'
+	    _react2.default.createElement('textarea', { cols: '20', rows: '10', id: 'editor' }),
+	    _react2.default.createElement(
+	      'button',
+	      { onClick: function onClick(e) {
+	          return props.runCode(e);
+	        }, id: 'run' },
+	      'Run the code!'
+	    ),
+	    _react2.default.createElement(
+	      'button',
+	      { id: 'save' },
+	      'Save the code!'
+	    ),
+	    _react2.default.createElement('div', { id: 'test' })
 	  );
 	};
 	
