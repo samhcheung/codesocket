@@ -1,6 +1,8 @@
 node_modules/
 bower_components/
 *.log
+*.hot-update.js
+*.hot-update.js.map
 
 build/
 dist/

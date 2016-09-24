@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "516a046d9b3d3afb441e"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "a080c5ff0f475a09b047"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -45993,7 +45993,7 @@
 	  return _react2.default.createElement(
 	    'div',
 	    { className: 'loadingscreen' },
-	    _react2.default.createElement('img', { alt: 'HAPPY VIDEO' })
+	    _react2.default.createElement('img', { alt: 'HAPPY VIDEOs' })
 	  );
 	};
 	
