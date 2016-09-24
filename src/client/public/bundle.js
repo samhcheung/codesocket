@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "de3db18b2fc2d746f0be"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "dfb281becf2ace8e2cd4"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -43648,28 +43648,20 @@
 	  }
 	
 	  _createClass(HomeContainer, [{
-	    key: 'componentDidMount',
-	
-	
-	    // componentWillMount() {
-	    //   console.log(this.props, 'will mount props');
-	    // } 
-	
-	    value: function componentDidMount() {
-	      //console.log('it hit componentDidMount =====>', this.state.user, this.props);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_container2.default, null),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'body-container' },
 	          _react2.default.createElement(_presentation2.default, null),
-	          this.props.children
+	          _react2.default.createElement(
+	            'main',
+	            null,
+	            this.props.children
+	          )
 	        )
 	      );
 	    }
@@ -43677,9 +43669,6 @@
 	
 	  return HomeContainer;
 	}(_react2.default.Component);
-	
-	HomeContainer.propTypes = {};
-	
 	
 	function mapStateToProps(state) {
 	  return {
@@ -45623,7 +45612,7 @@
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'body-container' },
-	          _react2.default.createElement(_presentation2.default, { addDoc: this.addDoc.bind(this) })
+	          _react2.default.createElement(_presentation2.default, { addDoc: this.addDoc.bind(this), userName: this.props.userName })
 	        )
 	      );
 	    }
@@ -45637,7 +45626,7 @@
 	
 	function mapStateToProps(state) {
 	  return {
-	    // isLoggedIn: state.userReducer.isLoggedIn //<=== shouldnt have to do this...? 
+	    userName: state.userReducer.userName //<=== shouldnt have to do this...? 
 	  };
 	}
 	
@@ -45711,7 +45700,7 @@
 	      _react2.default.createElement(
 	        'li',
 	        null,
-	        'User'
+	        props.userName
 	      ),
 	      _react2.default.createElement(
 	        'li',

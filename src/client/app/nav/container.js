@@ -31,7 +31,7 @@ class NavContainer extends React.Component {
     return(
       <div>
         <div className="body-container">
-          <NavPresentation addDoc={this.addDoc.bind(this)}/>
+          <NavPresentation addDoc={this.addDoc.bind(this)} userName={this.props.userName}/>
         </div>
       </div>
     )
@@ -40,7 +40,7 @@ class NavContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    // isLoggedIn: state.userReducer.isLoggedIn //<=== shouldnt have to do this...? 
+    userName: state.userReducer.userName //<=== shouldnt have to do this...? 
   }
 }
 

@@ -6,24 +6,15 @@ import NavContainer from '../nav/container.js'
 
 class HomeContainer extends React.Component {
 
-  static propTypes = {
-  };
-
-  // componentWillMount() {
-  //   console.log(this.props, 'will mount props');
-  // } 
-
-  componentDidMount() {
-    //console.log('it hit componentDidMount =====>', this.state.user, this.props);
-  }
-
   render() {
     return(
       <div>
-        <NavContainer/>
         <div className="body-container">
           <HomePresentation />
-          {this.props.children}
+
+          <main>
+            {this.props.children}
+          </main>
         </div>
       </div>
     )

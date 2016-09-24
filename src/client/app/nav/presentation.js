@@ -7,7 +7,7 @@ const NavPresentation = (props) => {
         <ul>
           <li><Link >Rooms</Link></li>
           <li onClick={e=>props.addDoc(e)}><button >Add New Doc</button></li>
-          <li>User</li>
+          <li>{props.userName}</li>
           <li>History</li>
 
         </ul>
