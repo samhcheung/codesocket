@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "7a10c643389815ba51d5"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "dfbed99d31dfc58147ee"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -43620,7 +43620,7 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 480);
 	
-	var _container = __webpack_require__(/*! ../nav/container.js */ 508);
+	var _container = __webpack_require__(/*! ../nav/container */ 508);
 	
 	var _container2 = _interopRequireDefault(_container);
 	
@@ -45477,7 +45477,7 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 480);
 	
-	var _presentation = __webpack_require__(/*! ./presentation.js */ 509);
+	var _presentation = __webpack_require__(/*! ./presentation */ 509);
 	
 	var _presentation2 = _interopRequireDefault(_presentation);
 	
@@ -45670,6 +45670,10 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 480);
 	
+	var _container = __webpack_require__(/*! ../editor/container */ 514);
+	
+	var _container2 = _interopRequireDefault(_container);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var DocContainer = function DocContainer(props) {
@@ -45682,17 +45686,17 @@
 	      _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(DocPresentation, null)
+	        _react2.default.createElement(_container2.default, null)
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(DocPresentation, null)
+	        _react2.default.createElement(_container2.default, null)
 	      ),
 	      _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(DocPresentation, null)
+	        _react2.default.createElement(_container2.default, null)
 	      )
 	    )
 	  );
@@ -45710,6 +45714,151 @@
 	  __REACT_HOT_LOADER__.register(DocContainer, 'DocContainer', '/Users/eggie/codesocket/src/client/app/doc/container.js');
 	
 	  __REACT_HOT_LOADER__.register(_default, 'default', '/Users/eggie/codesocket/src/client/app/doc/container.js');
+	}();
+
+	;
+
+/***/ },
+/* 511 */,
+/* 512 */,
+/* 513 */,
+/* 514 */
+/*!********************************************!*\
+  !*** ./src/client/app/editor/container.js ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 4);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 394);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 480);
+	
+	var _presentation = __webpack_require__(/*! ./presentation */ 515);
+	
+	var _presentation2 = _interopRequireDefault(_presentation);
+	
+	var _axios = __webpack_require__(/*! axios */ 457);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var EditorContainer = function (_React$Component) {
+	  _inherits(EditorContainer, _React$Component);
+	
+	  function EditorContainer() {
+	    _classCallCheck(this, EditorContainer);
+	
+	    return _possibleConstructorReturn(this, (EditorContainer.__proto__ || Object.getPrototypeOf(EditorContainer)).apply(this, arguments));
+	  }
+	
+	  _createClass(EditorContainer, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'body-container' },
+	          _react2.default.createElement(_presentation2.default, { userName: this.props.userName })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return EditorContainer;
+	}(_react2.default.Component);
+	
+	EditorContainer.propTypes = {};
+	
+	
+	function mapStateToProps(state) {
+	  return {
+	    userName: state.userReducer.userName //<=== shouldnt have to do this...? 
+	  };
+	}
+	
+	var _default = (0, _reactRedux.connect)(mapStateToProps)(EditorContainer);
+	
+	exports.default = _default;
+	;
+	
+	var _temp = function () {
+	  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+	    return;
+	  }
+	
+	  __REACT_HOT_LOADER__.register(EditorContainer, 'EditorContainer', '/Users/eggie/codesocket/src/client/app/editor/container.js');
+	
+	  __REACT_HOT_LOADER__.register(mapStateToProps, 'mapStateToProps', '/Users/eggie/codesocket/src/client/app/editor/container.js');
+	
+	  __REACT_HOT_LOADER__.register(_default, 'default', '/Users/eggie/codesocket/src/client/app/editor/container.js');
+	}();
+
+	;
+
+/***/ },
+/* 515 */
+/*!***********************************************!*\
+  !*** ./src/client/app/editor/presentation.js ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 4);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 394);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var EditorPresentation = function EditorPresentation(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'loadingscreen' },
+	    _react2.default.createElement('textarea', { rows: '10', cols: '50' })
+	  );
+	};
+	
+	var _default = EditorPresentation;
+	exports.default = _default;
+	;
+	
+	var _temp = function () {
+	  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+	    return;
+	  }
+	
+	  __REACT_HOT_LOADER__.register(EditorPresentation, 'EditorPresentation', '/Users/eggie/codesocket/src/client/app/editor/presentation.js');
+	
+	  __REACT_HOT_LOADER__.register(_default, 'default', '/Users/eggie/codesocket/src/client/app/editor/presentation.js');
 	}();
 
 	;

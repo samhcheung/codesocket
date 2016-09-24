@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 import { connect } from 'react-redux'
-import NavPresentation from './presentation.js'
+import NavPresentation from './presentation'
 import axios from 'axios'
 
 class NavContainer extends React.Component {

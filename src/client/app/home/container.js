@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 import { connect } from 'react-redux'
-import NavContainer from '../nav/container.js'
+import NavContainer from '../nav/container'
 
 const Home = (props) => {
   return (
