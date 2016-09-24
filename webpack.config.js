@@ -19,10 +19,10 @@ var config = {
         test : /\.jsx?/,
         include : APP_DIR,
         loader : 'babel',
-        query:
-          {
-            presets:['react']
-          }
+        // query:
+        //   {
+        //     presets:['react']
+        //   }
       },
 
       // { 

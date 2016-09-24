@@ -65,7 +65,7 @@
 /******/ 	}
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "4bbc2bcffa4850c50a2f"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "de3db18b2fc2d746f0be"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -18611,8 +18611,6 @@
 		value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
 	var _react = __webpack_require__(/*! react */ 4);
@@ -18631,14 +18629,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
 	var userInitialState = {
-		userID: ''
+		userName: 'Anonymous'
 	};
 	
 	function userReducer() {
@@ -18646,10 +18638,10 @@
 		var action = arguments[1];
 	
 		switch (action.type) {
-			case 'WATSON_QUERY_PERSONALITY':
+			case 'UPDATE_USER':
 				{
 					return _extends({}, state, {
-						query: action.query
+						userName: action.userName
 					});
 				}
 			default:
@@ -18664,29 +18656,6 @@
 	});
 	
 	var store = (0, _redux.createStore)(reducers);
-	
-	var App = function (_React$Component) {
-		_inherits(App, _React$Component);
-	
-		function App() {
-			_classCallCheck(this, App);
-	
-			return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
-		}
-	
-		_createClass(App, [{
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'p',
-					null,
-					'Hello React!'
-				);
-			}
-		}]);
-	
-		return App;
-	}(_react2.default.Component);
 	
 	(0, _reactDom.render)(_react2.default.createElement(
 		_reactRedux.Provider,
@@ -18711,8 +18680,6 @@
 		__REACT_HOT_LOADER__.register(reducers, 'reducers', '/Users/eggie/codesocket/src/client/app/index.jsx');
 	
 		__REACT_HOT_LOADER__.register(store, 'store', '/Users/eggie/codesocket/src/client/app/index.jsx');
-	
-		__REACT_HOT_LOADER__.register(App, 'App', '/Users/eggie/codesocket/src/client/app/index.jsx');
 	
 		__REACT_HOT_LOADER__.register(_default, 'default', '/Users/eggie/codesocket/src/client/app/index.jsx');
 	}();
@@ -36350,15 +36317,21 @@
 	
 	var _container2 = _interopRequireDefault(_container);
 	
+	var _container3 = __webpack_require__(/*! ./doc/container */ 510);
+	
+	var _container4 = _interopRequireDefault(_container3);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	//File contains the route setup to be exported to be used by App.js
 	var routes = _react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.hashHistory },
-	  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _container2.default })
-	);
-	
+	  _react2.default.createElement(
+	    _reactRouter.Route,
+	    { path: '/', component: _container2.default },
+	    _react2.default.createElement(_reactRouter.Route, { path: '/doc', component: _container4.default })
+	  )
+	); //File contains the route setup to be exported to be used by App.js
 	var _default = routes;
 	exports.default = _default;
 	;
@@ -43649,6 +43622,14 @@
 	
 	var _reactRedux = __webpack_require__(/*! react-redux */ 480);
 	
+	var _presentation = __webpack_require__(/*! ./presentation.js */ 507);
+	
+	var _presentation2 = _interopRequireDefault(_presentation);
+	
+	var _container = __webpack_require__(/*! ../nav/container.js */ 508);
+	
+	var _container2 = _interopRequireDefault(_container);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43680,11 +43661,16 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        'Heyyy'
+	        _react2.default.createElement(_container2.default, null),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'body-container' },
+	          _react2.default.createElement(_presentation2.default, null),
+	          this.props.children
+	        )
 	      );
 	    }
 	  }]);
@@ -43697,7 +43683,7 @@
 	
 	function mapStateToProps(state) {
 	  return {
-	    // isLoggedIn: state.userReducer.isLoggedIn //<=== shouldnt have to do this...? 
+	    userName: state.userReducer.userName //<=== shouldnt have to do this...? 
 	  };
 	}
 	
@@ -45517,6 +45503,380 @@
 	module.exports = invariant;
 	
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! (webpack)/~/node-libs-browser/~/process/browser.js */ 6)))
+
+/***/ },
+/* 507 */
+/*!*********************************************!*\
+  !*** ./src/client/app/home/presentation.js ***!
+  \*********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 4);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var HomePresentation = function HomePresentation(props) {
+	  return _react2.default.createElement('div', { className: 'loadingscreen' });
+	};
+	
+	var _default = HomePresentation;
+	exports.default = _default;
+	;
+	
+	var _temp = function () {
+	  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+	    return;
+	  }
+	
+	  __REACT_HOT_LOADER__.register(HomePresentation, 'HomePresentation', '/Users/eggie/codesocket/src/client/app/home/presentation.js');
+	
+	  __REACT_HOT_LOADER__.register(_default, 'default', '/Users/eggie/codesocket/src/client/app/home/presentation.js');
+	}();
+
+	;
+
+/***/ },
+/* 508 */
+/*!*****************************************!*\
+  !*** ./src/client/app/nav/container.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 4);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 394);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 480);
+	
+	var _presentation = __webpack_require__(/*! ./presentation.js */ 509);
+	
+	var _presentation2 = _interopRequireDefault(_presentation);
+	
+	var _axios = __webpack_require__(/*! axios */ 457);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NavContainer = function (_React$Component) {
+	  _inherits(NavContainer, _React$Component);
+	
+	  function NavContainer() {
+	    _classCallCheck(this, NavContainer);
+	
+	    return _possibleConstructorReturn(this, (NavContainer.__proto__ || Object.getPrototypeOf(NavContainer)).apply(this, arguments));
+	  }
+	
+	  _createClass(NavContainer, [{
+	    key: 'componentDidMount',
+	
+	
+	    // componentWillMount() {
+	    // } 
+	
+	    value: function componentDidMount() {
+	      //console.log('it hit componentDidMount =====>', this.state.user, this.props);
+	    }
+	  }, {
+	    key: 'addDoc',
+	    value: function addDoc() {
+	      console.log('==================props', this.props);
+	      var name = prompt('What\'s your name?');
+	      this.props.dispatch({
+	        type: 'UPDATE_USER',
+	        userName: name
+	      });
+	
+	      // axios.get()
+	      _reactRouter.hashHistory.push('/doc');
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'body-container' },
+	          _react2.default.createElement(_presentation2.default, { addDoc: this.addDoc.bind(this) })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return NavContainer;
+	}(_react2.default.Component);
+	
+	NavContainer.propTypes = {};
+	
+	
+	function mapStateToProps(state) {
+	  return {
+	    // isLoggedIn: state.userReducer.isLoggedIn //<=== shouldnt have to do this...? 
+	  };
+	}
+	
+	var _default = (0, _reactRedux.connect)(mapStateToProps)(NavContainer);
+	
+	exports.default = _default;
+	;
+	
+	var _temp = function () {
+	  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+	    return;
+	  }
+	
+	  __REACT_HOT_LOADER__.register(NavContainer, 'NavContainer', '/Users/eggie/codesocket/src/client/app/nav/container.js');
+	
+	  __REACT_HOT_LOADER__.register(mapStateToProps, 'mapStateToProps', '/Users/eggie/codesocket/src/client/app/nav/container.js');
+	
+	  __REACT_HOT_LOADER__.register(_default, 'default', '/Users/eggie/codesocket/src/client/app/nav/container.js');
+	}();
+
+	;
+
+/***/ },
+/* 509 */
+/*!********************************************!*\
+  !*** ./src/client/app/nav/presentation.js ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 4);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 394);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NavPresentation = function NavPresentation(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'loadingscreen' },
+	    _react2.default.createElement(
+	      'ul',
+	      null,
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          null,
+	          'Rooms'
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        { onClick: function onClick(e) {
+	            return props.addDoc(e);
+	          } },
+	        _react2.default.createElement(
+	          'button',
+	          null,
+	          'Add New Doc'
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        'User'
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        'History'
+	      )
+	    )
+	  );
+	};
+	
+	var _default = NavPresentation;
+	exports.default = _default;
+	;
+	
+	var _temp = function () {
+	  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+	    return;
+	  }
+	
+	  __REACT_HOT_LOADER__.register(NavPresentation, 'NavPresentation', '/Users/eggie/codesocket/src/client/app/nav/presentation.js');
+	
+	  __REACT_HOT_LOADER__.register(_default, 'default', '/Users/eggie/codesocket/src/client/app/nav/presentation.js');
+	}();
+
+	;
+
+/***/ },
+/* 510 */
+/*!*****************************************!*\
+  !*** ./src/client/app/doc/container.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 4);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 394);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 480);
+	
+	var _presentation = __webpack_require__(/*! ./presentation.js */ 511);
+	
+	var _presentation2 = _interopRequireDefault(_presentation);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var DocContainer = function (_React$Component) {
+	  _inherits(DocContainer, _React$Component);
+	
+	  function DocContainer() {
+	    _classCallCheck(this, DocContainer);
+	
+	    return _possibleConstructorReturn(this, (DocContainer.__proto__ || Object.getPrototypeOf(DocContainer)).apply(this, arguments));
+	  }
+	
+	  _createClass(DocContainer, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      console.log('in doc container');
+	      //console.log('it hit componentDidMount =====>', this.state.user, this.props);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'body-container' },
+	          'heyyyyyy',
+	          _react2.default.createElement(_presentation2.default, null)
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return DocContainer;
+	}(_react2.default.Component);
+	
+	DocContainer.propTypes = {};
+	
+	
+	function mapStateToProps(state) {
+	  return {
+	    // isLoggedIn: state.userReducer.isLoggedIn //<=== shouldnt have to do this...? 
+	  };
+	}
+	
+	var _default = (0, _reactRedux.connect)(mapStateToProps)(DocContainer);
+	
+	exports.default = _default;
+	;
+	
+	var _temp = function () {
+	  if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+	    return;
+	  }
+	
+	  __REACT_HOT_LOADER__.register(DocContainer, 'DocContainer', '/Users/eggie/codesocket/src/client/app/doc/container.js');
+	
+	  __REACT_HOT_LOADER__.register(mapStateToProps, 'mapStateToProps', '/Users/eggie/codesocket/src/client/app/doc/container.js');
+	
+	  __REACT_HOT_LOADER__.register(_default, 'default', '/Users/eggie/codesocket/src/client/app/doc/container.js');
+	}();
+
+	;
+
+/***/ },
+/* 511 */
+/*!********************************************!*\
+  !*** ./src/client/app/doc/presentation.js ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	     value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 4);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var DocPresentation = function DocPresentation(props) {
+	     return _react2.default.createElement(
+	          'div',
+	          { className: 'loadingscreen' },
+	          _react2.default.createElement('textarea', { rows: '10', cols: '50' })
+	     );
+	};
+	
+	var _default = DocPresentation;
+	exports.default = _default;
+	;
+	
+	var _temp = function () {
+	     if (typeof __REACT_HOT_LOADER__ === 'undefined') {
+	          return;
+	     }
+	
+	     __REACT_HOT_LOADER__.register(DocPresentation, 'DocPresentation', '/Users/eggie/codesocket/src/client/app/doc/presentation.js');
+	
+	     __REACT_HOT_LOADER__.register(_default, 'default', '/Users/eggie/codesocket/src/client/app/doc/presentation.js');
+	}();
+
+	;
 
 /***/ }
 /******/ ]);

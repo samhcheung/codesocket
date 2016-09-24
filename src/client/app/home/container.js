@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react'
 import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 import { connect } from 'react-redux'
+import HomePresentation from './presentation.js'
+import NavContainer from '../nav/container.js'
 
 class HomeContainer extends React.Component {
 
@@ -16,10 +18,13 @@ class HomeContainer extends React.Component {
   }
 
   render() {
-
     return(
       <div>
-        Heyyy
+        <NavContainer/>
+        <div className="body-container">
+          <HomePresentation />
+          {this.props.children}
+        </div>
       </div>
     )
   }
@@ -27,7 +32,7 @@ class HomeContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    // isLoggedIn: state.userReducer.isLoggedIn //<=== shouldnt have to do this...? 
+    userName: state.userReducer.userName //<=== shouldnt have to do this...? 
   }
 }
 

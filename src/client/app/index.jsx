@@ -6,16 +6,16 @@ import { Provider } from 'react-redux'
 
 
 const userInitialState = {
-  userID: ''
+  userName: 'Anonymous'
 }
 
 
 function userReducer (state = userInitialState, action) {
 	switch(action.type){
-		case 'WATSON_QUERY_PERSONALITY' : {
+		case 'UPDATE_USER' : {
 		 return {
 		   ...state, 
-		   query: action.query
+		   userName: action.userName
 		 }
 		}
 		default : {
@@ -30,12 +30,6 @@ const reducers = combineReducers({
 
 const store = createStore(reducers);
 
-
-class App extends React.Component {
-  render () {
-    return <p>Hello React!</p>;
-  }
-}
 
 render(
 	  <Provider store={store}>
