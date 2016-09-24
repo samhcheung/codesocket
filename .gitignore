@@ -3,6 +3,7 @@ bower_components/
 *.log
 *.hot-update.js
 *.hot-update.js.map
+*.hot-update.json
 
 build/
 dist/
