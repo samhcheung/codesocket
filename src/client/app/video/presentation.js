@@ -1,12 +1,12 @@
 import React, { PropTypes, Component } from 'react';
 import {Link} from 'react-router';
 
-const ConsolePresentation = (props) => {
+const VideoPresentation = (props) => {
     return (
       <div className='loadingscreen'>
-      I am the console!!!
+      	<img alt="HAPPY VIDEO"/>
       </div>
       )
 }
 
-export default ConsolePresentation;
+export default VideoPresentation;

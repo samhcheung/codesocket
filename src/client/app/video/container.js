@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react'
 import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 import { connect } from 'react-redux'
-import ConsolePresentation from './presentation'
+import VideoPresentation from './presentation'
 import axios from 'axios'
 
-class ConsoleContainer extends React.Component {
+class VideoContainer extends React.Component {
 
   static propTypes = {
   }
@@ -16,7 +16,7 @@ class ConsoleContainer extends React.Component {
     return(
       <div>
         <div className="body-container">
-          <ConsolePresentation userName={this.props.userName}/>
+          <VideoPresentation userName={this.props.userName}/>
         </div>
       </div>
     )
@@ -29,4 +29,4 @@ function mapStateToProps(state){
   }
 }
 
-export default connect(mapStateToProps)(ConsoleContainer)
+export default connect(mapStateToProps)(VideoContainer)
