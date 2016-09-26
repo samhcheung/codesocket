@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack -d --watch",
     "build": "webpack -p",
-    "start": "node server.js",
+    "start": "node server/server.js",
     "test": "./node_modules/jshint/bin/jshint server.js",
     "testfiles": "karma test"
   },
@@ -41,6 +41,8 @@
     "request": "^2.75.0",
     "supertest": "^2.0.0",
     "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.16.1"
+    "webpack-dev-middleware": "^1.8.2",
+    "webpack-dev-server": "^1.16.1",
+    "webpack-hot-middleware": "^2.12.2"
   }
 }
