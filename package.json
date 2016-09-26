@@ -14,13 +14,15 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.14.0",
+    "karma-requirejs": "^1.1.0",
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.3",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
     "redux": "^3.6.0",
-    "require": "^2.4.20"
+    "require": "^2.4.20",
+    "requirejs": "^2.3.2"
   },
   "devDependencies": {
     "babel-core": "^6.14.0",
