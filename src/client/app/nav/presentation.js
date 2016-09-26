@@ -9,7 +9,6 @@ const NavPresentation = (props) => {
           <li onClick={e=>props.addDoc(e)}><button >Add New Doc</button></li>
           <li>{props.userName}</li>
           <li>History</li>
-
         </ul>
       </div>
       )
