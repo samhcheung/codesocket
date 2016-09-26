@@ -66,7 +66,7 @@ app.get('/token', function(request, response) {
 
   // Create an access token which we will sign and return to the client,
   // containing the grant we just created
-  console.log(process.env);
+  //console.log(process.env);
   var token = new AccessToken(
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_API_KEY,

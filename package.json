@@ -14,18 +14,19 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.14.0",
+    "dotenv": "^1.2.0",
+    "express": "^4.13.3",
     "karma-requirejs": "^1.1.0",
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.3",
     "react-dom": "^15.3.2",
+    "react-quill": "zenoamaro/react-quill",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
     "redux": "^3.6.0",
-    "dotenv": "^1.2.0",
-    "express": "^4.13.3",
-    "twilio": "^3.0.0-edge",
     "require": "^2.4.20",
-    "requirejs": "^2.3.2"
+    "requirejs": "^2.3.2",
+    "twilio": "^3.0.0-edge"
   },
   "devDependencies": {
     "babel-core": "^6.14.0",
