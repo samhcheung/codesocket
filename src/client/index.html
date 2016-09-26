@@ -21,7 +21,7 @@
 
     <!-- Include the Quill library -->
     <script src="https://cdn.quilljs.com/1.0.4/quill.js"></script>
-    <button onclick="something()">hi</button>
+    <button onclick="something()">LARGER BUTTON PRESS</button>
 
     <!-- Initialize Quill editor -->
 <!--     <script type="text/javascript">
@@ -48,10 +48,17 @@
       theme: 'snow'
     });
     var something = function () {
-      console.log(quill.getText());
+      console.log('TEXT',quill.getText());
+      console.log('OPS',quill.getContents().ops);
+      quill.updateContents([{retain:5},{insert:"hello"}])
     }
-    // document.getElementsByTagName('button')[0].click();
-    // document.getElementsByTagName('button')[0].remove();
+
+    quill.on('text-change', update);
+    function update(delta) {
+      console.log(delta.ops);
+    }
+    document.getElementsByClassName('ql-code-block')[0].click();
+    document.getElementsByClassName('ql-code-block')[0].remove();
 
 
     </script>
