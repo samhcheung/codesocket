@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+var BUILD_DIR = path.resolve(__dirname, 'src/client/public');
 var APP_DIR = path.resolve(__dirname, 'src/client/app');
 
 console.log('=============', path.join(__dirname, 'dist'))
@@ -11,9 +12,8 @@ module.exports = {
     APP_DIR + '/index.jsx'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/'
+    path: BUILD_DIR,
+    filename: 'bundle.js'
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
