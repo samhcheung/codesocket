@@ -49,6 +49,9 @@ class EditorContainer extends React.Component {
     console.log('hi');
     document.getElementsByClassName('ql-code-block')[0].click();
     document.getElementsByClassName('ql-code-block')[0].remove();
+    hljs.configure({   // optionally configure hljs
+      languages: ['javascript']
+    });
   }
 
   componentOnMount() {
@@ -57,8 +60,8 @@ class EditorContainer extends React.Component {
   onTextChange(content,delta,source,editor) {
     //console.log('quillobj',this.refs.quillobj);
     console.log(delta.ops[0],delta.ops[1])
-    // document.getElementsByClassName('ql-code-block')[0].click();
-    // document.getElementsByClassName('ql-code-block')[0].remove();
+    
+    
   }
 
   render() {
@@ -67,8 +70,9 @@ class EditorContainer extends React.Component {
         <div className="body-container">
           <div className='_quill' >
                   <ReactQuill ref ='quillobj' theme='snow' 
+                              styles={false}
                               toolbar={false} // Let Quill manage toolbar
-                              modules={{toolbar: [['code-block']]}}
+                              modules={{syntax:true, toolbar: [['code-block']]}}
                               formats={[['code-block']]}
                               bounds={'._quill'}
                               onChange={this.onTextChange.bind(this)}
