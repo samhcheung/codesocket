@@ -7,9 +7,7 @@ console.log('=============', path.join(__dirname, 'dist'))
 module.exports = {
   devtool: 'eval',
   entry: [
-
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
+    'webpack-hot-middleware/client', 'webpack/hot/dev-server',
     APP_DIR + '/index.jsx'
   ],
   output: {
