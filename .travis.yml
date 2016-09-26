@@ -6,3 +6,5 @@ script: node_modules/karma/bin/karma start my.conf.js --single-run
 before_script:
   - npm install
   - npm start
+  - npm run test
+  - npm run testfiles
