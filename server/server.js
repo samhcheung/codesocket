@@ -36,13 +36,13 @@ function useWebpackMiddleware(app) {
 }
 
 require('dotenv').load();
-var http = require('http');
 var path = require('path');
 var AccessToken = require('twilio').jwt.AccessToken;
 var ConversationsGrant = AccessToken.ConversationsGrant;
 var randomUsername = require('./randos');
 var express = require('express');
 var app = express();
+var http = require('http').Server(app);
     // webpackDevHelper = require('./index.dev.js');
 useWebpackMiddleware(app);
 
@@ -53,6 +53,28 @@ app.get('/', function(req, res) {
 app.get('/sam', function(req, res) {
 	res.send('hiiidfd')
 })
+
+
+// Begin socket component
+var io = require('socket.io')(http);
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('typed', function(delta) {
+    console.log(delta);
+    socket.broadcast.emit('receive',delta);
+
+  });
+
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+});
+
+
+
+
 // app.use('/api/', require('./config/router'))
 
 // ***************************** Begin Video Component *****************************
@@ -66,7 +88,7 @@ app.get('/token', function(request, response) {
 
   // Create an access token which we will sign and return to the client,
   // containing the grant we just created
-  console.log(process.env);
+  //console.log(process.env);
   var token = new AccessToken(
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_API_KEY,
@@ -90,6 +112,6 @@ app.get('/token', function(request, response) {
 // ***************************** End Video Component *****************************
 
 
-app.listen(3000, function () {
+http.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
