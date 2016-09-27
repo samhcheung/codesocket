@@ -93,7 +93,7 @@ class EditorContainer extends React.Component {
           }
         }
         socket.emit('typed', JSON.stringify(arr));
-        arr = [];      
+        arr = [];
 
         // if(arr.length % 10 === 0 || arr.length % 11 === 0) {
         //   var temp = [{ insert: 'Quill' }];
