@@ -7,47 +7,9 @@ import axios from 'axios'
 var Quill = require('quill');
 var ReactQuill = require('react-quill');
 
-    // var quill = new Quill('#editor', {
-      // modules: {
-      //   syntax: true,              // Include syntax module
-      //   toolbar: [['code-block']]  // Include button in toolbar
-      // },
-      // formats: ['code-block'],
-      // theme: 'snow'
-    // });
-    // var something = function () {
-    //   console.log('TEXT',quill.getText());
-    //   console.log('OPS',quill.getContents().ops);
-    //   quill.updateContents([{retain:5},{insert:"hello"}])
-    // }
 
-    // quill.on('text-change', update);
-    // function update(delta) {
-    //   console.log(delta.ops);
-    // }
-    // <div className='_quill' >
-    //         <ReactQuill ref ='quillobj' theme='snow' 
-    //                     styles={false}
-    //                     toolbar={false} // Let Quill manage toolbar
-    //                     modules={{syntax:true, toolbar: [['code-block']]}}
-    //                     formats={[['code-block']]}
-    //                     bounds={'._quill'}
-    //                     onChange={this.onTextChange}>
-                    
-    //         </ReactQuill>
-    //       </div>
-
-var arr = [];
 
 class EditorContainer extends React.Component {
-
-  // _quillModules: {
-  //     toolbar: [ 
-  //         ['code-block']
-  //     ]
-  // }
-
-  // _quillFormats: [['code-block']]
 
   static propTypes = {
   }
@@ -84,6 +46,7 @@ class EditorContainer extends React.Component {
 
     quill.on('text-change', function(delta,olddelta,source) {
       //console.log('get delta', delta.ops[0],delta.ops[1])
+      var arr = [];
       console.log(source);
       if(source !== 'api') {
         for(var i = 0; i < 2; i++) {
@@ -112,12 +75,6 @@ class EditorContainer extends React.Component {
 
   }
 
-
-  // onTextChange(content,delta,source,editor) {
-  //   //console.log('quillobj',this.refs.quillobj);
-  //   console.log(source,editor);
-  //   console.log(delta.ops[0],delta.ops[1])
-  // }
 
   render() {
     return(
