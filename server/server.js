@@ -57,11 +57,12 @@ app.get('/sam', function(req, res) {
 
 // Begin socket component
 var io = require('socket.io')(http);
-
+var commands = [];
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.on('typed', function(delta) {
-    console.log(delta);
+    commands.push(delta)
+    console.log(commands);
     socket.broadcast.emit('receive',delta);
 
   });
@@ -70,6 +71,11 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
+
+  socket.on('changesToApply', function(index){
+    console.log('oldIndex', index);
+    socket.broadcast.emit('done', index);
+  })
 });
 
 

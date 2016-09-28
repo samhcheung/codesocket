@@ -14,13 +14,22 @@ class EditorContainer extends React.Component {
   static propTypes = {
   }
 
+  constructor(props) {
+    super(props);
+    // console.log('in constructor');
+    // this.myInserts = [];
+  }
+
   componentWillMount() {
     hljs.configure({   // optionally configure hljs
       languages: ['javascript']
     });
   }
   componentDidMount() {
-    console.log('didmount woohooo');
+    var context = this; 
+    console.log('----------context', context, context.props.myInserts);
+
+    // console.log('didmount woohooo');
     var socket = io();
     var quill = new Quill('#editor', {
         modules: {
@@ -38,20 +47,72 @@ class EditorContainer extends React.Component {
     });
     
     socket.on('receive', function(delta) {
-          console.log('receive', delta);
-          quill.updateContents(JSON.parse(delta), 'api');
-        })
+      console.log('-----------receive', delta);
+      //do math
+      var insertionIndex = JSON.parse(delta)[0].retain || 0;
+      // console.log('insertionIndex', insertionIndex);
+      var counter = 0;
+      for(var i = 0; i < context.props.myInserts.length; i++){
+        if(context.props.myInserts[i] < insertionIndex) {
+          counter++;
+        }
+      }
+
+      var newDelta = JSON.parse(delta);
+      // console.log('newDelta', newDelta,counter)
 
 
+      var oldIndex = newDelta[0].retain;
+      newDelta[0].retain += counter;
+      quill.updateContents(newDelta, 'api');
+      // console.log('newnewDelta=====', newDelta)
 
+      // console.log('before client emit doned', oldIndex)
+      socket.emit('changesToApply', JSON.stringify({oldIndex:oldIndex}));
+    });
+    socket.on('done', function(index) {
+      console.log('---------index', index)
+      index= JSON.parse(index).oldIndex;
+      // console.log('in done got index:', index)
+      var removeIndex = context.props.myInserts.indexOf(index);
+      // console.log('oldmyInserts', context.myInserts);
+
+      // console.log('removeIndex', removeIndex);
+      context.props.myInserts.splice(removeIndex, 1);
+      // console.log('newmyInserts', context.myInserts);
+
+    });
+    console.log('omg', context)
     quill.on('text-change', function(delta,olddelta,source) {
-      //console.log('get delta', delta.ops[0],delta.ops[1])
+      // console.log('get delta', delta.ops[0],delta.ops[1])
+      // console.log('omg', delta, olddelta, source)
       var arr = [];
-      console.log(source);
+      if(source === 'user') {
+        if(delta.ops[1] && delta.ops[1]['insert'] !== undefined) {
+          console.log('before dispatch',context, context.props.myInserts)
+          console.log('delta', delta.ops[0]['retain'])
+          context.props.dispatch({
+            type: 'UPDATE_EDITOR_INSERTS',
+            myInserts: context.props.myInserts.concat(delta.ops[0]['retain'])
+          })
+          // context.myInserts.push(delta.ops[0]['retain']);
+        } else {
+          context.props.dispatch({
+            type: 'UPDATE_EDITOR_INSERTS',
+            myInserts: context.props.myInserts.concat(0)
+          })
+         // context.myInserts.push(0); 
+        }
+      };
+
+      // console.log('myInserts', context.myInserts);
+
+
+      // console.log(source);
       if(source !== 'api') {
         for(var i = 0; i < 2; i++) {
           if(delta.ops[i] !== undefined) {
-            console.log(delta.ops[i])
+            // console.log(delta.ops[i])
             arr.push(delta.ops[i])
           }
         }
@@ -62,7 +123,7 @@ class EditorContainer extends React.Component {
         //   var temp = [{ insert: 'Quill' }];
         //   var currentplace = quill.getSelection();
         //   quill.updateContents(temp, 'api');
-        //   console.log(temp);
+          // console.log(temp);
         //   if(temp) {
         //     quill.setSelection(currentplace.index+temp.insert.length)
         //   }
@@ -90,7 +151,8 @@ class EditorContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    userName: state.userReducer.userName //<=== shouldnt have to do this...? 
+    userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
+    myInserts: state.userReducer.myInserts //<=== shouldnt have to do this...? 
   }
 }
 
