@@ -27,7 +27,7 @@ class EditorContainer extends React.Component {
   }
   componentDidMount() {
     var context = this; 
-    // console.log('context', context);
+    console.log('----------context', context, context.props.myInserts);
 
     // console.log('didmount woohooo');
     var socket = io();
@@ -47,13 +47,13 @@ class EditorContainer extends React.Component {
     });
     
     socket.on('receive', function(delta) {
-      // console.log('receive', delta);
+      console.log('-----------receive', delta);
       //do math
       var insertionIndex = JSON.parse(delta)[0].retain || 0;
       // console.log('insertionIndex', insertionIndex);
       var counter = 0;
       for(var i = 0; i < context.props.myInserts.length; i++){
-        if(context.myInserts[i] < insertionIndex) {
+        if(context.props.myInserts[i] < insertionIndex) {
           counter++;
         }
       }
@@ -71,33 +71,35 @@ class EditorContainer extends React.Component {
       socket.emit('changesToApply', JSON.stringify({oldIndex:oldIndex}));
     });
     socket.on('done', function(index) {
-      // console.log('index', index)
+      console.log('---------index', index)
       index= JSON.parse(index).oldIndex;
       // console.log('in done got index:', index)
-      var removeIndex = context.myInserts.indexOf(index);
+      var removeIndex = context.props.myInserts.indexOf(index);
       // console.log('oldmyInserts', context.myInserts);
 
       // console.log('removeIndex', removeIndex);
-      context.myInserts.splice(removeIndex, 1);
+      context.props.myInserts.splice(removeIndex, 1);
       // console.log('newmyInserts', context.myInserts);
 
     });
-
+    console.log('omg', context)
     quill.on('text-change', function(delta,olddelta,source) {
       // console.log('get delta', delta.ops[0],delta.ops[1])
       // console.log('omg', delta, olddelta, source)
       var arr = [];
       if(source === 'user') {
         if(delta.ops[1] && delta.ops[1]['insert'] !== undefined) {
+          console.log('before dispatch',context, context.props.myInserts)
+          console.log('delta', delta.ops[0]['retain'])
           context.props.dispatch({
             type: 'UPDATE_EDITOR_INSERTS',
-            myInserts: context.props.myInserts.push(delta.ops[0]['retain'])
+            myInserts: context.props.myInserts.concat(delta.ops[0]['retain'])
           })
           // context.myInserts.push(delta.ops[0]['retain']);
         } else {
           context.props.dispatch({
             type: 'UPDATE_EDITOR_INSERTS',
-            myInserts: context.props.myInserts.push(0)
+            myInserts: context.props.myInserts.concat(0)
           })
          // context.myInserts.push(0); 
         }
