@@ -57,15 +57,31 @@ app.get('/sam', function(req, res) {
 
 // Begin socket component
 var io = require('socket.io')(http);
-
+var commands = [];
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.on('typed', function(delta) {
-    console.log(delta);
-    socket.broadcast.emit('receive',delta);
+    commands.push(delta);
+    // console.log(commands)
+    socket.emit('serverokay', delta)
+    // socket.broadcast.emit('receive', delta);
 
   });
-
+  socket.on('removedfromarr', function(delta) {
+    console.log(commands);
+    if(commands.length > 1) {
+      var tempCurrent = JSON.parse(commands[0])
+      for(var i = 1; i < commands.length; i++) {
+        var tempNeedsTransform = JSON.parse(commands[i]);
+        if (tempNeedsTransform[0].retain &&  (tempNeedsTransform[0].retain <= tempCurrent[0].retain || !tempCurrent[0].retain)) {
+          tempNeedsTransform[0].retain += tempCurrent[1].insert.length;
+          commands[i] = JSON.stringify(tempNeedsTransform);
+        }
+      }
+    }
+    delta = commands.splice(0,1);
+    socket.broadcast.emit('receive', delta);
+  })
 
   socket.on('disconnect', function(){
     console.log('user disconnected');

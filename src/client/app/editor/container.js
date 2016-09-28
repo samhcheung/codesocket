@@ -7,7 +7,7 @@ import axios from 'axios'
 var Quill = require('quill');
 var ReactQuill = require('react-quill');
 
-
+var arr = [];
 
 class EditorContainer extends React.Component {
 
@@ -38,25 +38,45 @@ class EditorContainer extends React.Component {
     });
     
     socket.on('receive', function(delta) {
-          console.log('receive', delta);
-          quill.updateContents(JSON.parse(delta), 'api');
-        })
-
+      console.log('receive', delta);
+      var parsedDelta = JSON.parse(delta);
+      if( arr.length > 0 ) {
+        var arrSnapshot = arr.slice();
+        console.log('conflict', arrSnapshot, parsedDelta);
+        console.log('ifcheck', arrSnapshot[0][0].retain, parsedDelta[0].retain);
+        for(var i = 0; i < arrSnapshot.length; i++) {
+          if(arrSnapshot[i][0].retain <= parsedDelta[0].retain) {
+            console.log('ever gets here?')
+            parsedDelta[0].retain += arrSnapshot[i][1].insert.length;
+            console.log('transformed', parsedDelta);
+          }
+        }
+      }
+      quill.updateContents(parsedDelta, 'api');
+    });
+    var socketcontext = socket;
+    socket.on('serverokay', function(delta) {
+      console.log('serverokay');
+      arr.splice(0,1);
+      console.log(arr);
+      socketcontext.emit('removedfromarr', delta);
+    });
 
 
     quill.on('text-change', function(delta,olddelta,source) {
       //console.log('get delta', delta.ops[0],delta.ops[1])
-      var arr = [];
+      var newestchange = [];
       console.log(source);
       if(source !== 'api') {
         for(var i = 0; i < 2; i++) {
           if(delta.ops[i] !== undefined) {
             console.log(delta.ops[i])
-            arr.push(delta.ops[i])
+            newestchange.push(delta.ops[i])
           }
         }
-        socket.emit('typed', JSON.stringify(arr));
-        arr = [];
+        arr.push(newestchange);
+        socket.emit('typed', JSON.stringify(newestchange));
+        
 
         // if(arr.length % 10 === 0 || arr.length % 11 === 0) {
         //   var temp = [{ insert: 'Quill' }];
