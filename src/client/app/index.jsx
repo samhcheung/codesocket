@@ -6,7 +6,8 @@ import { Provider } from 'react-redux'
 
 
 const userInitialState = {
-  userName: 'Anonymous'
+  userName: 'Anonymous',
+  myInserts: []
 }
 
 
@@ -16,6 +17,12 @@ function userReducer (state = userInitialState, action) {
 		 return {
 		   ...state, 
 		   userName: action.userName
+		 }
+		}
+		case 'UPDATE_EDITOR_INSERTS' : {
+		 return {
+		   ...state, 
+		   myInserts: action.myInserts
 		 }
 		}
 		default : {
