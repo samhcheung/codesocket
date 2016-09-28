@@ -35,6 +35,10 @@ function useWebpackMiddleware(app) {
     return app;
 }
 
+var fs = require('fs'); // To load the key and cert files
+var https = require('https'); // https required for WebRTC
+var os = require('os');
+
 require('dotenv').load();
 var path = require('path');
 var AccessToken = require('twilio').jwt.AccessToken;
@@ -42,7 +46,13 @@ var ConversationsGrant = AccessToken.ConversationsGrant;
 var randomUsername = require('./randos');
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
+//var http = require('http').Server(app);
+
+var httpsServer = https.createServer({
+  key: fs.readFileSync('./server/key.pem'),
+  cert: fs.readFileSync('./server/cert.pem')
+}, app);
+
     // webpackDevHelper = require('./index.dev.js');
 useWebpackMiddleware(app);
 
@@ -56,7 +66,7 @@ app.get('/sam', function(req, res) {
 
 
 // Begin socket component
-var io = require('socket.io')(http);
+var io = require('socket.io')(httpsServer);
 var commands = [];
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -118,6 +128,6 @@ app.get('/token', function(request, response) {
 // ***************************** End Video Component *****************************
 
 
-http.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+httpsServer.listen(3000, function () {
+  console.log('Example https app listening on port 3000!');
 });

@@ -11,8 +11,6 @@ var ReactQuill = require('react-quill');
 
 class EditorContainer extends React.Component {
 
-  static propTypes = {
-  }
 
   constructor(props) {
     super(props);
@@ -28,9 +26,9 @@ class EditorContainer extends React.Component {
   componentDidMount() {
     var context = this; 
     console.log('----------context', context, context.props.myInserts);
-
+    var socket = this.props.socket;
     // console.log('didmount woohooo');
-    var socket = io();
+    // var socket = io();
     var quill = new Quill('#editor', {
         modules: {
         syntax: true,              // Include syntax module
@@ -139,11 +137,8 @@ class EditorContainer extends React.Component {
 
   render() {
     return(
-      <div>
-        <div className="body-container">
-          <div id="editor">
-          </div>
-        </div>
+      <div className="body-container">
+        <EditorPresentation />
       </div>
     )
   }
@@ -152,7 +147,8 @@ class EditorContainer extends React.Component {
 function mapStateToProps(state){
   return {
     userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
-    myInserts: state.userReducer.myInserts //<=== shouldnt have to do this...? 
+    myInserts: state.userReducer.myInserts, //<=== shouldnt have to do this...? 
+    socket: state.sessionReducer.socket 
   }
 }
 

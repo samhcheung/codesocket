@@ -6,5 +6,6 @@ bower_components/
 *.hot-update.json
 *.env
 *.DS_Store
+*.pem
 build/
 dist/
