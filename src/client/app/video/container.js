@@ -116,7 +116,7 @@ class VideoContainer extends React.Component {
 
 
       navigator.mediaDevices.getUserMedia({
-        audio: false,
+        audio: true,
         video: true
       })
       .then(gotStream)

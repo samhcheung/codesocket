@@ -64,6 +64,7 @@ app.get('/sam', function(req, res) {
 // Begin socket component
 var io = require('socket.io')(httpsServer);
 var commands = [];
+// This object has {aRoomName: # of users in this room}
 var roomClients = {};
 
 io.on('connection', function(socket){
@@ -80,12 +81,13 @@ io.on('connection', function(socket){
     log('Client said: ', message);
 
     var clientID = socket.id;
-    console.log(socket.rooms);
-    console.log(io.sockets.adapter.rooms);
-    var clientRooms = socket.rooms.filter(function(aRoom) {
+    //console.log(Object.keys(socket.rooms));
+    // clientRooms is an array of all the rooms I am in.
+    var clientRooms = Object.keys(socket.rooms).filter(function(aRoom) {
       return (aRoom === clientID) ? false : true;
     });
     
+    // Relay the message to each user in my room
     clientRooms.forEach(function(aRoom) {
       io.sockets.in(aRoom).emit('message', message);
       if (message === 'bye' + aRoom) {
