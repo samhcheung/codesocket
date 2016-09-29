@@ -25,9 +25,11 @@ class DocContainer extends React.Component {
     return (
       <div>
         <div className="body-container">
-          <div><VideoContainer /></div>
-          <div><EditorContainer /></div>
-          <div><ConsoleContainer /></div>
+          <div className="row">
+            <div className="col-sm-6"><EditorContainer /></div>
+            <div className="col-sm-6"><VideoContainer /></div>
+          </div>
+          <div className="row"><ConsoleContainer /></div>
         </div>
       </div>
     );

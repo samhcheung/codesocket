@@ -4,12 +4,12 @@ import {Link} from 'react-router';
 const NavPresentation = (props) => {
     return (
       <div className='loadingscreen'>
-        <ul>
-          <li><Link >Rooms</Link></li>
-          <li onClick={e=>props.addDoc(e)}><button >Add New Doc</button></li>
-          <li>{props.userName}</li>
-          <li>History</li>
-        </ul>
+        <div className="row">
+          <div className="col-sm-3"><Link >Rooms</Link></div>
+          <div className="col-sm-3" onClick={e=>props.addDoc(e)}>Add New Doc</div>
+          <div className="col-sm-3">History</div>
+          <div className="col-sm-3"> {props.userName}</div>
+        </div>
       </div>
       )
 }
