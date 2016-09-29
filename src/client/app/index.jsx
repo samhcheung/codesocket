@@ -1,38 +1,14 @@
 import React from 'react';
 import {render} from 'react-dom';
-import routes from './routes.jsx'
-import { createStore, combineReducers } from 'redux'
-import { Provider } from 'react-redux'
-
-
-const userInitialState = {
-  userName: 'Anonymous',
-  myInserts: []
-}
-
-
-function userReducer (state = userInitialState, action) {
-	switch(action.type){
-		case 'UPDATE_USER' : {
-		 return {
-		   ...state, 
-		   userName: action.userName
-		 }
-		}
-		case 'UPDATE_EDITOR_INSERTS' : {
-		 return {
-		   ...state, 
-		   myInserts: action.myInserts
-		 }
-		}
-		default : {
-		 return state
-		}
-	}
-}
+import routes from './routes.jsx';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
+import userReducer from './reducers/userreducer';
+import sessionReducer from './reducers/sessionreducer';
 
 const reducers = combineReducers({
- userReducer
+ userReducer,
+ sessionReducer
 });
 
 const store = createStore(reducers);

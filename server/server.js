@@ -35,14 +35,20 @@ function useWebpackMiddleware(app) {
     return app;
 }
 
-require('dotenv').load();
+var fs = require('fs'); // To load the key and cert files
+var https = require('https'); // https required for WebRTC
+var os = require('os');
+
 var path = require('path');
-var AccessToken = require('twilio').jwt.AccessToken;
-var ConversationsGrant = AccessToken.ConversationsGrant;
-var randomUsername = require('./randos');
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
+//var http = require('http').Server(app);
+
+var httpsServer = https.createServer({
+  key: fs.readFileSync('./server/key.pem'),
+  cert: fs.readFileSync('./server/cert.pem')
+}, app);
+
     // webpackDevHelper = require('./index.dev.js');
 useWebpackMiddleware(app);
 
@@ -56,9 +62,103 @@ app.get('/sam', function(req, res) {
 
 
 // Begin socket component
-var io = require('socket.io')(http);
+var io = require('socket.io')(httpsServer);
 var commands = [];
+// This object has {aRoomName: # of users in this room}
+var roomClients = {};
+
 io.on('connection', function(socket){
+
+  // *********** Begin WebRTC Socket ************
+  function log() {
+    var array = ['Message from server:'];
+    array.push.apply(array, arguments);
+    socket.emit('log', array);
+  }
+
+  socket.on('message', function(message) {
+
+    log('Client said: ', message);
+
+    var clientID = socket.id;
+    //console.log(Object.keys(socket.rooms));
+    // clientRooms is an array of all the rooms I am in.
+    var clientRooms = Object.keys(socket.rooms).filter(function(aRoom) {
+      return (aRoom === clientID) ? false : true;
+    });
+    
+    // Relay the message to each user in my room
+    clientRooms.forEach(function(aRoom) {
+      io.sockets.in(aRoom).emit('message', message);
+      if (message === 'bye' + aRoom) {
+        if (roomClients[aRoom] > 0) {
+          roomClients[aRoom]--;
+        }
+      }
+    });
+
+    //socket.broadcast.emit('message', message);
+  });
+
+  socket.on('create or join', function(room) {
+    //console.log(room, '===== ROOM');
+    log('Received request to create or join room ' + room);
+
+    if (io.sockets.sockets.length === 0) {
+      roomClients = {};
+    }
+    if ((!roomClients[room]) || (roomClients[room] === 0)) {
+      roomClients[room] = 1;
+    } else {
+      roomClients[room]++;
+    }
+
+    var numClients = roomClients[room];
+
+    //var numClients = io.sockets.sockets.length;
+    log('Room ' + room + ' now has ' + numClients + ' client(s)');
+
+    if (numClients === 1) {
+      socket.join(room);
+      log('Client ID ' + socket.id + ' created room ' + room);
+      
+      //socket.emit('created', room, socket.id);
+
+      io.sockets.in(room).emit('created', room, socket.id);
+
+    } else if (numClients === 2) {
+      socket.join(room);
+      log('Client ID ' + socket.id + ' joined room ' + room);
+      io.sockets.in(room).emit('join', room);
+      //socket.emit('joined', room, socket.id);
+      io.sockets.in(room).emit('joined', room, socket.id);
+
+      io.sockets.in(room).emit('ready');  
+    } else { // max two clients
+
+      io.sockets.in(room).emit('full', room);
+      //socket.emit('full', room);
+    }
+  });
+
+  socket.on('ipaddr', function() {
+    var ifaces = os.networkInterfaces();
+    for (var dev in ifaces) {
+      ifaces[dev].forEach(function(details) {
+        if (details.family === 'IPv4' && details.address !== '127.0.0.1') {
+          io.sockets.in(room).emit('ipaddr', details.address);
+          //socket.emit('ipaddr', details.address);
+        }
+      });
+    }
+  });
+
+  socket.on('bye', function(){
+    console.log('received bye');
+  });
+  // *********** End WebRTC Socket ************
+  
+  // *********** Begin Quill Socket ************
   console.log('a user connected');
   socket.on('typed', function(delta) {
     commands.push(delta)
@@ -76,6 +176,7 @@ io.on('connection', function(socket){
     console.log('oldIndex', index);
     socket.broadcast.emit('done', index);
   })
+  // *********** End Quill Socket ************
 });
 
 
@@ -118,6 +219,6 @@ app.get('/token', function(request, response) {
 // ***************************** End Video Component *****************************
 
 
-http.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+httpsServer.listen(3000, function () {
+  console.log('Example https app listening on port 3000!');
 });

@@ -18,9 +18,17 @@ class NavContainer extends React.Component {
   addDoc() {
     console.log('==================props', this.props)
     var name = prompt('What\'s your name?');
+    var room = prompt('Enter a room name.');
+
+
     this.props.dispatch({
       type: 'UPDATE_USER', 
       userName: name
+    });
+
+    this.props.dispatch({
+      type: 'UPDATE_ROOM', 
+      room: room
     });
 
     // axios.get()
@@ -40,7 +48,8 @@ class NavContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    userName: state.userReducer.userName //<=== shouldnt have to do this...? 
+    userName: state.userReducer.userName,
+    room: state.sessionReducer.room 
   }
 }
 
