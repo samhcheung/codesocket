@@ -16,7 +16,7 @@ class ConsoleContainer extends React.Component {
         var messageNode = document.createElement("P");
         var text = document.createTextNode(message);
         messageNode.appendChild(text);
-        document.getElementById('test').appendChild(messageNode);
+        //document.getElementById('test').appendChild(messageNode);
 
         oldLog.apply(console, arguments);
     };

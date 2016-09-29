@@ -1,5 +1,6 @@
 const sessionInitialState = {
   socket : null,
+  room: ''
 }
 
 export default function sessionReducer (state = sessionInitialState, action) {
@@ -8,6 +9,12 @@ export default function sessionReducer (state = sessionInitialState, action) {
      return {
        ...state, 
        socket: action.socket
+     }
+    }
+    case 'UPDATE_ROOM' : {
+     return {
+       ...state, 
+       room: action.room
      }
     }
     default : {
