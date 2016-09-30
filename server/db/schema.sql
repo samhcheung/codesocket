@@ -1,29 +1,31 @@
-CREATE DATABASE codesocket;
+-- May or may not be necessary
 
-\c codesocket;
+-- CREATE DATABASE codesocket;
 
-CREATE TABLE dev (
-	id bigserial primary key,
-	username varchar(20) NOT NULL
-);
+-- \c codesocket;
 
-CREATE TABLE doc (
-	id bigserial primary key,
-	docname varchar(20) NOT NULL,
-	docContent text default NULL,
-	create_time timestamp without time zone default (now() at time zone 'utc')
-);
+-- CREATE TABLE dev (
+-- 	id bigserial primary key,
+-- 	username varchar(20) NOT NULL
+-- );
 
-CREATE TABLE devdoc (
-	id bigserial primary key,
-	userId bigserial REFERENCES dev(id),
-	docId bigserial REFERENCES doc(id)
-);
+-- CREATE TABLE doc (
+-- 	id bigserial primary key,
+-- 	docname varchar(20) NOT NULL,
+-- 	docContent text default NULL,
+-- 	create_time timestamp without time zone default (now() at time zone 'utc')
+-- );
 
-CREATE TABLE dochistory (
-	id bigserial primary key,
-	userId bigserial REFERENCES dev(id),
-	docId bigserial REFERENCES doc(id),
-	docContent text NOT NULL,
-	saved_time timestamp without time zone default NULL
-);
+-- CREATE TABLE devdoc (
+-- 	id bigserial primary key,
+-- 	userId bigserial REFERENCES dev(id),
+-- 	docId bigserial REFERENCES doc(id)
+-- );
+
+-- CREATE TABLE dochistory (
+-- 	id bigserial primary key,
+-- 	userId bigserial REFERENCES dev(id),
+-- 	docId bigserial REFERENCES doc(id),
+-- 	docContent text NOT NULL,
+-- 	saved_time timestamp without time zone default NULL
+-- );

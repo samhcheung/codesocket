@@ -1,44 +1,29 @@
 var Sequelize = require('sequelize');
-var db = new Sequelize('codesocket');
-
-var User = sequelize.define('user', {
-  username: Sequelize.STRING
+var db = new Sequelize('codesocket', '', '', {
+  dialect: 'postgres',
+  port: 5432
 });
 
-var Doc = sequelize.define('doc', {
-	docname: Sequelize.STRING,
-	docContent: Sequelize.TEXT,
-	createAt: Sequelize.DATE
-});
-
-var Dev = sequelize.define('dev', {
+var Dev = db.define('devs', {
 	username: Sequelize.STRING
 });
 
-var DevDoc = sequelize.define('devdoc', {
-	userId: Sequelize.INTEGER,
-	docId: Sequelize.INTEGER
+var Doc = db.define('docs', {
+  doc_name: Sequelize.STRING,
+  doc_content: Sequelize.TEXT,
 });
 
-// Category.belongsToMany(Student, {through: 'IndividualCompetency'})
-// Student.belongsToMany(Category, {as: 'Competency', through: 'IndividualCompetency'})
+var DevDoc = db.define('devdocs', {
+	user_id: Sequelize.INTEGER,
+	doc_id: Sequelize.INTEGER
+});
 
+Dev.belongsToMany(Doc, {through: 'DevDoc'});
+Doc.belongsToMany(Dev, {through: 'DevDoc'});
 
-// Question.sync();
-// Teacher.sync();
-// Student.sync();
-// Category.sync();
+Dev.sync();
+Doc.sync();
+DevDoc.sync();
 
-// StudentQuestion.sync();
-// StudentCategory.sync();
-// IndividualCompetency.sync();
-
-// module.exports.Question = Question;
-// module.exports.Teacher = Teacher;
-// module.exports.Student = Student;
-// module.exports.Category = Category;
-// module.exports.StudentQuestion = StudentQuestion;
-// module.exports.StudentCategory = StudentCategory;
-// module.exports.IndividualCompetency = IndividualCompetency;
-
-
+module.exports.Dev = Dev;
+module.exports.Doc = Doc;
