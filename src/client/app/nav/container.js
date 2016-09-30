@@ -44,13 +44,11 @@ class NavContainer extends React.Component {
     hashHistory.push('/doc');
   }
 
-  joinDoc() {
-    console.log('==================props', this.props)
+  joinDoc(e) {
+    e.preventDefault();
+    var docname = e.target.value;
+    //socket join room
     var name = prompt('What\'s your name?');
-    //see list of rooms
-
-    var room = prompt('Enter a room name.');
-
 
     this.props.dispatch({
       type: 'UPDATE_USER', 
@@ -58,11 +56,10 @@ class NavContainer extends React.Component {
     });
 
     this.props.dispatch({
-      type: 'UPDATE_ROOM', 
-      room: room
-    });
-
-    // axios.get()
+      type: 'DOC_SELECTION_MODAL', 
+      modalopen: false
+    });  
+    
     hashHistory.push('/doc');
   }
 

@@ -189,13 +189,47 @@ io.on('connection', function(socket){
     }
   });
 
+  socket.on('join room', function(room) {
+    console.log(room, '===== JOIN ROOM');
+    log('Received request to join room ' + room);
+
+    if (io.sockets.sockets.length === 0) {
+      roomClients = {};
+    }
+    if ((!roomClients[room]) || (roomClients[room] === 0)) {
+      roomClients[room] = 1;
+    } else {
+      roomClients[room]++;
+    }
+
+    var numClients = roomClients[room];
+
+    log('Room ' + room + ' now has ' + numClients + ' client(s)');
+
+    if (numClients === 1) {
+      socket.join(room);
+      log('Client ID ' + socket.id + ' created room ' + room);
+      io.sockets.in(room).emit('created', room, socket.id);
+
+    } else if (numClients === 2) {
+      socket.join(room);
+      log('Client ID ' + socket.id + ' joined room ' + room);
+      io.sockets.in(room).emit('join', room);
+      io.sockets.in(room).emit('joined', room, socket.id);
+
+      io.sockets.in(room).emit('ready');  
+    } else { // max two clients
+
+      io.sockets.in(room).emit('full', room);
+    }
+  });
+
   socket.on('ipaddr', function() {
     var ifaces = os.networkInterfaces();
     for (var dev in ifaces) {
       ifaces[dev].forEach(function(details) {
         if (details.family === 'IPv4' && details.address !== '127.0.0.1') {
           io.sockets.in(room).emit('ipaddr', details.address);
-          //socket.emit('ipaddr', details.address);
         }
       });
     }
