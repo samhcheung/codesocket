@@ -33,5 +33,19 @@ function fetchDocContent(room, socket) {
 
 }
 
+function fetchrooms(callback){
+	db.Doc.findAll()
+	.then(function(docs){
+		console.log('found docs', docs)
+		if(doc === null){
+			callback(null);
+		} else {
+			console.log('docs', docs);
+			//docs {}?
+			callback(docs);
+		}
+	})
+}
+
 module.exports.docExists = docExists;
 module.exports.fetchDocContent = fetchDocContent;

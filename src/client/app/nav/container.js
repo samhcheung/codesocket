@@ -90,6 +90,8 @@ class NavContainer extends React.Component {
       type: 'DOC_SELECTION_MODAL', 
       modalopen: true
     });  
+    //fetch list of rooms
+    socket.emit('fetch rooms', 'get existing rooms');
   }
 
   closeModal() { 
@@ -106,7 +108,6 @@ class NavContainer extends React.Component {
         <div className="body-container">
           <NavPresentation isOpen={this.props.modalopen} openModal= {this.openModal.bind(this)} closeModal= {this.closeModal.bind(this)} addDoc={this.addDoc.bind(this)} joinDoc={this.joinDoc.bind(this)} userName={this.props.userName}/>
         </div>
-
       </div>
     )
   }
@@ -116,6 +117,7 @@ function mapStateToProps(state){
   return {
     userName: state.userReducer.userName,
     room: state.sessionReducer.room,
+    socket: state.sessionReducer.socket,
     modalopen: state.sessionReducer.modalopen
   }
 }

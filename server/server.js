@@ -233,6 +233,13 @@ io.on('connection', function(socket){
     console.log('oldIndex', index);
     socket.broadcast.emit('done', index);
   })
+
+  socket.on('fetch rooms', function(){
+    console.log('fetching rooms');
+    helpers.fetchrooms(function(rooms){
+      socket.emit('room list', rooms);
+    })
+  })
   // *********** End Quill Socket ************
 });
 
