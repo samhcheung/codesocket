@@ -9,10 +9,10 @@ const navstyle = {
   },
   navbuttons: {
     padding:'15px',
-    "border-style": 'solid',
-    "border-width": '0.5px',
-    "border-color":'rgb(199, 199, 199)',
-    "margin-bottom": '10px'
+    "borderStyle": 'solid',
+    "borderWidth": '1.5px',
+    "borderColor":'rgb(199, 199, 199)',
+    "marginBottom": '10px'
   }
 }
 const NavPresentation = (props) => {
