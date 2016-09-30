@@ -17,7 +17,10 @@ var webpack = require('webpack'),
     webpackHotMiddleware = require('webpack-hot-middleware'),
     webpackconfig = require('../webpack.config.js'),
     webpackcompiler = webpack(webpackconfig);
- 
+
+// var db = require('./db/index.js');
+var helpers = require('./utils/helper.js')
+
 //enable webpack middleware for hot-reloads in development
 function useWebpackMiddleware(app) {
     app.use(webpackDevMiddleware(webpackcompiler, {
@@ -126,6 +129,25 @@ io.on('connection', function(socket){
 
   socket.on('create or join', function(room) {
     //console.log(room, '===== ROOM');
+    var fetch = function(exists) {
+      if(exists){
+        console.log('doc exists')
+        helpers.fetchDocContent(room, socket);
+      } else {
+        console.log('doc does not exists')
+
+        socket.disconnect();
+        //emit room doesn't exist.
+        //create listener for roomdoes't exist;
+      }
+    }
+    var exists = helpers.docExists(room, fetch);
+    console.log('exists', exists);
+
+
+    
+
+
     log('Received request to create or join room ' + room);
 
     if (io.sockets.sockets.length === 0) {

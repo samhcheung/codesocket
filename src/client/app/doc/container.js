@@ -18,6 +18,7 @@ class DocContainer extends React.Component {
       type: 'UPDATE_SOCKET',
       socket: socket
     });
+    
   }
 
   render () {
