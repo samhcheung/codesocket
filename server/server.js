@@ -69,8 +69,10 @@ app.use(bodyParser.json());
 app.get('/', function(req, res) {
 	res.send();
 })
-app.get('/sam', function(req, res) {
-	res.send('hiiidfd')
+app.get('/doclist', function(req, res) {
+  helpers.fetchrooms(function(docs){
+    res.send(docs);
+  })
 })
 
 app.post('/savedoc', function(req, res) {
@@ -234,12 +236,11 @@ io.on('connection', function(socket){
     socket.broadcast.emit('done', index);
   })
 
-  socket.on('fetch rooms', function(){
-    console.log('fetching rooms');
-    helpers.fetchrooms(function(rooms){
-      socket.emit('room list', rooms);
-    })
-  })
+
+
+  // socket.emit('fetch rooms', 'get existing rooms');
+  // socket.on('got room list', function(docs){  
+
   // *********** End Quill Socket ************
 });
 

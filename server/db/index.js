@@ -14,8 +14,8 @@ var Doc = db.define('docs', {
 });
 
 var UserDoc = db.define('userdocs', {
-    user_id: Sequelize.INTEGER,
-    doc_id: Sequelize.INTEGER
+	user_id: Sequelize.INTEGER,
+	doc_id: Sequelize.INTEGER
 });
 
 User.belongsToMany(Doc, {through: 'UserDoc', foreignKey: 'user_id'});

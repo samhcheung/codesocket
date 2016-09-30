@@ -48,10 +48,10 @@ class VideoContainer extends React.Component {
     console.log('socket inside video container', socket);
     //var socket = io.connect('/' + room);
 
-    if (room !== '') {
-      socket.emit('create or join', room);
-      console.log('Attempted to create or  join room', room);
-    }
+    // if (room !== '') {
+    //   socket.emit('create or join', room);
+    //   console.log('Attempted to create or  join room', room);
+    // }
 
     socket.on('created', function(room) {
       console.log('Created room ' + room);

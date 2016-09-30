@@ -3,7 +3,6 @@ import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 import { connect } from 'react-redux'
 import NavPresentation from './presentation'
 import axios from 'axios'
-import Popup from 'react-popup';
 import Modal from 'react-modal';
 
 class NavContainer extends React.Component {
@@ -13,9 +12,6 @@ class NavContainer extends React.Component {
 
   constructor (props) {
     super(props);
-    this.state = {
-      open: false
-    }
   }
   // componentWillMount() {
   // } 
@@ -38,6 +34,11 @@ class NavContainer extends React.Component {
       type: 'UPDATE_ROOM', 
       room: room
     });
+
+    this.props.dispatch({
+      type: 'DOC_SELECTION_MODAL', 
+      modalopen: false
+    });  
 
     // axios.get()
     hashHistory.push('/doc');
@@ -65,33 +66,25 @@ class NavContainer extends React.Component {
     hashHistory.push('/doc');
   }
 
-  myFunction(e) {
-    // var popup = document.getElementById('myPopup');
-    // popup.classList.toggle('show');
-
-    e.preventDefault();
-
-        var _this = this;
-        Popup.prompt('Type your name below', 'What\'s your name?', {
-            placeholder: 'Placeholder yo',
-            type: 'text'
-        }, {
-            text: 'Save',
-            className: 'success',
-            action: function (Box) {
-                Popup.alert('Your name is: ' + Box.value);
-                Box.close();
-            }
-        });
-  }
-
   openModal() { 
+    var context = this;
     this.props.dispatch({
       type: 'DOC_SELECTION_MODAL', 
       modalopen: true
     });  
+
     //fetch list of rooms
-    socket.emit('fetch rooms', 'get existing rooms');
+    ('fetch rooms', 'get existing rooms');
+    axios.get('/doclist')
+    .then(function(docs){
+      console.log('docs', docs);
+      context.props.dispatch({
+        type: 'UPDATE_DOC_LIST', 
+        doclist: docs.data
+      });
+    })
+
+
   }
 
   closeModal() { 
@@ -106,7 +99,7 @@ class NavContainer extends React.Component {
     return(
       <div>
         <div className="body-container">
-          <NavPresentation isOpen={this.props.modalopen} openModal= {this.openModal.bind(this)} closeModal= {this.closeModal.bind(this)} addDoc={this.addDoc.bind(this)} joinDoc={this.joinDoc.bind(this)} userName={this.props.userName}/>
+          <NavPresentation doclist={this.props.doclist} isOpen={this.props.modalopen} openModal= {this.openModal.bind(this)} closeModal= {this.closeModal.bind(this)} addDoc={this.addDoc.bind(this)} joinDoc={this.joinDoc.bind(this)} userName={this.props.userName}/>
         </div>
       </div>
     )
@@ -118,7 +111,8 @@ function mapStateToProps(state){
     userName: state.userReducer.userName,
     room: state.sessionReducer.room,
     socket: state.sessionReducer.socket,
-    modalopen: state.sessionReducer.modalopen
+    modalopen: state.sessionReducer.modalopen,
+    doclist: state.groupReducer.doclist
   }
 }
 

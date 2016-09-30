@@ -32,12 +32,11 @@ function fetchDocContent(room, socket) {
 //ask db for latest
 
 }
-
 function fetchrooms(callback){
 	db.Doc.findAll()
 	.then(function(docs){
 		console.log('found docs', docs)
-		if(doc === null){
+		if(docs === null){
 			callback(null);
 		} else {
 			console.log('docs', docs);
@@ -49,3 +48,4 @@ function fetchrooms(callback){
 
 module.exports.docExists = docExists;
 module.exports.fetchDocContent = fetchDocContent;
+module.exports.fetchrooms = fetchrooms;
