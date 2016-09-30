@@ -12,6 +12,7 @@ class VideoContainer extends React.Component {
   // }
 
   componentDidMount() {
+    var context = this;
     var isChannelReady = false;
     var isInitiator = false;
     var isStarted = false;
@@ -55,6 +56,10 @@ class VideoContainer extends React.Component {
     socket.on('created', function(room) {
       console.log('Created room ' + room);
       isInitiator = true;
+      context.props.dispatch({
+        type: 'UPDATE_SOCKET',
+        socket: socket
+      })
     });
 
     socket.on('full', function(room) {

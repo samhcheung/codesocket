@@ -26,8 +26,8 @@ class EditorContainer extends React.Component {
   componentDidMount() {
     var context = this; 
     console.log('----------context', context, context.props.myInserts);
-    //var socket = this.props.socket;
-    var socket = io.connect();
+    var socket = this.props.socket;
+    // var socket = io.connect();
 
     console.log('socket inside editor container', socket);
     // console.log('didmount woohooo');
