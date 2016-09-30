@@ -163,8 +163,19 @@ io.on('connection', function(socket){
   socket.on('typed', function(delta) {
     commands.push(delta)
     console.log(commands);
-    socket.broadcast.emit('receive',delta);
+    // socket.broadcast.emit('receive',delta);
+    // console.log('socket id', socket.id)
+    // console.log('socket rooms', socket.rooms)
 
+    var clientID = socket.id;
+    var clientRooms = Object.keys(socket.rooms).filter(function(aRoom) {
+      return (aRoom === clientID) ? false : true;
+    });
+    console.log('rooms', clientRooms, clientID)
+    clientRooms.forEach(function(aRoom) {
+      console.log('===========', aRoom, clientID)
+      socket.broadcast.to(aRoom).emit('receive', delta);
+    });
   });
 
 
