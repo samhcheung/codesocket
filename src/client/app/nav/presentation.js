@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import {Link} from 'react-router';
+import Modal from 'react-modal';
 
 const navstyle = {
   mainheader: {
@@ -27,6 +28,21 @@ const NavPresentation = (props) => {
           <div className="col-sm-3 text-center">History</div>
           <div className="col-sm-3 text-center"> {props.userName}</div>
         </div>
+
+        <Modal
+          style={{
+            content: {
+              color: 'lightsteelblue'
+            }
+          }}
+          isOpen={props.isOpen}
+          onRequestClose={props.closeModal}
+        >
+          <h1>Styled Using Inline Styles Modal</h1>
+          <button onClick={props.closeModal}>Close</button>
+          <input />
+          <input />
+        </Modal>
       </div>
       )
 }

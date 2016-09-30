@@ -136,7 +136,7 @@ io.on('connection', function(socket){
       } else {
         console.log('doc does not exists')
 
-        socket.disconnect();
+        // socket.disconnect();
         //emit room doesn't exist.
         //create listener for roomdoes't exist;
       }

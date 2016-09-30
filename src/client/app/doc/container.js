@@ -18,7 +18,12 @@ class DocContainer extends React.Component {
       type: 'UPDATE_SOCKET',
       socket: socket
     });
-    
+    var room = this.props.room;
+
+    if (room !== '') {
+      socket.emit('create or join', room);
+      console.log('Attempted to create or  join room', room);
+    }
   }
 
   render () {
@@ -47,11 +52,11 @@ class DocContainer extends React.Component {
 
 //export default DocContainer;
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
   return {
-    // userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
-    // myInserts: state.userReducer.myInserts, //<=== shouldnt have to do this...? 
-    // socket: state.sessionReducer.socket 
+    userName: state.userReducer.userName,
+    room: state.sessionReducer.room,
+    socket: state.sessionReducer.socket
   }
 }
 

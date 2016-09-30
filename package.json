@@ -28,6 +28,7 @@
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.3",
     "react-dom": "^15.3.2",
+    "react-modal": "^1.4.0",
     "react-quill": "zenoamaro/react-quill",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
