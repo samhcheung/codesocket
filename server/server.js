@@ -43,6 +43,7 @@ var path = require('path');
 var express = require('express');
 var app = express();
 //var http = require('http').Server(app);
+var db = require('./db/index.js');
 
 var httpsServer = https.createServer({
   key: fs.readFileSync('./server/key.pem'),
@@ -218,6 +219,14 @@ app.get('/token', function(request, response) {
 });
 // ***************************** End Video Component *****************************
 
+// *************************** Begin DB Test Component ***************************
+
+
+
+
+
+
+// **************************** End DB Test Component ****************************
 
 httpsServer.listen(3000, function () {
   console.log('Example https app listening on port 3000!');
