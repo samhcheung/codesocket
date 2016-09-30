@@ -39,7 +39,7 @@ class EditorContainer extends React.Component {
 
       });
     document.getElementsByClassName('ql-code-block')[0].click();
-    document.getElementsByClassName('ql-code-block')[0].remove();
+    document.getElementsByClassName('ql-toolbar')[0].remove();
     hljs.configure({   // optionally configure hljs
       languages: ['javascript']
     });
