@@ -20,7 +20,7 @@ const EditorPresentation = (props) => {
       <div>
         <div className="row">
           <div className="text-center col-sm-4"></div>
-          <div style={editorstyle.savebutton} className="text-center col-sm-4">Save</div>
+          <div style={editorstyle.savebutton} className="text-center col-sm-4" onClick={e=>props.saveCode(e)}>Save</div>
           <div className="text-center col-sm-4"></div>
         </div>
         <div id="editor" style={editorstyle.editor} className="row"></div>

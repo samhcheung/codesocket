@@ -5,7 +5,7 @@ import EditorPresentation from './presentation'
 import axios from 'axios'
 
 var Quill = require('quill');
-var ReactQuill = require('react-quill');
+//var ReactQuill = require('react-quill');
 
 class EditorContainer extends React.Component {
 
@@ -130,12 +130,33 @@ class EditorContainer extends React.Component {
       
     });
 
+    this.quill = quill;
+
+  } // ComponentDidMount
+  saveCode() {
+    var contents = this.quill.getContents();
+    var gettext = this.quill.getText();
+    // console.log(contents.ops[0])
+    // var text = '';
+    // for(var i = 0; i < contents.ops.length; i++) {
+    //   if(contents.ops[i].insert) {
+    //     text = text + contents.ops[i].insert;
+    //   }
+    // }
+    // console.log(text);
+    console.log(gettext);
+    $.ajax({
+      url: '/sam',
+      success: function(response) {
+        console.log(response);
+      }
+    })
   }
 
   render() {
     return(
       <div className="body-container">
-        <EditorPresentation />
+        <EditorPresentation saveCode={this.saveCode.bind(this)}/>
       </div>
     )
   }
