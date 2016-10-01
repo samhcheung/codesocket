@@ -34,7 +34,7 @@ class EditorContainer extends React.Component {
         syntax: true,              // Include syntax module
         toolbar: [['code-block']]  // Include button in toolbar
       },
-      formats: ['code-block'],
+      formats: ['code','bold','code-block'],
       theme: 'snow'
 
       });
@@ -144,13 +144,18 @@ class EditorContainer extends React.Component {
     //   }
     // }
     // console.log(text);
-    console.log(gettext);
+    var quillobj = this.quill;
+    console.log(contents);
     $.ajax({
-      url: '/sam',
+      url: '/savedoc',
+      type: "POST",
+      data: {'contents': JSON.stringify(contents.ops)},
       success: function(response) {
-        console.log(response);
+        console.log((response));
+        // quillobj.setContents(JSON.parse(response))
       }
-    })
+    });
+
   }
 
   render() {

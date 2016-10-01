@@ -39,6 +39,8 @@ var fs = require('fs'); // To load the key and cert files
 var https = require('https'); // https required for WebRTC
 var os = require('os');
 
+var bodyParser = require('body-parser');
+
 var path = require('path');
 var express = require('express');
 var app = express();
@@ -54,11 +56,23 @@ var httpsServer = https.createServer({
 useWebpackMiddleware(app);
 
 app.use(express.static('./src/client'));
+
+//add bodyParser
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+
+
 app.get('/', function(req, res) {
 	res.send();
 })
 app.get('/sam', function(req, res) {
 	res.send('hiiidfd')
+})
+
+app.post('/savedoc', function(req, res) {
+  console.log(req.body.contents);
+  res.send('Received the POST for /savedoc')
 })
 
 
