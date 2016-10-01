@@ -32,6 +32,18 @@ function addDocToDB(user, docname){
 	})
 }
 
+function saveuser(username){
+	console.log('in helper ', username)
+	db.User.findOrCreate({
+		where: {
+			user_name: username
+		}
+	})
+	.then(function(user){
+		console.log('user', user);
+	})
+}
+
 function addDoctoUser(user, doc){
 	db.Doc.findOne({
 		where: {
@@ -84,3 +96,4 @@ module.exports.fetchDocContent = fetchDocContent;
 module.exports.fetchrooms = fetchrooms;
 module.exports.addDoctoUser = addDoctoUser;
 module.exports.addDocToDB = addDocToDB;
+module.exports.saveuser = saveuser;

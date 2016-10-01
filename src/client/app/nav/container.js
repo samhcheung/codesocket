@@ -25,6 +25,7 @@ class NavContainer extends React.Component {
     console.log('==================props', this.props)
     var name = prompt('What\'s your name?');
     var room = prompt('Enter a room name.');
+    this.saveuser(name);
 
     this.checkDocExist(name, room, function(exists){
       if(exists){
@@ -55,12 +56,20 @@ class NavContainer extends React.Component {
       callback(roomExists.data);
     })
   }
+  saveuser(username){
+    console.log('in save user', username)
+    axios.post('/adduser',{username: username})
+    .then(function(user){
+      console.log('new user saved');
+    })
+  }
 
   joinDoc(e) {
     e.preventDefault();
     var docname = e.target.textContent;
     console.log('=====================docname', docname)
     var username = prompt('What\'s your name?');
+    this.saveuser(username);
     this.props.dispatch({
       type: 'DOC_SELECTION_MODAL', 
       modalopen: false
@@ -74,6 +83,8 @@ class NavContainer extends React.Component {
     this.props.dispatch({
       type: 'UPDATE_ROOM', 
       room: docname
+    }).then(function(){
+      hashHistory.push('/doc');
     })
     // .then(function(room){
     console.log('omg', docname, username)
@@ -91,7 +102,6 @@ class NavContainer extends React.Component {
         console.log('====', response);
     });
 
-    hashHistory.push('/doc');
     // })
 
   //   axios.post('/user', {

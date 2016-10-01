@@ -109,6 +109,11 @@ app.post('/addroomtouser', function(req, res){
   helper.addDoctoUser(user, room);
 })
 
+app.post('/adduser', function(req, res){
+  var username = req.body.username;
+  console.log('server sees username to save', username)
+  helper.saveuser(username);
+})
 // Begin socket component
 var io = require('socket.io')(httpsServer);
 var commands = [];
