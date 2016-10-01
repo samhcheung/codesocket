@@ -44,19 +44,21 @@ class EditorContainer extends React.Component {
     });
 
     socket.on('fetched live', function(latest){
-      console.log('fetched!!!', latest.ops[0])
+      console.log('fetched!!!', latest, latest.ops)
+      console.log('got last elem', latest.ops[latest.ops.length -1].insert)
+      delete latest.ops[latest.ops.length -1].insert;
       var delta = {
         ops: [latest.ops[0]]
       }
-      quill.updateContents(delta, 'api');
+      quill.setContents(latest, 'api');
     });
 
     socket.on('found latest doc', function(doc){
       console.log('latest doc', doc);
-      var delta = {
-        ops: [{insert: doc['doc_content']}]
-      }
-      quill.updateContents(delta, 'api');
+      // var delta = {
+      //   ops: [{insert: doc['doc_content']}]
+      // }
+      quill.setContents(doc, 'api');
     })
 
     socket.on('fetch live version', function(requestId){
@@ -68,7 +70,11 @@ class EditorContainer extends React.Component {
         requestId: requestId
       }
       socket.emit('live version', response);
-
+      // context.props.myInserts = [];
+      context.props.dispatch({
+        type: 'UPDATE_EDITOR_INSERTS',
+        myInserts: []
+      })
     })
 
     socket.on('receive', function(delta) {
