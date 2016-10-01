@@ -67,8 +67,18 @@ function fetchDocContent(room, socket) {
 	if(users.length > 1) {
 		//get their stuff
 		console.log('more than one user!')
+		socket.broadcast.to(room).emit('fetch latest version', '');
+		socket.on('latest version', function(latest){
+			console.log('got latest---------', latest);
+		})
 	} else {
 		//ask db for latest;
+		db.Doc.findOne({where: {
+			doc_name: room
+		}})
+		.then(function(doc){
+			console.log('found doc', doc)
+		})
 	}
 //if anyone connected? 
 //if connected, get their stuff

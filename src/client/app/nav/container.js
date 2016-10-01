@@ -83,9 +83,8 @@ class NavContainer extends React.Component {
     this.props.dispatch({
       type: 'UPDATE_ROOM', 
       room: docname
-    }).then(function(){
-      hashHistory.push('/doc');
     })
+
     // .then(function(room){
     console.log('omg', docname, username)
     var postPackage = {
@@ -102,6 +101,7 @@ class NavContainer extends React.Component {
         console.log('====', response);
     });
 
+    hashHistory.push('/doc');
     // })
 
   //   axios.post('/user', {

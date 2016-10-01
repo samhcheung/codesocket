@@ -42,7 +42,22 @@ class EditorContainer extends React.Component {
     hljs.configure({   // optionally configure hljs
       languages: ['javascript']
     });
-    
+
+    socket.on('fetched latest', function(latest){
+      quill.updateContents(latest, 'api');
+    })
+    socket.on('fetch latest version', function(requestId){
+      console.log('in fetch latest')
+      var delta = quill.getContents();
+      console.log('fetchd', delta)
+      var response = {
+        delta: delta,
+        requestId: requestId
+      }
+      socket.emit('latest version', response);
+
+    })
+
     socket.on('receive', function(delta) {
       console.log('-----------receive', delta);
       //do math

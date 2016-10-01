@@ -18,11 +18,14 @@ class DocContainer extends React.Component {
       type: 'UPDATE_SOCKET',
       socket: socket
     });
+    console.log('will mount', this.props)
+  // }
+  // componentDidMount(){
     var room = this.props.room;
     // con
     if (room !== '') {
       // socket.emit('join room', room);
-      console.log('BEFORE EMIT OPEN OR JOIN')
+      console.log('BEFORE EMIT OPEN OR JOIN', room, this.props)
       socket.emit('open or join', room);
       console.log('Attempted to create or  join room', room);
     } else {
@@ -68,4 +71,4 @@ function mapStateToProps(state) {
   }
 }
 
- export default connect()(DocContainer)
+ export default connect(mapStateToProps)(DocContainer)

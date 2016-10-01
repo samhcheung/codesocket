@@ -170,11 +170,10 @@ io.on('connection', function(socket){
     // var exists = helper.docExists(room, fetch);
     // console.log('exists', exists);
 
-
-    
-
+console.log('open or join')
 
     log('Received request to open or join room ' + room);
+    console.log('Received request to open or join room ' + room);
 
     if (io.sockets.sockets.length === 0) {
       roomClients = {};
@@ -185,12 +184,33 @@ io.on('connection', function(socket){
       roomClients[room]++;
     }
 
+    var users = Object.keys(socket.rooms).length;
     var numClients = roomClients[room];
 
+    console.log('roomClients', roomClients)
+    console.log('users count---', users);
+    if(numClients*1 > 1) {
+      //get their stuff
+      console.log('more than one user!')
+      socket.broadcast.to(room).emit('fetch latest version', socket.id);
+
+    } else {
+      //ask db for latest;
+      db.Doc.findOne({where: {
+        doc_name: room
+      }})
+      .then(function(doc){
+        console.log('found doc', doc)
+      })
+    }
+
+
+    console.log('numClients', numClients)
     //var numClients = io.sockets.sockets.length;
     log('Room ' + room + ' now has ' + numClients + ' client(s)');
 
     if (numClients === 1) {
+      console.log('one client')
       socket.join(room);
       log('Client ID ' + socket.id + ' opened room ' + room);
       
@@ -199,6 +219,7 @@ io.on('connection', function(socket){
       io.sockets.in(room).emit('opened', room, socket.id);
 
     } else if (numClients === 2) {
+      console.log('two clients')
       socket.join(room);
       log('Client ID ' + socket.id + ' joined room ' + room);
       io.sockets.in(room).emit('join', room);
@@ -213,6 +234,12 @@ io.on('connection', function(socket){
     }
   });
 
+  socket.on('latest version', function(latest){
+    console.log('got latest---------', latest);
+    var requestId = latest.requestId;
+    var delta = latest.delta;
+    io.sockets.socket(requestId).emit('fetched latest', delta)
+  })
   // socket.on('join room', function(room) {
   //   console.log(room, '===== JOIN ROOM');
   //   log('Received request to join room ' + room);
