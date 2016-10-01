@@ -5,7 +5,6 @@ import EditorPresentation from './presentation'
 import axios from 'axios'
 
 var Quill = require('quill');
-//var ReactQuill = require('react-quill');
 
 class EditorContainer extends React.Component {
 
@@ -34,7 +33,7 @@ class EditorContainer extends React.Component {
         syntax: true,              // Include syntax module
         toolbar: [['code-block']]  // Include button in toolbar
       },
-      formats: ['code','bold','code-block'],
+      formats: ['code-block'],
       theme: 'snow'
 
       });
@@ -117,20 +116,12 @@ class EditorContainer extends React.Component {
         socket.emit('typed', JSON.stringify(arr));
         arr = [];
 
-        // if(arr.length % 10 === 0 || arr.length % 11 === 0) {
-        //   var temp = [{ insert: 'Quill' }];
-        //   var currentplace = quill.getSelection();
-        //   quill.updateContents(temp, 'api');
-          // console.log(temp);
-        //   if(temp) {
-        //     quill.setSelection(currentplace.index+temp.insert.length)
-        //   }
-        // }
       }
       
     });
 
     this.quill = quill;
+
     this.props.dispatch({
       type: 'UPDATE_QUILL', 
       quill: quill
@@ -138,17 +129,9 @@ class EditorContainer extends React.Component {
 
   } // ComponentDidMount
   saveCode() {
-    var contents = this.quill.getContents();
-    var gettext = this.quill.getText();
-    // console.log(contents.ops[0])
-    // var text = '';
-    // for(var i = 0; i < contents.ops.length; i++) {
-    //   if(contents.ops[i].insert) {
-    //     text = text + contents.ops[i].insert;
-    //   }
-    // }
-    // console.log(text);
-    var quillobj = this.quill;
+    var contents = this.props.quill.getContents();
+    var gettext = this.props.quill.getText();
+    
     console.log(contents);
     $.ajax({
       url: '/savedoc',
@@ -156,7 +139,6 @@ class EditorContainer extends React.Component {
       data: {'room': this.props.room, 'contents': JSON.stringify(contents.ops)},
       success: function(response) {
         console.log((response));
-        // quillobj.setContents(JSON.parse(response))
       }
     });
 

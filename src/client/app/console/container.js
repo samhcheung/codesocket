@@ -17,9 +17,7 @@ class ConsoleContainer extends React.Component {
     // Grab the code from the current editor to be run.
     // Will switch to the Quill editor when it is refactored to live in the
     // Redux Store.
-    var theCode = document.getElementById('test-editor').value;
-    console.log(this.props.quill, 'quill')
-    theCode = this.props.quill.getText();
+    var theCode = this.props.quill.getText();
     // Save reference to the default console.log function.
     var oldLog = console.log;
 

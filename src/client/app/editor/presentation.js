@@ -24,7 +24,6 @@ const EditorPresentation = (props) => {
           <div className="text-center col-sm-4"></div>
         </div>
         <div id="editor" style={editorstyle.editor} className="row"></div>
-        <textarea cols="40" rows="5" id="test-editor"></textarea>
       </div>
       )
 }
