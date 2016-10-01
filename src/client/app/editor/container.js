@@ -7,10 +7,7 @@ import axios from 'axios'
 var Quill = require('quill');
 var ReactQuill = require('react-quill');
 
-
-
 class EditorContainer extends React.Component {
-
 
   constructor(props) {
     super(props);
@@ -131,12 +128,9 @@ class EditorContainer extends React.Component {
         // }
       }
       
-
     });
 
-
   }
-
 
   render() {
     return(
@@ -149,8 +143,8 @@ class EditorContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
-    myInserts: state.userReducer.myInserts, //<=== shouldnt have to do this...? 
+    userName: state.userReducer.userName,
+    myInserts: state.userReducer.myInserts,
     socket: state.sessionReducer.socket 
   }
 }

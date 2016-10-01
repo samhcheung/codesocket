@@ -10,20 +10,57 @@ class ConsoleContainer extends React.Component {
   }
 
   componentDidMount() {
-    var oldLog = console.log;
-    console.log = function (message) {
-        // DO MESSAGE HERE.
-        var messageNode = document.createElement("P");
-        var text = document.createTextNode(message);
-        messageNode.appendChild(text);
-        //document.getElementById('test').appendChild(messageNode);
-
-        oldLog.apply(console, arguments);
-    };
+    
   }
   runCode(e) {
-    var theCode = document.getElementById('editor').value;
+
+    // Grab the code from the current editor to be run.
+    // Will switch to the Quill editor when it is refactored to live in the
+    // Redux Store.
+    var theCode = document.getElementById('test-editor').value;
+
+    // Save reference to the default console.log function.
+    var oldLog = console.log;
+
+    // Hijack the console.log function to append the console output to the DOM.
+    console.log = function (message) {
+      // Display the console output as a list of P tags.
+      var messageNode = document.createElement("pre");
+      messageNode.className+= "ql-syntax";
+      var text = document.createTextNode(" " + message);
+      messageNode.appendChild(text);
+
+      // Each time the editor code is run, clear console first.
+      document.getElementById('console').innerHTML = "";
+
+      // SetTimeout is used to cause a small flash to let the user
+      // know the code is being run even if the output is identical.
+      // Without this, clicking run repeatedly looks like nothing
+      // is happening.
+      setTimeout(function() {
+        document.getElementById('console').appendChild(messageNode);
+      }, 50);
+
+      // Also display the console.logged items in the real console.
+      oldLog.apply(console, arguments);
+    };
+
+    // If there is an error running the code, append error to DOM.
+    window.onerror = function(message, url, linenumber, x, y) {
+      console.log(" " + message + " on line " + 
+        linenumber);
+      
+        // Restore normal console.log behavior.  This prevents system console.log
+        // from showing up on the DOM.
+        console.log = oldLog;
+    };
+
+    // Run the code from the editor.
     eval(theCode);
+
+    // Restore normal console.log behavior.  This prevents system console.log
+    // from showing up on the DOM.
+    console.log = oldLog;
   }
 
   render() {
@@ -39,7 +76,7 @@ class ConsoleContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    userName: state.userReducer.userName //<=== shouldnt have to do this...? 
+    userName: state.userReducer.userName
   }
 }
 
