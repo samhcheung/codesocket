@@ -106,7 +106,7 @@ app.post('/addroomtouser', function(req, res){
 app.post('/adduser', function(req, res){
   var username = req.body.username;
   console.log('server sees username to save', username)
-  helper.saveuser(username);
+  helper.saveuser(username,res);
 })
 // Begin socket component
 var io = require('socket.io')(httpsServer);
@@ -340,4 +340,5 @@ console.log('open or join')
 
 httpsServer.listen(3000, function () {
   console.log('Example https app listening on port 3000!');
+  db.db.sync();
 });

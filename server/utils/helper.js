@@ -32,7 +32,7 @@ function addDocToDB(user, docname){
 	})
 }
 
-function saveuser(username){
+function saveuser(username,res){
 	console.log('in helper ', username)
 	db.User.findOrCreate({
 		where: {
@@ -41,6 +41,7 @@ function saveuser(username){
 	})
 	.then(function(user){
 		console.log('user', user);
+		res.send('added user');
 	})
 }
 

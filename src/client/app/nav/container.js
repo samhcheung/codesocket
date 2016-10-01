@@ -25,28 +25,39 @@ class NavContainer extends React.Component {
     console.log('==================props', this.props)
     var name = prompt('What\'s your name?');
     var room = prompt('Enter a room name.');
-    this.saveuser(name);
+//    this.saveuser(name);
+    console.log('in save user', name)
+    axios.post('/adduser',{username: name})
+    .then(function(user){
+      console.log('new user saved');
+    
 
-    this.checkDocExist(name, room, function(exists){
-      if(exists){
-        alert('Cannot create room because room already exists. Try another name or join the existing room!');
-      } else {
-        context.props.dispatch({
-          type: 'UPDATE_USER', 
-          userName: name
-        });
+      context.checkDocExist(name, room, function(exists){
+        if(exists){
+          alert('Cannot create room because room already exists. Try another name or join the existing room!');
+        } else {
+          context.props.dispatch({
+            type: 'UPDATE_USER', 
+            userName: name
+          });
 
-        context.props.dispatch({
-          type: 'UPDATE_ROOM', 
-          room: room
-        });
+          context.props.dispatch({
+            type: 'UPDATE_ROOM', 
+            room: room
+          });
 
-        hashHistory.push('/doc');
+          hashHistory.push('/doc');
 
-      } 
+        } 
 
 
+      })
+
+
+
+      
     })
+
   }
 
   checkDocExist(user, room, callback) {
@@ -56,52 +67,62 @@ class NavContainer extends React.Component {
       callback(roomExists.data);
     })
   }
-  saveuser(username){
+  // saveuser(username){
+  //   console.log('in save user', username)
+  //   axios.post('/adduser',{username: username})
+  //   .then(function(user){
+  //     console.log('new user saved');
+  //   })
+  // }
+
+  joinDoc(e) {
+    e.preventDefault();
+    var context = this;
+    var docname = e.target.textContent;
+    console.log('=====================docname', docname)
+    var username = prompt('What\'s your name?');
+    //this.saveuser(username);
     console.log('in save user', username)
     axios.post('/adduser',{username: username})
     .then(function(user){
       console.log('new user saved');
-    })
-  }
-
-  joinDoc(e) {
-    e.preventDefault();
-    var docname = e.target.textContent;
-    console.log('=====================docname', docname)
-    var username = prompt('What\'s your name?');
-    this.saveuser(username);
-    this.props.dispatch({
-      type: 'DOC_SELECTION_MODAL', 
-      modalopen: false
-    });  
     
-    this.props.dispatch({
-      type: 'UPDATE_USER', 
-      userName: username
-    });
 
-    this.props.dispatch({
-      type: 'UPDATE_ROOM', 
-      room: docname
+      context.props.dispatch({
+        type: 'DOC_SELECTION_MODAL', 
+        modalopen: false
+      });  
+      
+      context.props.dispatch({
+        type: 'UPDATE_USER', 
+        userName: username
+      });
+
+      context.props.dispatch({
+        type: 'UPDATE_ROOM', 
+        room: docname
+      })
+
+      // .then(function(room){
+      console.log('omg', docname, username)
+      var postPackage = {
+        room: docname, 
+        user: username
+      }
+      // axios.post('/addroomtouser', {params: postPackage})
+      // .then(function(userroom){
+      //   console.log('user room successfully posted')
+      // })
+      console.log('before add room', postPackage)
+      axios.post('/addroomtouser', postPackage)
+      .then(function(response) {
+          console.log('====', response);
+      });
+
+      hashHistory.push('/doc');
+
+      
     })
-
-    // .then(function(room){
-    console.log('omg', docname, username)
-    var postPackage = {
-      room: docname, 
-      user: username
-    }
-    // axios.post('/addroomtouser', {params: postPackage})
-    // .then(function(userroom){
-    //   console.log('user room successfully posted')
-    // })
-    console.log('before add room', postPackage)
-    axios.post('/addroomtouser', postPackage)
-    .then(function(response) {
-        console.log('====', response);
-    });
-
-    hashHistory.push('/doc');
     // })
 
   //   axios.post('/user', {
