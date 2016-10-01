@@ -19,7 +19,7 @@ var webpack = require('webpack'),
     webpackcompiler = webpack(webpackconfig);
 
 // var db = require('./db/index.js');
-var helpers = require('./utils/helper.js')
+var helper = require('./utils/helper.js')
 
 //enable webpack middleware for hot-reloads in development
 function useWebpackMiddleware(app) {
@@ -70,11 +70,12 @@ app.get('/', function(req, res) {
 	res.send();
 })
 app.get('/doclist', function(req, res) {
-  helpers.fetchrooms(function(docs){
+  helper.fetchrooms(function(docs){
     res.send(docs);
   })
 })
 
+<<<<<<< 6273bc9d6cedc9942832435f95b1b456f64f2fe7
 app.post('/savedoc', function(req, res) {
   db.Doc.update({
     doc_name:req.body.room,
@@ -89,6 +90,15 @@ app.post('/savedoc', function(req, res) {
 
 })
 
+=======
+app.get('/roomExists', function(req, res){
+  
+  helper.docExists(req.query.room, function(exists){
+    console.log('exists', exists);
+    res.send(exists);
+  })
+})
+>>>>>>> server logic added for checking if room exists
 
 // Begin socket component
 var io = require('socket.io')(httpsServer);
@@ -134,7 +144,7 @@ io.on('connection', function(socket){
     var fetch = function(exists) {
       if(exists){
         console.log('doc exists')
-        helpers.fetchDocContent(room, socket);
+        helper.fetchDocContent(room, socket);
       } else {
         console.log('doc does not exists')
 
@@ -143,7 +153,7 @@ io.on('connection', function(socket){
         //create listener for roomdoes't exist;
       }
     }
-    var exists = helpers.docExists(room, fetch);
+    var exists = helper.docExists(room, fetch);
     console.log('exists', exists);
 
 
@@ -189,40 +199,40 @@ io.on('connection', function(socket){
     }
   });
 
-  socket.on('join room', function(room) {
-    console.log(room, '===== JOIN ROOM');
-    log('Received request to join room ' + room);
+  // socket.on('join room', function(room) {
+  //   console.log(room, '===== JOIN ROOM');
+  //   log('Received request to join room ' + room);
 
-    if (io.sockets.sockets.length === 0) {
-      roomClients = {};
-    }
-    if ((!roomClients[room]) || (roomClients[room] === 0)) {
-      roomClients[room] = 1;
-    } else {
-      roomClients[room]++;
-    }
+  //   if (io.sockets.sockets.length === 0) {
+  //     roomClients = {};
+  //   }
+  //   if ((!roomClients[room]) || (roomClients[room] === 0)) {
+  //     roomClients[room] = 1;
+  //   } else {
+  //     roomClients[room]++;
+  //   }
 
-    var numClients = roomClients[room];
+  //   var numClients = roomClients[room];
 
-    log('Room ' + room + ' now has ' + numClients + ' client(s)');
+  //   log('Room ' + room + ' now has ' + numClients + ' client(s)');
 
-    if (numClients === 1) {
-      socket.join(room);
-      log('Client ID ' + socket.id + ' created room ' + room);
-      io.sockets.in(room).emit('created', room, socket.id);
+  //   if (numClients === 1) {
+  //     socket.join(room);
+  //     log('Client ID ' + socket.id + ' created room ' + room);
+  //     io.sockets.in(room).emit('created', room, socket.id);
 
-    } else if (numClients === 2) {
-      socket.join(room);
-      log('Client ID ' + socket.id + ' joined room ' + room);
-      io.sockets.in(room).emit('join', room);
-      io.sockets.in(room).emit('joined', room, socket.id);
+  //   } else if (numClients === 2) {
+  //     socket.join(room);
+  //     log('Client ID ' + socket.id + ' joined room ' + room);
+  //     io.sockets.in(room).emit('join', room);
+  //     io.sockets.in(room).emit('joined', room, socket.id);
 
-      io.sockets.in(room).emit('ready');  
-    } else { // max two clients
+  //     io.sockets.in(room).emit('ready');  
+  //   } else { // max two clients
 
-      io.sockets.in(room).emit('full', room);
-    }
-  });
+  //     io.sockets.in(room).emit('full', room);
+  //   }
+  // });
 
   socket.on('ipaddr', function() {
     var ifaces = os.networkInterfaces();

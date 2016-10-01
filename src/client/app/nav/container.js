@@ -20,37 +20,38 @@ class NavContainer extends React.Component {
     //console.log('it hit componentDidMount =====>', this.state.user, this.props);
   }
   addDoc() {
+    var context = this;
     console.log('==================props', this.props)
     var name = prompt('What\'s your name?');
-    this.checkDocExist(function(exists){
-      if(roomExists){
+    var room = prompt('Enter a room name.');
+
+    this.checkDocExist(room, function(exists){
+      if(exists){
         alert('Cannot create room because room already exists. Try another name or join the existing room!');
       } else {
-        this.props.dispatch({
+        context.props.dispatch({
           type: 'UPDATE_USER', 
           userName: name
         });
 
-        this.props.dispatch({
+        context.props.dispatch({
           type: 'UPDATE_ROOM', 
           room: room
         });
-      }
-      this.props.dispatch({
-        type: 'DOC_SELECTION_MODAL', 
-        modalopen: false
-      });  
 
-      hashHistory.push('/doc');
+        hashHistory.push('/doc');
+
+      } 
+
 
     })
   }
 
-  checkDocExist(callback) {
-    var room = prompt('Enter a room name.');
+  checkDocExist(room, callback) {
     axios.get('/roomExists', {params: {room: room}})
     .then(function(roomExists){
-      callback(roomExists);
+      console.log('client found rom', roomExists)
+      callback(roomExists.data);
     })
   }
 
