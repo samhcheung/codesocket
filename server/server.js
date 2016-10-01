@@ -47,6 +47,7 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var express = require('express');
 var app = express();
+var bodyparser = require('body-parser');
 //var http = require('http').Server(app);
 var db = require('./db/index.js');
 
@@ -59,6 +60,7 @@ var httpsServer = https.createServer({
 useWebpackMiddleware(app);
 
 app.use(express.static('./src/client'));
+<<<<<<< 55112947248b72ae9d4b9c344ce144cd11b96238
 
 //add bodyParser
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -66,6 +68,9 @@ app.use(bodyParser.json());
 
 
 
+=======
+app.use(bodyparser());
+>>>>>>> added logic for saving doc to user on joining room
 app.get('/', function(req, res) {
 	res.send();
 })
@@ -75,7 +80,6 @@ app.get('/doclist', function(req, res) {
   })
 })
 
-<<<<<<< 6273bc9d6cedc9942832435f95b1b456f64f2fe7
 app.post('/savedoc', function(req, res) {
   db.Doc.update({
     doc_name:req.body.room,
@@ -90,15 +94,20 @@ app.post('/savedoc', function(req, res) {
 
 })
 
-=======
 app.get('/roomExists', function(req, res){
-  console.log
   helper.docExists(req.query.user, req.query.room, function(exists){
     console.log('exists', exists);
     res.send(exists);
   })
 })
->>>>>>> server logic added for checking if room exists
+
+app.post('/addroomtouser', function(req, res){
+  // helper.
+  console.log('req query', req.body)
+  var room = req.body.room;
+  var user = req.body.user;
+  helper.addDoctoUser(user, room);
+})
 
 // Begin socket component
 var io = require('socket.io')(httpsServer);

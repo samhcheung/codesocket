@@ -28,17 +28,24 @@ function addDocToDB(user, docname){
 	})
 	.then(function(newDoc) {
 		console.log('user', user)
-		addDoctoUser(user, newDoc)
+		addDoctoUser(user, docname)
 	})
 }
 
 function addDoctoUser(user, doc){
-	db.User.findOne({where: {
-		username: user
-	}})
-	.then(function(foundUser){
-		console.log('doc added', newDoc, foundUser)
-		return newDoc.addUser(foundUser);
+	db.Doc.findOne({
+		where: {
+			doc_name: doc
+		}
+	})
+	.then(function(newDoc){
+		db.User.findOne({where: {
+			username: user
+		}})
+		.then(function(foundUser){
+			console.log('doc added', newDoc, foundUser)
+			newDoc.addUser(foundUser);
+		})
 	})
 }
 
@@ -61,11 +68,11 @@ function fetchDocContent(room, socket) {
 function fetchrooms(callback){
 	db.Doc.findAll()
 	.then(function(docs){
-		console.log('found docs', docs)
+		// console.log('found docs', docs)
 		if(docs === null){
 			callback(null);
 		} else {
-			console.log('docs', docs);
+			// console.log('docs', docs);
 			//docs {}?
 			callback(docs);
 		}
@@ -75,3 +82,5 @@ function fetchrooms(callback){
 module.exports.docExists = docExists;
 module.exports.fetchDocContent = fetchDocContent;
 module.exports.fetchrooms = fetchrooms;
+module.exports.addDoctoUser = addDoctoUser;
+module.exports.addDocToDB = addDocToDB;

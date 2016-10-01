@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import NavPresentation from './presentation'
 import axios from 'axios'
 import Modal from 'react-modal';
+import querystring from 'querystring';
 
 class NavContainer extends React.Component {
 
@@ -58,7 +59,7 @@ class NavContainer extends React.Component {
   joinDoc(e) {
     e.preventDefault();
     var docname = e.target.textContent;
-    console.log('docname', docname)
+    console.log('=====================docname', docname)
     var username = prompt('What\'s your name?');
     this.props.dispatch({
       type: 'DOC_SELECTION_MODAL', 
@@ -75,10 +76,30 @@ class NavContainer extends React.Component {
       room: docname
     })
     // .then(function(room){
-      hashHistory.push('/doc');
+    console.log('omg', docname, username)
+    var postPackage = {
+      room: docname, 
+      user: username
+    }
+    // axios.post('/addroomtouser', {params: postPackage})
+    // .then(function(userroom){
+    //   console.log('user room successfully posted')
+    // })
+    console.log('before add room', postPackage)
+    axios.post('/addroomtouser', postPackage)
+    .then(function(response) {
+        console.log('====', response);
+    });
+
+    hashHistory.push('/doc');
     // })
 
-    
+  //   axios.post('/user', {
+  //   firstName: 'Fred',
+  //   lastName: 'Flintstone'
+  // })
+
+
   }
 
   openModal() { 
@@ -89,10 +110,8 @@ class NavContainer extends React.Component {
     });  
 
     //fetch list of rooms
-    ('fetch rooms', 'get existing rooms');
     axios.get('/doclist')
     .then(function(docs){
-      console.log('docs', docs);
       context.props.dispatch({
         type: 'UPDATE_DOC_LIST', 
         doclist: docs.data
