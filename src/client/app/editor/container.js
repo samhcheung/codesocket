@@ -45,11 +45,11 @@ class EditorContainer extends React.Component {
 
     socket.on('fetched live', function(latest){
       console.log('fetched!!!', latest, latest.ops)
-      console.log('got last elem', latest.ops[latest.ops.length -1].insert)
-      delete latest.ops[latest.ops.length -1].insert;
-      var delta = {
-        ops: [latest.ops[0]]
-      }
+      // console.log('got last elem', latest.ops[latest.ops.length -1].insert)
+      // delete latest.ops[latest.ops.length -1].insert;
+      // var delta = {
+      //   ops: [latest.ops[0]]
+      // }
       quill.setContents(latest, 'api');
     });
 
@@ -58,7 +58,7 @@ class EditorContainer extends React.Component {
       // var delta = {
       //   ops: [{insert: doc['doc_content']}]
       // }
-      quill.setContents(doc, 'api');
+      quill.setContents(JSON.parse(doc['doc_content']), 'api');
     })
 
     socket.on('fetch live version', function(requestId){

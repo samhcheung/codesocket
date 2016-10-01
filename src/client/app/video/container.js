@@ -165,10 +165,17 @@ class VideoContainer extends React.Component {
       }
     }
 
-    window.onbeforeunload = function() {
-      sendMessage('bye' + room);
-    };
+    // window.onbeforeunload = function() {
+    //   sendMessage('bye' + room);
+    // };
 
+    // window.onbeforeunload = function() {
+    //    hangup();
+    //  };
+
+    //  window.onhashchange = function() {
+    //    hangup();
+    //  };
     /////////////////////////////////////////////////////////
 
     function createPeerConnection() {
