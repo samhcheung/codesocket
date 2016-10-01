@@ -149,7 +149,7 @@ class EditorContainer extends React.Component {
     $.ajax({
       url: '/savedoc',
       type: "POST",
-      data: {'contents': JSON.stringify(contents.ops)},
+      data: {'room': this.props.room, 'contents': JSON.stringify(contents.ops)},
       success: function(response) {
         console.log((response));
         // quillobj.setContents(JSON.parse(response))
@@ -171,7 +171,8 @@ function mapStateToProps(state){
   return {
     userName: state.userReducer.userName,
     myInserts: state.userReducer.myInserts,
-    socket: state.sessionReducer.socket 
+    socket: state.sessionReducer.socket,
+    room: state.sessionReducer.room
   }
 }
 

@@ -71,8 +71,17 @@ app.get('/sam', function(req, res) {
 })
 
 app.post('/savedoc', function(req, res) {
-  console.log(req.body.contents);
-  res.send('Received the POST for /savedoc');
+  db.Doc.update({
+    doc_name:req.body.room,
+    doc_content: req.body.contents
+  },
+  {
+    where: {doc_name:req.body.room}
+  }).then(function() {
+    res.send('/savedoc success!')
+  });
+
+
 })
 
 
