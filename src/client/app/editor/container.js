@@ -59,7 +59,9 @@ class EditorContainer extends React.Component {
       // var delta = {
       //   ops: [{insert: doc['doc_content']}]
       // }
-      //quill.setContents(JSON.parse(doc['doc_content']), 'api');
+      var latest = JSON.parse(doc['doc_content'])
+      latest[0].attributes = {"code-block":true};
+      quill.setContents(latest, 'api');
     })
 
     socket.on('fetch live version', function(requestId){

@@ -169,13 +169,13 @@ class VideoContainer extends React.Component {
     //   sendMessage('bye' + room);
     // };
 
-    // window.onbeforeunload = function() {
-    //    hangup();
-    //  };
+    window.onbeforeunload = function() {
+       hangup();
+     };
 
-    //  window.onhashchange = function() {
-    //    hangup();
-    //  };
+     window.onhashchange = function() {
+       hangup();
+     };
     /////////////////////////////////////////////////////////
 
     function createPeerConnection() {
@@ -297,7 +297,7 @@ class VideoContainer extends React.Component {
       isStarted = false;
       // isAudioMuted = false;
       // isVideoMuted = false;
-      pc.close();
+      //pc.close();
       pc = null;
     }
 
