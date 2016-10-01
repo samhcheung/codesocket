@@ -28,16 +28,17 @@ function addDocToDB(user, docname){
 	})
 	.then(function(newDoc) {
 		console.log('user', user)
-		return db.User.findOne({where: {
-			username: user
-		}})
-		.then(function(foundUser){
-			console.log('doc added', newDoc, foundUser)
-			return newDoc.addUser(foundUser);
-		})
+		addDoctoUser(user, newDoc)
 	})
-	.then(function(newDocUser){
-		console.log('newDocUser', newDocUser);
+}
+
+function addDoctoUser(user, doc){
+	db.User.findOne({where: {
+		username: user
+	}})
+	.then(function(foundUser){
+		console.log('doc added', newDoc, foundUser)
+		return newDoc.addUser(foundUser);
 	})
 }
 
