@@ -1,7 +1,8 @@
 var db = require('../db/index.js');
 
 
-function docExists(docname, callback){
+function docExists(user, docname, callback){
+	console.log()
 	db.Doc.findOne({
 		where: {
 			doc_name: docname
@@ -9,10 +10,34 @@ function docExists(docname, callback){
 	}).then(function(doc){
 		console.log('found doc', doc)
 		if(doc === null){
+			//room does not exist
+			addDocToDB(user, docname)
 			callback(false);
+			//create room in db
 		} else {
 			callback(true);
 		}
+	})
+}
+
+function addDocToDB(user, docname){
+	console.log('in addDocToDB', user, docname)
+	db.Doc.create({
+		doc_name: docname,
+		doc_content: '',
+	})
+	.then(function(newDoc) {
+		console.log('user', user)
+		return db.User.findOne({where: {
+			username: user
+		}})
+		.then(function(foundUser){
+			console.log('doc added', newDoc, foundUser)
+			return newDoc.addUser(foundUser);
+		})
+	})
+	.then(function(newDocUser){
+		console.log('newDocUser', newDocUser);
 	})
 }
 

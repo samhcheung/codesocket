@@ -22,7 +22,7 @@ class DocContainer extends React.Component {
     // con
     if (room !== '') {
       // socket.emit('join room', room);
-
+      console.log('BEFORE EMIT OPEN OR JOIN')
       socket.emit('open or join', room);
       console.log('Attempted to create or  join room', room);
     } else {

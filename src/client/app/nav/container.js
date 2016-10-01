@@ -25,7 +25,7 @@ class NavContainer extends React.Component {
     var name = prompt('What\'s your name?');
     var room = prompt('Enter a room name.');
 
-    this.checkDocExist(room, function(exists){
+    this.checkDocExist(name, room, function(exists){
       if(exists){
         alert('Cannot create room because room already exists. Try another name or join the existing room!');
       } else {
@@ -47,8 +47,8 @@ class NavContainer extends React.Component {
     })
   }
 
-  checkDocExist(room, callback) {
-    axios.get('/roomExists', {params: {room: room}})
+  checkDocExist(user, room, callback) {
+    axios.get('/roomExists', {params: {user: user, room: room}})
     .then(function(roomExists){
       console.log('client found rom', roomExists)
       callback(roomExists.data);

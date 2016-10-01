@@ -92,8 +92,8 @@ app.post('/savedoc', function(req, res) {
 
 =======
 app.get('/roomExists', function(req, res){
-  
-  helper.docExists(req.query.room, function(exists){
+  console.log
+  helper.docExists(req.query.user, req.query.room, function(exists){
     console.log('exists', exists);
     res.send(exists);
   })
@@ -141,20 +141,20 @@ io.on('connection', function(socket){
 
   socket.on('open or join', function(room) {
     //console.log(room, '===== ROOM');
-    var fetch = function(exists) {
-      if(exists){
-        console.log('doc exists')
-        helper.fetchDocContent(room, socket);
-      } else {
-        console.log('doc does not exists')
+    // var fetch = function(exists) {
+    //   if(exists){
+    //     console.log('doc exists')
+    //     helper.fetchDocContent(room, socket);
+    //   } else {
+    //     console.log('doc does not exists')
 
-        // socket.disconnect();
-        //emit room doesn't exist.
-        //create listener for roomdoes't exist;
-      }
-    }
-    var exists = helper.docExists(room, fetch);
-    console.log('exists', exists);
+    //     // socket.disconnect();
+    //     //emit room doesn't exist.
+    //     //create listener for roomdoes't exist;
+    //   }
+    // }
+    // var exists = helper.docExists(room, fetch);
+    // console.log('exists', exists);
 
 
     
