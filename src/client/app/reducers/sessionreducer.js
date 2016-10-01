@@ -1,6 +1,7 @@
 const sessionInitialState = {
   socket : null,
-  room: ''
+  room: '',
+  quill: null
 }
 
 export default function sessionReducer (state = sessionInitialState, action) {
@@ -16,6 +17,12 @@ export default function sessionReducer (state = sessionInitialState, action) {
        ...state, 
        room: action.room
      }
+    }
+    case 'UPDATE_QUILL' : {
+      return {
+        ...state,
+        quill: action.quill
+      }
     }
     default : {
      return state

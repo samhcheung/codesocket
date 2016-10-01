@@ -5,7 +5,6 @@ import EditorPresentation from './presentation'
 import axios from 'axios'
 
 var Quill = require('quill');
-var ReactQuill = require('react-quill');
 
 class EditorContainer extends React.Component {
 
@@ -39,7 +38,7 @@ class EditorContainer extends React.Component {
 
       });
     document.getElementsByClassName('ql-code-block')[0].click();
-    document.getElementsByClassName('ql-code-block')[0].remove();
+    document.getElementsByClassName('ql-toolbar')[0].remove();
     hljs.configure({   // optionally configure hljs
       languages: ['javascript']
     });
@@ -117,17 +116,30 @@ class EditorContainer extends React.Component {
         socket.emit('typed', JSON.stringify(arr));
         arr = [];
 
-        // if(arr.length % 10 === 0 || arr.length % 11 === 0) {
-        //   var temp = [{ insert: 'Quill' }];
-        //   var currentplace = quill.getSelection();
-        //   quill.updateContents(temp, 'api');
-          // console.log(temp);
-        //   if(temp) {
-        //     quill.setSelection(currentplace.index+temp.insert.length)
-        //   }
-        // }
       }
       
+    });
+
+    this.quill = quill;
+
+    this.props.dispatch({
+      type: 'UPDATE_QUILL', 
+      quill: quill
+    });
+
+  } // ComponentDidMount
+  saveCode() {
+    var contents = this.props.quill.getContents();
+    var gettext = this.props.quill.getText();
+    
+    console.log(contents);
+    $.ajax({
+      url: '/savedoc',
+      type: "POST",
+      data: {'room': this.props.room, 'contents': JSON.stringify(contents.ops)},
+      success: function(response) {
+        console.log((response));
+      }
     });
 
   }
@@ -135,7 +147,7 @@ class EditorContainer extends React.Component {
   render() {
     return(
       <div className="body-container">
-        <EditorPresentation />
+        <EditorPresentation saveCode={this.saveCode.bind(this)}/>
       </div>
     )
   }
@@ -145,7 +157,9 @@ function mapStateToProps(state){
   return {
     userName: state.userReducer.userName,
     myInserts: state.userReducer.myInserts,
-    socket: state.sessionReducer.socket 
+    socket: state.sessionReducer.socket,
+    room: state.sessionReducer.room,
+    quill: state.sessionReducer.quill
   }
 }
 
