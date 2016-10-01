@@ -40,7 +40,7 @@ function addDoctoUser(user, doc){
 	})
 	.then(function(newDoc){
 		db.User.findOne({where: {
-			username: user
+			user_name: user
 		}})
 		.then(function(foundUser){
 			console.log('doc added', newDoc, foundUser)

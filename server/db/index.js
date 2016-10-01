@@ -5,7 +5,7 @@ var db = new Sequelize('codesocket', '', '', {
 });
 
 var User = db.define('users', {
-    username: Sequelize.STRING
+	user_name: Sequelize.STRING
 });
 
 var Doc = db.define('docs', {
