@@ -1,29 +1,32 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('codesocket', '', '', {
-  dialect: 'postgres',
-  port: 5432
+ dialect: 'postgres',
+ port: 5432
 });
 
-var Dev = db.define('devs', {
-	username: Sequelize.STRING
+var User = db.define('users', {
+    username: Sequelize.STRING
 });
 
 var Doc = db.define('docs', {
-  doc_name: Sequelize.STRING,
-  doc_content: Sequelize.TEXT,
+ doc_name: Sequelize.STRING,
+ doc_content: Sequelize.TEXT,
 });
 
-var DevDoc = db.define('devdocs', {
-	user_id: Sequelize.INTEGER,
-	doc_id: Sequelize.INTEGER
+var UserDoc = db.define('userdocs', {
+    user_id: Sequelize.INTEGER,
+    doc_id: Sequelize.INTEGER
 });
 
-Dev.belongsToMany(Doc, {through: 'DevDoc'});
-Doc.belongsToMany(Dev, {through: 'DevDoc'});
+User.belongsToMany(Doc, {through: 'UserDoc', foreignKey: 'user_id'});
+Doc.belongsToMany(User, {through: 'UserDoc', foreignKey: 'doc_id'});
 
-Dev.sync();
+
+
+User.sync();
 Doc.sync();
-DevDoc.sync();
+UserDoc.sync();
 
-module.exports.Dev = Dev;
+module.exports.User = User;
 module.exports.Doc = Doc;
+module.exports.UserDoc = UserDoc;
