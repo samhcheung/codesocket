@@ -60,17 +60,11 @@ var httpsServer = https.createServer({
 useWebpackMiddleware(app);
 
 app.use(express.static('./src/client'));
-<<<<<<< 55112947248b72ae9d4b9c344ce144cd11b96238
-
 //add bodyParser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-
-=======
-app.use(bodyparser());
->>>>>>> added logic for saving doc to user on joining room
 app.get('/', function(req, res) {
 	res.send();
 })
