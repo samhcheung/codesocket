@@ -129,7 +129,7 @@ io.on('connection', function(socket){
     //socket.broadcast.emit('message', message);
   });
 
-  socket.on('create or join', function(room) {
+  socket.on('open or join', function(room) {
     //console.log(room, '===== ROOM');
     var fetch = function(exists) {
       if(exists){
@@ -150,7 +150,7 @@ io.on('connection', function(socket){
     
 
 
-    log('Received request to create or join room ' + room);
+    log('Received request to open or join room ' + room);
 
     if (io.sockets.sockets.length === 0) {
       roomClients = {};
@@ -168,11 +168,11 @@ io.on('connection', function(socket){
 
     if (numClients === 1) {
       socket.join(room);
-      log('Client ID ' + socket.id + ' created room ' + room);
+      log('Client ID ' + socket.id + ' opened room ' + room);
       
       //socket.emit('created', room, socket.id);
 
-      io.sockets.in(room).emit('created', room, socket.id);
+      io.sockets.in(room).emit('opened', room, socket.id);
 
     } else if (numClients === 2) {
       socket.join(room);
