@@ -238,7 +238,7 @@ console.log('open or join')
     console.log('got latest---------', latest);
     var requestId = latest.requestId;
     var delta = latest.delta;
-    io.sockets.socket(requestId).emit('fetched latest', delta)
+    io.to(requestId).emit('fetched latest', delta)
   })
   // socket.on('join room', function(room) {
   //   console.log(room, '===== JOIN ROOM');

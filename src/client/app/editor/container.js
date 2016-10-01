@@ -44,8 +44,10 @@ class EditorContainer extends React.Component {
     });
 
     socket.on('fetched latest', function(latest){
+      console.log('fetched!!!', latest)
       quill.updateContents(latest, 'api');
     })
+
     socket.on('fetch latest version', function(requestId){
       console.log('in fetch latest')
       var delta = quill.getContents();
