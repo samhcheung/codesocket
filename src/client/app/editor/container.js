@@ -43,12 +43,23 @@ class EditorContainer extends React.Component {
       languages: ['javascript']
     });
 
-    socket.on('fetched latest', function(latest){
-      console.log('fetched!!!', latest)
-      quill.updateContents(latest, 'api');
+    socket.on('fetched live', function(latest){
+      console.log('fetched!!!', latest.ops[0])
+      var delta = {
+        ops: [latest.ops[0]]
+      }
+      quill.updateContents(delta, 'api');
+    });
+
+    socket.on('found latest doc', function(doc){
+      console.log('latest doc', doc);
+      var delta = {
+        ops: [{insert: doc['doc_content']}]
+      }
+      quill.updateContents(delta, 'api');
     })
 
-    socket.on('fetch latest version', function(requestId){
+    socket.on('fetch live version', function(requestId){
       console.log('in fetch latest')
       var delta = quill.getContents();
       console.log('fetchd', delta)
@@ -56,7 +67,7 @@ class EditorContainer extends React.Component {
         delta: delta,
         requestId: requestId
       }
-      socket.emit('latest version', response);
+      socket.emit('live version', response);
 
     })
 
@@ -99,7 +110,7 @@ class EditorContainer extends React.Component {
     console.log('omg', context)
     quill.on('text-change', function(delta,olddelta,source) {
       // console.log('get delta', delta.ops[0],delta.ops[1])
-      // console.log('omg', delta, olddelta, source)
+      console.log('omg-------------', delta)
       var arr = [];
       if(source === 'user') {
         if(delta.ops[1] && delta.ops[1]['insert'] !== undefined) {

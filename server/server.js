@@ -188,11 +188,11 @@ console.log('open or join')
     var numClients = roomClients[room];
 
     console.log('roomClients', roomClients)
-    console.log('users count---', users);
+    console.log('users count---', numClients);
     if(numClients*1 > 1) {
       //get their stuff
       console.log('more than one user!')
-      socket.broadcast.to(room).emit('fetch latest version', socket.id);
+      socket.broadcast.to(room).emit('fetch live version', socket.id);
 
     } else {
       //ask db for latest;
@@ -201,6 +201,7 @@ console.log('open or join')
       }})
       .then(function(doc){
         console.log('found doc', doc)
+        io.to(socket.id).emit('found latest doc', doc);
       })
     }
 
@@ -234,11 +235,11 @@ console.log('open or join')
     }
   });
 
-  socket.on('latest version', function(latest){
-    console.log('got latest---------', latest);
+  socket.on('live version', function(latest){
+    console.log('got live v---------', latest);
     var requestId = latest.requestId;
     var delta = latest.delta;
-    io.to(requestId).emit('fetched latest', delta)
+    io.to(requestId).emit('fetched live', delta)
   })
   // socket.on('join room', function(room) {
   //   console.log(room, '===== JOIN ROOM');
