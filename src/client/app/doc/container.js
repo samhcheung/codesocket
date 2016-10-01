@@ -12,16 +12,16 @@ class DocContainer extends React.Component {
   }
 
   componentWillMount() {
-    console.log('ever comes here')
+    console.log('room name', this.props.room)
     var socket = io();
     this.props.dispatch({
       type: 'UPDATE_SOCKET',
       socket: socket
     });
     var room = this.props.room;
-
+    // con
     if (room !== '') {
-      // socket.emit('join room', docname);
+      // socket.emit('join room', room);
 
       socket.emit('create or join', room);
       console.log('Attempted to create or  join room', room);

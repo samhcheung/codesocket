@@ -372,34 +372,34 @@ class VideoContainer extends React.Component {
       return sdpLines;
     }
 
-    var callVideoButton = document.querySelector('#call-video');
-    callVideoButton.onclick = function() {
-      isInitiator = true;
-      isChannelReady = true;
-      isStarted = false;
-      sendMessage('got user media' + room);
-      // if (!isInitiator) {
-      maybeStart();
-      // }
+    // var callVideoButton = document.querySelector('#call-video');
+    // callVideoButton.onclick = function() {
+    //   isInitiator = true;
+    //   isChannelReady = true;
+    //   isStarted = false;
+    //   sendMessage('got user media' + room);
+    //   // if (!isInitiator) {
+    //   maybeStart();
+    //   // }
 
-      //if (isInitiator) {
-        //maybeStart();
-        // doCall();
-        // sendMessage('got user media' + room);
-        doCall();
-      //}
-    };
+    //   //if (isInitiator) {
+    //     //maybeStart();
+    //     // doCall();
+    //     // sendMessage('got user media' + room);
+    //     doCall();
+    //   //}
+    // };
 
-    var answerVideoButton = document.querySelector('#answer-video');
-    answerVideoButton.onclick = function() {
-      //maybeStart();
-    };
+    // var answerVideoButton = document.querySelector('#answer-video');
+    // answerVideoButton.onclick = function() {
+    //   //maybeStart();
+    // };
 
-    var stopVideoButton = document.querySelector('#stop-video');
-    stopVideoButton.onclick = function() {
-      hangup();
+    // var stopVideoButton = document.querySelector('#stop-video');
+    // stopVideoButton.onclick = function() {
+    //   hangup();
 
-    };
+    // };
 
   }
 

@@ -46,21 +46,28 @@ class NavContainer extends React.Component {
 
   joinDoc(e) {
     e.preventDefault();
-    var docname = e.target.value;
-    //socket join room
-    var name = prompt('What\'s your name?');
-
-    this.props.dispatch({
-      type: 'UPDATE_USER', 
-      userName: name
-    });
-
+    var docname = e.target.textContent;
+    console.log('docname', docname)
+    var username = prompt('What\'s your name?');
     this.props.dispatch({
       type: 'DOC_SELECTION_MODAL', 
       modalopen: false
     });  
     
-    hashHistory.push('/doc');
+    this.props.dispatch({
+      type: 'UPDATE_USER', 
+      userName: username
+    });
+
+    this.props.dispatch({
+      type: 'UPDATE_ROOM', 
+      room: docname
+    })
+    // .then(function(room){
+      hashHistory.push('/doc');
+    // })
+
+    
   }
 
   openModal() { 
