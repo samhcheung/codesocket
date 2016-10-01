@@ -131,6 +131,10 @@ class EditorContainer extends React.Component {
     });
 
     this.quill = quill;
+    this.props.dispatch({
+      type: 'UPDATE_QUILL', 
+      quill: quill
+    });
 
   } // ComponentDidMount
   saveCode() {
@@ -172,7 +176,8 @@ function mapStateToProps(state){
     userName: state.userReducer.userName,
     myInserts: state.userReducer.myInserts,
     socket: state.sessionReducer.socket,
-    room: state.sessionReducer.room
+    room: state.sessionReducer.room,
+    quill: state.sessionReducer.quill
   }
 }
 

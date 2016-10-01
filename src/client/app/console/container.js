@@ -18,7 +18,8 @@ class ConsoleContainer extends React.Component {
     // Will switch to the Quill editor when it is refactored to live in the
     // Redux Store.
     var theCode = document.getElementById('test-editor').value;
-
+    console.log(this.props.quill, 'quill')
+    theCode = this.props.quill.getText();
     // Save reference to the default console.log function.
     var oldLog = console.log;
 
@@ -76,7 +77,8 @@ class ConsoleContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    userName: state.userReducer.userName
+    userName: state.userReducer.userName,
+    quill: state.sessionReducer.quill
   }
 }
 
