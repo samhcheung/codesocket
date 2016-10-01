@@ -27,11 +27,14 @@ class DocContainer extends React.Component {
         <div className="body-container">
           <div className="row">
             <div className="col-sm-6"><EditorContainer /></div>
-            <div className="col-sm-6"><VideoContainer /></div>
+            <div className="col-sm-6">
+              <VideoContainer />
+              <ConsoleContainer /> 
+            </div>
           </div>
           <div className="row">
             <div className="col-sm-12">
-              <div className="text-center"><ConsoleContainer /> </div>
+              <div className="text-center"></div>
             </div>
           </div>
         </div>

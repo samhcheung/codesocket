@@ -1,13 +1,23 @@
 import React, { PropTypes, Component } from 'react';
 import {Link} from 'react-router';
 
+const consoleStyle = {
+  height: { 
+    'maxHeight': '40%',
+    overflow: 'auto'
+  },
+  width: {
+    'marginRight': '20px'
+  }
+};
+
 const ConsolePresentation = (props) => {
-    //<textarea cols="20" rows="10" id="editor"></textarea>
     return (
       <div className='loadingscreen'>
-      <button onClick={e=>props.runCode(e)} id="run">Run the code!</button>
-      <button id="save">Save the code!</button>
-      <div id="test"></div>
+        <button onClick={e=>props.runCode(e)} id="run">Run the code!</button>
+        <button id="save">Save the code!</button>
+        <div>Console Output:</div>
+        <div id="console" className="ql-editor" style={Object.assign(consoleStyle.height, consoleStyle.width)}></div>
       </div>
       )
 }
