@@ -20,14 +20,14 @@ function docExists(user, docname, callback){
 	})
 }
 
-function addDocToDB(user, docname, callback){
-	console.log('in addDocToDB', user, docname)
-	db.Doc.create({
-		doc_name: docname,
-		doc_content: '',
+function addDocToDB(docname, callback){
+	console.log('in addDocToDB', docname)
+	db.Doc.findOrCreate({
+		where: {
+			doc_name: docname
+		}
 	})
 	.then(function(newDoc) {
-		console.log('user', user)
 		console.log('callback', callback)
 		// callback(newDoc);
 		callback(newDoc)

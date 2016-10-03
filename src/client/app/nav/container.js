@@ -23,29 +23,34 @@ class NavContainer extends React.Component {
   addDoc() {
     var context = this;
     console.log('==================props', this.props)
-    var name = prompt('What\'s your name?');
-    if(name){
+    var username = prompt('What\'s your name?');
+    if(username){
+      context.props.dispatch({
+        type: 'UPDATE_USER', 
+        userName: username
+      });
       var room = prompt('Enter a room name.');
       if(room){
-        this.saveuser(name);
-
-        this.checkDocExist(name, room, function(exists){
-          if(exists){
-            console.log('exists', exists)
-            alert('Cannot create room because room already exists. Try another name or join the existing room!');
-          } else {
-            context.props.dispatch({
-              type: 'UPDATE_USER', 
-              userName: name
-            });
-
-            context.props.dispatch({
-              type: 'UPDATE_ROOM', 
-              room: room
-            });
-            hashHistory.push('/doc');
-          } 
-        })
+        context.props.dispatch({
+          type: 'UPDATE_ROOM', 
+          room: room
+        });
+        context.saveuser(username, function(user){
+          context.checkDocExist(username, room, function(exists){
+            if(exists){
+              console.log('exists', exists)
+              alert('Cannot create room because room already exists. Try another name or join the existing room!');
+            } else {
+              context.saveroom(room, function(roomname){
+                context.saveroomtouser(username, room, function(userroom){
+                  console.log('saved user room', userroom);
+                  hashHistory.push('/doc');
+                })
+                
+              });
+            } 
+          })
+        });
       }
     }
   }
@@ -57,49 +62,72 @@ class NavContainer extends React.Component {
       callback(roomExists.data);
     })
   }
-  saveuser(username){
+  saveuser(username, callback){
     console.log('in save user', username)
-    axios.post('/adduser',{username: username})
+    axios.post('/adduser',{user: username})
     .then(function(user){
       console.log('new user saved');
+      callback(user);
     })
+  }
+
+  saveroom(room, callback){
+    console.log('in save user', room)
+    axios.post('/addroom',{room: room})
+    .then(function(room){
+      console.log('new room saved');
+      callback(room);
+    })
+  }
+
+  saveroomtouser(user, room, callback){
+    var postPackage = {
+      room: room, 
+      user: user
+    }
+    console.log('before add room', postPackage)
+    axios.post('/addroomtouser', postPackage)
+    .then(function(userroom) {
+        console.log('====', userroom);
+        callback(userroom);
+    });
   }
 
   joinDoc(e) {
     e.preventDefault();
-    var docname = e.target.textContent;
-    console.log('=====================docname', docname)
+    var context = this;
+    var room = e.target.textContent;
+    context.props.dispatch({
+      type: 'UPDATE_ROOM', 
+      room: room
+    })
+    console.log('=====================room', room)
     var username = prompt('What\'s your name?');
     if(username) {
-      this.saveuser(username);
-      this.props.dispatch({
+      context.props.dispatch({
         type: 'DOC_SELECTION_MODAL', 
         modalopen: false
       });  
-      
-      this.props.dispatch({
-        type: 'UPDATE_USER', 
-        userName: username
+      context.saveuser(username, function(user){
+        context.props.dispatch({
+          type: 'UPDATE_USER', 
+          userName: username
+        });
+        context.saveroomtouser(username, room, function(userroom){
+          hashHistory.push('/doc');
+        })
       });
-
-      this.props.dispatch({
-        type: 'UPDATE_ROOM', 
-        room: docname
-      })
-
       // .then(function(room){
-      console.log('omg', docname, username)
-      var postPackage = {
-        room: docname, 
-        user: username
-      }
-      console.log('before add room', postPackage)
-      axios.post('/addroomtouser', postPackage)
-      .then(function(response) {
-          console.log('====', response);
-      });
+      // var postPackage = {
+      //   room: docname, 
+      //   user: username
+      // }
+      // console.log('before add room', postPackage)
+      // axios.post('/addroomtouser', postPackage)
+      // .then(function(response) {
+      //     console.log('====', response);
+      // });
 
-      hashHistory.push('/doc');
     }
     // })
 
@@ -113,7 +141,7 @@ class NavContainer extends React.Component {
 
   openModal() { 
     var context = this;
-    this.props.dispatch({
+    context.props.dispatch({
       type: 'DOC_SELECTION_MODAL', 
       modalopen: true
     });  

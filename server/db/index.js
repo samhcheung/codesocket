@@ -13,20 +13,25 @@ var Doc = db.define('docs', {
  doc_content: Sequelize.TEXT,
 });
 
-var UserDoc = db.define('userdocs', {
-    user_id: Sequelize.INTEGER,
-    doc_id: Sequelize.INTEGER
-});
+// var UserDoc = db.define('userdocs', {
+// 	id: {
+// 		type: Sequelize.INTEGER,
+// 		primaryKey: true
+// 	},
+//     user_id: Sequelize.INTEGER,
+//     doc_id: Sequelize.INTEGER
+// });
 
-User.belongsToMany(Doc, {through: 'userdocs', foreignKey: 'user_id', primaryKey: 'id'});
-Doc.belongsToMany(User, {through: 'userdocs', foreignKey: 'doc_id', primaryKey: 'id'});
+User.belongsToMany(Doc, {through: 'userdocs', foreignKey: 'user_id'});
+Doc.belongsToMany(User, {through: 'userdocs', foreignKey: 'doc_id'});
 
 
 
-User.sync();
-Doc.sync();
-UserDoc.sync();
+// User.sync();
+// Doc.sync();
+// UserDoc.sync();
+db.sync();
 
 module.exports.User = User;
 module.exports.Doc = Doc;
-module.exports.UserDoc = UserDoc;
+// module.exports.UserDoc = UserDoc;
