@@ -168,7 +168,6 @@ console.log('open or join')
 
     log('Received request to open or join room ' + room);
     console.log('Received request to open or join room ' + room);
-
     if (io.sockets.sockets.length === 0) {
       roomClients = {};
     }
@@ -227,6 +226,8 @@ console.log('open or join')
       io.sockets.in(room).emit('full', room);
       //socket.emit('full', room);
     }
+
+    console.log('Rooms',io.sockets.adapter.rooms)
   });
 
   socket.on('live version', function(latest){
