@@ -1,6 +1,7 @@
 const userInitialState = {
   userName: 'Anonymous',
-  myInserts: []
+  myInserts: [],
+  isInitiator: false
 }
 
 export default function userReducer (state = userInitialState, action) {
@@ -15,6 +16,12 @@ export default function userReducer (state = userInitialState, action) {
      return {
        ...state, 
        myInserts: action.myInserts
+     }
+    }
+    case 'SET_INITIATOR' : {
+     return {
+       ...state, 
+       isInitiator: action.isInitiator
      }
     }
     default : {

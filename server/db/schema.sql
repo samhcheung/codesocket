@@ -4,10 +4,10 @@
 
 -- \c codesocket;
 
--- CREATE TABLE dev (
--- 	id bigserial primary key,
--- 	username varchar(20) NOT NULL
--- );
+CREATE TABLE users (
+	id bigserial primary key,
+	user_name varchar(20) NOT NULL
+);
 
 -- CREATE TABLE doc (
 -- 	id bigserial primary key,

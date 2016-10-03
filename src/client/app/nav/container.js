@@ -29,6 +29,7 @@ class NavContainer extends React.Component {
 
     this.checkDocExist(name, room, function(exists){
       if(exists){
+        console.log('exists', exists)
         alert('Cannot create room because room already exists. Try another name or join the existing room!');
       } else {
         context.props.dispatch({
@@ -91,10 +92,6 @@ class NavContainer extends React.Component {
       room: docname, 
       user: username
     }
-    // axios.post('/addroomtouser', {params: postPackage})
-    // .then(function(userroom){
-    //   console.log('user room successfully posted')
-    // })
     console.log('before add room', postPackage)
     axios.post('/addroomtouser', postPackage)
     .then(function(response) {

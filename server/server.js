@@ -47,7 +47,6 @@ var bodyParser = require('body-parser');
 var path = require('path');
 var express = require('express');
 var app = express();
-var bodyparser = require('body-parser');
 //var http = require('http').Server(app);
 var db = require('./db/index.js');
 
@@ -91,7 +90,15 @@ app.post('/savedoc', function(req, res) {
 app.get('/roomExists', function(req, res){
   helper.docExists(req.query.user, req.query.room, function(exists){
     console.log('exists', exists);
-    res.send(exists);
+    if(!exists){
+      helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
+        helper.addDoctoUser(req.query.user, req.query.room, function(result){
+          res.send(false);
+        })
+      })
+    } else {
+      res.send(true);
+    } 
   })
 })
 
@@ -100,13 +107,17 @@ app.post('/addroomtouser', function(req, res){
   console.log('req query', req.body)
   var room = req.body.room;
   var user = req.body.user;
-  helper.addDoctoUser(user, room);
+  helper.addDoctoUser(user, room, function(result){
+    res.send(result);
+  });
 })
 
 app.post('/adduser', function(req, res){
   var username = req.body.username;
   console.log('server sees username to save', username)
-  helper.saveuser(username);
+  helper.saveuser(username, function(result){
+    res.send(result);
+  });
 })
 // Begin socket component
 var io = require('socket.io')(httpsServer);
@@ -136,9 +147,12 @@ io.on('connection', function(socket){
     
     // Relay the message to each user in my room
     clientRooms.forEach(function(aRoom) {
-      io.sockets.in(aRoom).emit('message', message);
+      socket.broadcast.to(aRoom).emit('message', message);
+
+      // io.sockets.in(aRoom).emit('message', message);
       if (message === 'bye' + aRoom) {
         if (roomClients[aRoom] > 0) {
+          console.log('in bye room. decrementing room count')
           roomClients[aRoom]--;
         }
       }
@@ -147,7 +161,7 @@ io.on('connection', function(socket){
     //socket.broadcast.emit('message', message);
   });
 
-  socket.on('open or join', function(room) {
+  socket.on('create or join', function(room) {
     //console.log(room, '===== ROOM');
     // var fetch = function(exists) {
     //   if(exists){
@@ -164,10 +178,10 @@ io.on('connection', function(socket){
     // var exists = helper.docExists(room, fetch);
     // console.log('exists', exists);
 
-console.log('open or join')
+    console.log('create or join')
 
-    log('Received request to open or join room ' + room);
-    console.log('Received request to open or join room ' + room);
+    log('Received request to create or join room ' + room);
+    console.log('Received request to create or join room ' + room);
 
     if (io.sockets.sockets.length === 0) {
       roomClients = {};
@@ -183,21 +197,21 @@ console.log('open or join')
 
     console.log('roomClients', roomClients)
     console.log('users count---', numClients);
-    if(numClients*1 > 1) {
-      //get their stuff
-      console.log('more than one user!')
-      socket.broadcast.to(room).emit('fetch live version', socket.id);
+    // if(numClients * 1 > 1) {
+    //   //get their stuff
+    //   console.log('more than one user!')
+    //   socket.broadcast.to(room).emit('fetch live version', socket.id);
 
-    } else {
-      //ask db for latest;
-      db.Doc.findOne({where: {
-        doc_name: room
-      }})
-      .then(function(doc){
-        console.log('found doc', doc)
-        io.to(socket.id).emit('found latest doc', doc);
-      })
-    }
+    // } else {
+    //   //ask db for latest;
+    //   db.Doc.findOne({where: {
+    //     doc_name: room
+    //   }})
+    //   .then(function(doc){
+    //     console.log('found doc', doc)
+    //     io.to(socket.id).emit('found latest doc', doc);
+    //   })
+    // }
 
 
     console.log('numClients', numClients)
@@ -207,23 +221,45 @@ console.log('open or join')
     if (numClients === 1) {
       console.log('one client')
       socket.join(room);
-      log('Client ID ' + socket.id + ' opened room ' + room);
+      log('Client ID ' + socket.id + ' created room ' + room);
       
       //socket.emit('created', room, socket.id);
 
-      io.sockets.in(room).emit('opened', room, socket.id);
+      io.sockets.in(room).emit('created', room, socket.id);
+
+      db.Doc.findOne({where: {
+        doc_name: room
+      }})
+      .then(function(doc){
+        console.log('found doc', doc)
+        io.to(socket.id).emit('found latest doc', doc);
+      })
+
 
     } else if (numClients === 2) {
-      console.log('two clients')
+
+      console.log('more than one user!')
+
+      console.log('two clients',room, socket.id)
       socket.join(room);
+
+      console.log('---AFTER JOIN ROOM -----')
       log('Client ID ' + socket.id + ' joined room ' + room);
       io.sockets.in(room).emit('join', room);
+            console.log('---AFTER JOIN emit -----')
+
       //socket.emit('joined', room, socket.id);
       io.sockets.in(room).emit('joined', room, socket.id);
+            console.log('---AFTER JOINed emit -----')
 
-      io.sockets.in(room).emit('ready');  
+      io.sockets.in(room).emit('ready');
+            console.log('---AFTER ready emit -----')
+
+      socket.broadcast.to(room).emit('fetch live version', socket.id);
+            console.log('---AFTER fetch live emit -----')
+
     } else { // max two clients
-
+      console.log('IN CLIENT MORE THAN TWO')
       io.sockets.in(room).emit('full', room);
       //socket.emit('full', room);
     }

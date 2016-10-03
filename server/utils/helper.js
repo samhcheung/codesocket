@@ -11,7 +11,7 @@ function docExists(user, docname, callback){
 		console.log('found doc', doc)
 		if(doc === null){
 			//room does not exist
-			addDocToDB(user, docname)
+			// addDocToDB(user, docname)
 			callback(false);
 			//create room in db
 		} else {
@@ -20,7 +20,7 @@ function docExists(user, docname, callback){
 	})
 }
 
-function addDocToDB(user, docname){
+function addDocToDB(user, docname, callback){
 	console.log('in addDocToDB', user, docname)
 	db.Doc.create({
 		doc_name: docname,
@@ -28,11 +28,13 @@ function addDocToDB(user, docname){
 	})
 	.then(function(newDoc) {
 		console.log('user', user)
-		addDoctoUser(user, docname)
+		console.log('callback', callback)
+		// callback(newDoc);
+		callback(newDoc)
 	})
 }
 
-function saveuser(username){
+function saveuser(username, callback){
 	console.log('in helper ', username)
 	db.User.findOrCreate({
 		where: {
@@ -41,10 +43,11 @@ function saveuser(username){
 	})
 	.then(function(user){
 		console.log('user', user);
+		callback(user);
 	})
 }
 
-function addDoctoUser(user, doc){
+function addDoctoUser(user, doc, callback){
 	db.Doc.findOne({
 		where: {
 			doc_name: doc
@@ -56,7 +59,12 @@ function addDoctoUser(user, doc){
 		}})
 		.then(function(foundUser){
 			console.log('doc added', newDoc, foundUser)
-			newDoc.addUser(foundUser);
+			if (foundUser) {
+				foundUser.addDoc(newDoc);
+				callback(foundUser);
+			} else {
+				callback(null);
+			}
 		})
 	})
 }

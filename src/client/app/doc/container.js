@@ -12,29 +12,12 @@ class DocContainer extends React.Component {
   }
 
   componentWillMount() {
-    console.log('room name', this.props.room)
+    console.log('ever comes here')
     var socket = io();
     this.props.dispatch({
       type: 'UPDATE_SOCKET',
       socket: socket
     });
-    console.log('will mount', this.props)
-  // }
-  // componentDidMount(){
-    var room = this.props.room;
-    // con
-    if (room !== '') {
-      // socket.emit('join room', room);
-      console.log('BEFORE EMIT OPEN OR JOIN', room, this.props)
-      socket.emit('open or join', room);
-      console.log('Attempted to create or  join room', room);
-    } else {
-      var room = prompt('Enter a room name.');
-      this.props.dispatch({
-        type: 'UPDATE_ROOM', 
-        room: room
-      });
-    }
   }
 
   render () {
@@ -63,12 +46,12 @@ class DocContainer extends React.Component {
 
 //export default DocContainer;
 
-function mapStateToProps(state) {
+function mapStateToProps(state){
   return {
-    userName: state.userReducer.userName,
-    room: state.sessionReducer.room,
-    socket: state.sessionReducer.socket
+    // userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
+    // myInserts: state.userReducer.myInserts, //<=== shouldnt have to do this...? 
+    // socket: state.sessionReducer.socket 
   }
 }
 
- export default connect(mapStateToProps)(DocContainer)
+ export default connect()(DocContainer)

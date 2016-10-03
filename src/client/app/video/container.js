@@ -12,7 +12,6 @@ class VideoContainer extends React.Component {
   // }
 
   componentDidMount() {
-    var context = this;
     var isChannelReady = false;
     var isInitiator = false;
     var isStarted = false;
@@ -48,18 +47,15 @@ class VideoContainer extends React.Component {
     console.log('socket inside video container', socket);
     //var socket = io.connect('/' + room);
 
-    // if (room !== '') {
-    //   socket.emit('create or join', room);
-    //   console.log('Attempted to create or  join room', room);
-    // }
+    if (room !== '') {
+      socket.emit('create or join', room);
+      console.log('Attempted to create or  join room', room);
+    }
 
     socket.on('created', function(room) {
       console.log('Created room ' + room);
       isInitiator = true;
-      context.props.dispatch({
-        type: 'UPDATE_SOCKET',
-        socket: socket
-      })
+      console.log('i am initiator?', isInitiator)
     });
 
     socket.on('full', function(room) {
@@ -111,6 +107,7 @@ class VideoContainer extends React.Component {
       } else if (message === 'bye' + room && isStarted) {
         console.log('handling remote hangup!!!!!!!');
         handleRemoteHangup();
+        isInitiator = true;
       }
     });
 
@@ -160,22 +157,16 @@ class VideoContainer extends React.Component {
         isStarted = true;
         console.log('isInitiator', isInitiator);
         if (isInitiator) {
+          console.log('before do call')
           doCall();
         }
       }
     }
 
-    // window.onbeforeunload = function() {
-    //   sendMessage('bye' + room);
-    // };
+    window.onbeforeunload = function() {
+      sendMessage('bye' + room);
+    };
 
-    // window.onbeforeunload = function() {
-    //    hangup();
-    //  };
-
-    //  window.onhashchange = function() {
-    //    hangup();
-    //  };
     /////////////////////////////////////////////////////////
 
     function createPeerConnection() {
@@ -379,34 +370,34 @@ class VideoContainer extends React.Component {
       return sdpLines;
     }
 
-    // var callVideoButton = document.querySelector('#call-video');
-    // callVideoButton.onclick = function() {
-    //   isInitiator = true;
-    //   isChannelReady = true;
-    //   isStarted = false;
-    //   sendMessage('got user media' + room);
-    //   // if (!isInitiator) {
-    //   maybeStart();
-    //   // }
+    var callVideoButton = document.querySelector('#call-video');
+    callVideoButton.onclick = function() {
+      isInitiator = true;
+      isChannelReady = true;
+      isStarted = false;
+      sendMessage('got user media' + room);
+      // if (!isInitiator) {
+      maybeStart();
+      // }
 
-    //   //if (isInitiator) {
-    //     //maybeStart();
-    //     // doCall();
-    //     // sendMessage('got user media' + room);
-    //     doCall();
-    //   //}
-    // };
+      //if (isInitiator) {
+        //maybeStart();
+        // doCall();
+        // sendMessage('got user media' + room);
+        doCall();
+      //}
+    };
 
-    // var answerVideoButton = document.querySelector('#answer-video');
-    // answerVideoButton.onclick = function() {
-    //   //maybeStart();
-    // };
+    var answerVideoButton = document.querySelector('#answer-video');
+    answerVideoButton.onclick = function() {
+      //maybeStart();
+    };
 
-    // var stopVideoButton = document.querySelector('#stop-video');
-    // stopVideoButton.onclick = function() {
-    //   hangup();
+    var stopVideoButton = document.querySelector('#stop-video');
+    stopVideoButton.onclick = function() {
+      hangup();
 
-    // };
+    };
 
   }
 

@@ -116,7 +116,7 @@ class EditorContainer extends React.Component {
     console.log('omg', context)
     quill.on('text-change', function(delta,olddelta,source) {
       // console.log('get delta', delta.ops[0],delta.ops[1])
-      console.log('omg-------------', delta)
+      // console.log('omg-------------', delta)
       var arr = [];
       if(source === 'user') {
         if(delta.ops[1] && delta.ops[1]['insert'] !== undefined) {
