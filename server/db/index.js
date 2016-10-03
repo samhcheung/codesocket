@@ -5,7 +5,7 @@ var db = new Sequelize('codesocket', '', '', {
 });
 
 var User = db.define('users', {
-    username: Sequelize.STRING
+    user_name: Sequelize.STRING
 });
 
 var Doc = db.define('docs', {
@@ -18,8 +18,8 @@ var UserDoc = db.define('userdocs', {
     doc_id: Sequelize.INTEGER
 });
 
-User.belongsToMany(Doc, {through: 'UserDoc', foreignKey: 'user_id'});
-Doc.belongsToMany(User, {through: 'UserDoc', foreignKey: 'doc_id'});
+User.belongsToMany(Doc, {through: 'userdocs', foreignKey: 'user_id', primaryKey: 'id'});
+Doc.belongsToMany(User, {through: 'userdocs', foreignKey: 'doc_id', primaryKey: 'id'});
 
 
 

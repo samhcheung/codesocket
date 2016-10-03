@@ -17,7 +17,10 @@ var webpack = require('webpack'),
     webpackHotMiddleware = require('webpack-hot-middleware'),
     webpackconfig = require('../webpack.config.js'),
     webpackcompiler = webpack(webpackconfig);
- 
+
+// var db = require('./db/index.js');
+var helper = require('./utils/helper.js')
+
 //enable webpack middleware for hot-reloads in development
 function useWebpackMiddleware(app) {
     app.use(webpackDevMiddleware(webpackcompiler, {
@@ -56,18 +59,18 @@ var httpsServer = https.createServer({
 useWebpackMiddleware(app);
 
 app.use(express.static('./src/client'));
-
 //add bodyParser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 
-
 app.get('/', function(req, res) {
 	res.send();
 })
-app.get('/sam', function(req, res) {
-	res.send('hiiidfd')
+app.get('/doclist', function(req, res) {
+  helper.fetchrooms(function(docs){
+    res.send(docs);
+  })
 })
 
 app.post('/savedoc', function(req, res) {
@@ -84,7 +87,38 @@ app.post('/savedoc', function(req, res) {
 
 })
 
+app.get('/roomExists', function(req, res){
+  helper.docExists(req.query.user, req.query.room, function(exists){
+    console.log('exists', exists);
+    if(!exists){
+      helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
+        helper.addDoctoUser(req.query.user, req.query.room, function(result){
+          res.send(false);
+        })
+      })
+    } else {
+      res.send(true);
+    } 
+  })
+})
 
+app.post('/addroomtouser', function(req, res){
+  // helper.
+  console.log('req query', req.body)
+  var room = req.body.room;
+  var user = req.body.user;
+  helper.addDoctoUser(user, room, function(result){
+    res.send(result);
+  });
+})
+
+app.post('/adduser', function(req, res){
+  var username = req.body.username;
+  console.log('server sees username to save', username)
+  helper.saveuser(username, function(result){
+    res.send(result);
+  });
+})
 // Begin socket component
 var io = require('socket.io')(httpsServer);
 var commands = [];
@@ -113,9 +147,12 @@ io.on('connection', function(socket){
     
     // Relay the message to each user in my room
     clientRooms.forEach(function(aRoom) {
-      io.sockets.in(aRoom).emit('message', message);
+      socket.broadcast.to(aRoom).emit('message', message);
+
+      // io.sockets.in(aRoom).emit('message', message);
       if (message === 'bye' + aRoom) {
         if (roomClients[aRoom] > 0) {
+          console.log('in bye room. decrementing room count')
           roomClients[aRoom]--;
         }
       }
@@ -126,7 +163,25 @@ io.on('connection', function(socket){
 
   socket.on('create or join', function(room) {
     //console.log(room, '===== ROOM');
+    // var fetch = function(exists) {
+    //   if(exists){
+    //     console.log('doc exists')
+    //     helper.fetchDocContent(room, socket);
+    //   } else {
+    //     console.log('doc does not exists')
+
+    //     // socket.disconnect();
+    //     //emit room doesn't exist.
+    //     //create listener for roomdoes't exist;
+    //   }
+    // }
+    // var exists = helper.docExists(room, fetch);
+    // console.log('exists', exists);
+
+    console.log('create or join')
+
     log('Received request to create or join room ' + room);
+    console.log('Received request to create or join room ' + room);
 
     if (io.sockets.sockets.length === 0) {
       roomClients = {};
@@ -137,12 +192,34 @@ io.on('connection', function(socket){
       roomClients[room]++;
     }
 
+    var users = Object.keys(socket.rooms).length;
     var numClients = roomClients[room];
 
+    console.log('roomClients', roomClients)
+    console.log('users count---', numClients);
+    // if(numClients * 1 > 1) {
+    //   //get their stuff
+    //   console.log('more than one user!')
+    //   socket.broadcast.to(room).emit('fetch live version', socket.id);
+
+    // } else {
+    //   //ask db for latest;
+    //   db.Doc.findOne({where: {
+    //     doc_name: room
+    //   }})
+    //   .then(function(doc){
+    //     console.log('found doc', doc)
+    //     io.to(socket.id).emit('found latest doc', doc);
+    //   })
+    // }
+
+
+    console.log('numClients', numClients)
     //var numClients = io.sockets.sockets.length;
     log('Room ' + room + ' now has ' + numClients + ' client(s)');
 
     if (numClients === 1) {
+      console.log('one client')
       socket.join(room);
       log('Client ID ' + socket.id + ' created room ' + room);
       
@@ -150,20 +227,84 @@ io.on('connection', function(socket){
 
       io.sockets.in(room).emit('created', room, socket.id);
 
+      db.Doc.findOne({where: {
+        doc_name: room
+      }})
+      .then(function(doc){
+        console.log('found doc', doc)
+        io.to(socket.id).emit('found latest doc', doc);
+      })
+
+
     } else if (numClients === 2) {
+
+      console.log('more than one user!')
+
+      console.log('two clients',room, socket.id)
       socket.join(room);
+
+      console.log('---AFTER JOIN ROOM -----')
       log('Client ID ' + socket.id + ' joined room ' + room);
       io.sockets.in(room).emit('join', room);
+            console.log('---AFTER JOIN emit -----')
+
       //socket.emit('joined', room, socket.id);
       io.sockets.in(room).emit('joined', room, socket.id);
+            console.log('---AFTER JOINed emit -----')
 
-      io.sockets.in(room).emit('ready');  
+      io.sockets.in(room).emit('ready');
+            console.log('---AFTER ready emit -----')
+
+      socket.broadcast.to(room).emit('fetch live version', socket.id);
+            console.log('---AFTER fetch live emit -----')
+
     } else { // max two clients
-
+      console.log('IN CLIENT MORE THAN TWO')
       io.sockets.in(room).emit('full', room);
       //socket.emit('full', room);
     }
   });
+
+  socket.on('live version', function(latest){
+    console.log('got live v---------', latest);
+    var requestId = latest.requestId;
+    var delta = latest.delta;
+    io.to(requestId).emit('fetched live', delta)
+  })
+  // socket.on('join room', function(room) {
+  //   console.log(room, '===== JOIN ROOM');
+  //   log('Received request to join room ' + room);
+
+  //   if (io.sockets.sockets.length === 0) {
+  //     roomClients = {};
+  //   }
+  //   if ((!roomClients[room]) || (roomClients[room] === 0)) {
+  //     roomClients[room] = 1;
+  //   } else {
+  //     roomClients[room]++;
+  //   }
+
+  //   var numClients = roomClients[room];
+
+  //   log('Room ' + room + ' now has ' + numClients + ' client(s)');
+
+  //   if (numClients === 1) {
+  //     socket.join(room);
+  //     log('Client ID ' + socket.id + ' created room ' + room);
+  //     io.sockets.in(room).emit('created', room, socket.id);
+
+  //   } else if (numClients === 2) {
+  //     socket.join(room);
+  //     log('Client ID ' + socket.id + ' joined room ' + room);
+  //     io.sockets.in(room).emit('join', room);
+  //     io.sockets.in(room).emit('joined', room, socket.id);
+
+  //     io.sockets.in(room).emit('ready');  
+  //   } else { // max two clients
+
+  //     io.sockets.in(room).emit('full', room);
+  //   }
+  // });
 
   socket.on('ipaddr', function() {
     var ifaces = os.networkInterfaces();
@@ -171,7 +312,6 @@ io.on('connection', function(socket){
       ifaces[dev].forEach(function(details) {
         if (details.family === 'IPv4' && details.address !== '127.0.0.1') {
           io.sockets.in(room).emit('ipaddr', details.address);
-          //socket.emit('ipaddr', details.address);
         }
       });
     }
@@ -211,6 +351,12 @@ io.on('connection', function(socket){
     console.log('oldIndex', index);
     socket.broadcast.emit('done', index);
   })
+
+
+
+  // socket.emit('fetch rooms', 'get existing rooms');
+  // socket.on('got room list', function(docs){  
+
   // *********** End Quill Socket ************
 });
 

@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import {Link} from 'react-router';
+import Modal from 'react-modal';
 
 const navstyle = {
   mainheader: {
@@ -23,10 +24,26 @@ const NavPresentation = (props) => {
         </div>
         <div className="row" style={navstyle.navbuttons}>
           <div className="col-sm-3 text-center"><Link >Rooms</Link></div>
-          <div className="col-sm-3 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
-          <div className="col-sm-3 text-center">History</div>
+          <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
+          <div className="col-sm-2 text-center" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
+          <div className="col-sm-2 text-center">History</div>
           <div className="col-sm-3 text-center"> {props.userName}</div>
         </div>
+
+        <Modal
+          style={{
+            content: {
+              color: 'lightsteelblue'
+            }
+          }}
+          isOpen={props.isOpen}
+          onRequestClose={props.closeModal}
+        >
+          <h1>Document List</h1>
+          {props.doclist && props.doclist.map(doc=> <li onClick={e=>props.joinDoc(e)}>{doc['doc_name']}</li>)}
+          <button onClick={props.closeModal}>Close</button>
+          <button onClick={props.addDoc}>Create New Doc</button>
+        </Modal>
       </div>
       )
 }

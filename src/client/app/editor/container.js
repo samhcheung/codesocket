@@ -42,7 +42,41 @@ class EditorContainer extends React.Component {
     hljs.configure({   // optionally configure hljs
       languages: ['javascript']
     });
-    
+
+    socket.on('fetched live', function(latest){
+      console.log('fetched!!!', latest, latest.ops)
+      // console.log('got last elem', latest.ops[latest.ops.length -1].insert)
+      // delete latest.ops[latest.ops.length -1].insert;
+      // var delta = {
+      //   ops: [latest.ops[0]]
+      // }
+      quill.setContents(latest, 'api');
+    });
+
+    socket.on('found latest doc', function(doc){
+      console.log('latest doc', doc);
+      // var delta = {
+      //   ops: [{insert: doc['doc_content']}]
+      // }
+      quill.setContents(JSON.parse(doc['doc_content']), 'api');
+    })
+
+    socket.on('fetch live version', function(requestId){
+      console.log('in fetch latest')
+      var delta = quill.getContents();
+      console.log('fetchd', delta)
+      var response = {
+        delta: delta,
+        requestId: requestId
+      }
+      socket.emit('live version', response);
+      // context.props.myInserts = [];
+      context.props.dispatch({
+        type: 'UPDATE_EDITOR_INSERTS',
+        myInserts: []
+      })
+    })
+
     socket.on('receive', function(delta) {
       console.log('-----------receive', delta);
       //do math
@@ -82,7 +116,7 @@ class EditorContainer extends React.Component {
     console.log('omg', context)
     quill.on('text-change', function(delta,olddelta,source) {
       // console.log('get delta', delta.ops[0],delta.ops[1])
-      // console.log('omg', delta, olddelta, source)
+      // console.log('omg-------------', delta)
       var arr = [];
       if(source === 'user') {
         if(delta.ops[1] && delta.ops[1]['insert'] !== undefined) {

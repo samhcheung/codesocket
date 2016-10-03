@@ -12,7 +12,6 @@ class VideoContainer extends React.Component {
   // }
 
   componentDidMount() {
-    var context = this;
     var isChannelReady = false;
     var isInitiator = false;
     var isStarted = false;
@@ -56,10 +55,7 @@ class VideoContainer extends React.Component {
     socket.on('created', function(room) {
       console.log('Created room ' + room);
       isInitiator = true;
-      context.props.dispatch({
-        type: 'UPDATE_SOCKET',
-        socket: socket
-      })
+      console.log('i am initiator?', isInitiator)
     });
 
     socket.on('full', function(room) {
@@ -111,6 +107,7 @@ class VideoContainer extends React.Component {
       } else if (message === 'bye' + room && isStarted) {
         console.log('handling remote hangup!!!!!!!');
         handleRemoteHangup();
+        isInitiator = true;
       }
     });
 
@@ -160,6 +157,7 @@ class VideoContainer extends React.Component {
         isStarted = true;
         console.log('isInitiator', isInitiator);
         if (isInitiator) {
+          console.log('before do call')
           doCall();
         }
       }

@@ -1,7 +1,9 @@
 const sessionInitialState = {
   socket : null,
   room: '',
-  quill: null
+  quill: null,
+  modalopen: false,
+  videoChannelReady: false
 }
 
 export default function sessionReducer (state = sessionInitialState, action) {
@@ -10,6 +12,12 @@ export default function sessionReducer (state = sessionInitialState, action) {
      return {
        ...state, 
        socket: action.socket
+     }
+    }    
+    case 'VIDEO_CHANNEL_READY' : {
+     return {
+       ...state, 
+       videoChannelReady: action.videoChannelReady
      }
     }
     case 'UPDATE_ROOM' : {
@@ -23,6 +31,12 @@ export default function sessionReducer (state = sessionInitialState, action) {
         ...state,
         quill: action.quill
       }
+    }
+    case 'DOC_SELECTION_MODAL' : {
+     return {
+       ...state, 
+       modalopen: action.modalopen
+     }
     }
     default : {
      return state

@@ -5,10 +5,12 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import userReducer from './reducers/userreducer';
 import sessionReducer from './reducers/sessionreducer';
+import groupReducer from './reducers/groupreducer';
 
 const reducers = combineReducers({
  userReducer,
- sessionReducer
+ sessionReducer,
+ groupReducer
 });
 
 const store = createStore(reducers);
