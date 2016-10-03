@@ -24,30 +24,30 @@ class NavContainer extends React.Component {
     var context = this;
     console.log('==================props', this.props)
     var name = prompt('What\'s your name?');
-    var room = prompt('Enter a room name.');
-    this.saveuser(name);
+    if(name){
+      var room = prompt('Enter a room name.');
+      if(room){
+        this.saveuser(name);
 
-    this.checkDocExist(name, room, function(exists){
-      if(exists){
-        console.log('exists', exists)
-        alert('Cannot create room because room already exists. Try another name or join the existing room!');
-      } else {
-        context.props.dispatch({
-          type: 'UPDATE_USER', 
-          userName: name
-        });
+        this.checkDocExist(name, room, function(exists){
+          if(exists){
+            console.log('exists', exists)
+            alert('Cannot create room because room already exists. Try another name or join the existing room!');
+          } else {
+            context.props.dispatch({
+              type: 'UPDATE_USER', 
+              userName: name
+            });
 
-        context.props.dispatch({
-          type: 'UPDATE_ROOM', 
-          room: room
-        });
-
-        hashHistory.push('/doc');
-
-      } 
-
-
-    })
+            context.props.dispatch({
+              type: 'UPDATE_ROOM', 
+              room: room
+            });
+            hashHistory.push('/doc');
+          } 
+        })
+      }
+    }
   }
 
   checkDocExist(user, room, callback) {
@@ -70,35 +70,37 @@ class NavContainer extends React.Component {
     var docname = e.target.textContent;
     console.log('=====================docname', docname)
     var username = prompt('What\'s your name?');
-    this.saveuser(username);
-    this.props.dispatch({
-      type: 'DOC_SELECTION_MODAL', 
-      modalopen: false
-    });  
-    
-    this.props.dispatch({
-      type: 'UPDATE_USER', 
-      userName: username
-    });
+    if(username) {
+      this.saveuser(username);
+      this.props.dispatch({
+        type: 'DOC_SELECTION_MODAL', 
+        modalopen: false
+      });  
+      
+      this.props.dispatch({
+        type: 'UPDATE_USER', 
+        userName: username
+      });
 
-    this.props.dispatch({
-      type: 'UPDATE_ROOM', 
-      room: docname
-    })
+      this.props.dispatch({
+        type: 'UPDATE_ROOM', 
+        room: docname
+      })
 
-    // .then(function(room){
-    console.log('omg', docname, username)
-    var postPackage = {
-      room: docname, 
-      user: username
+      // .then(function(room){
+      console.log('omg', docname, username)
+      var postPackage = {
+        room: docname, 
+        user: username
+      }
+      console.log('before add room', postPackage)
+      axios.post('/addroomtouser', postPackage)
+      .then(function(response) {
+          console.log('====', response);
+      });
+
+      hashHistory.push('/doc');
     }
-    console.log('before add room', postPackage)
-    axios.post('/addroomtouser', postPackage)
-    .then(function(response) {
-        console.log('====', response);
-    });
-
-    hashHistory.push('/doc');
     // })
 
   //   axios.post('/user', {
