@@ -87,35 +87,79 @@ app.post('/savedoc', function(req, res) {
 
 })
 
+var docExists = function(user, room, callback) {
+  // callback
+  helper.docExists(user, room, callback);
+}
+
 app.get('/roomExists', function(req, res){
-  helper.docExists(req.query.user, req.query.room, function(exists){
-    console.log('exists', exists);
-    if(!exists){
-      helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
-        helper.addDoctoUser(req.query.user, req.query.room, function(result){
-          res.send(false);
-        })
-      })
-    } else {
-      res.send(true);
-    } 
+  var user = req.query.user;
+  var room = req.query.room;
+
+  docExists(user, room, function(exists){
+     console.log('exists', exists);
+     if(!exists){
+       // helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
+         // helper.addDoctoUser(req.query.user, req.query.room, function(result){
+           res.send(false);
+         // })
+       // })
+     } else {
+       res.send(true);
+     }  
   })
+
+  app.post('/addroom', function(req, res){
+    var room = req.body.room;
+    console.log('server sees username to save', room)
+    helper.addDocToDB(room, function(result){
+      res.send(result);
+    });
+
+  })
+  app.post('/addroomtouser', function(req, res){
+    var room = req.body.room;
+    var user = req.body.user;
+    console.log('server sees username to save', room, user)
+    helper.addDoctoUser(user, room, function(result){
+      res.send(result);
+    });
+  })
+  // helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
+  //   helper.addDoctoUser(req.query.user, req.query.room, function(result){
+  //     res.send(false);
+  //   })
+  // })
+
+
+  // helper.docExists(req.query.user, req.query.room, function(exists){
+  //   console.log('exists', exists);
+  //   if(!exists){
+  //     helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
+  //       helper.addDoctoUser(req.query.user, req.query.room, function(result){
+  //         res.send(false);
+  //       })
+  //     })
+  //   } else {
+  //     res.send(true);
+  //   } 
+  // })
 })
 
 app.post('/addroomtouser', function(req, res){
   // helper.
-  console.log('req query', req.body)
   var room = req.body.room;
   var user = req.body.user;
+  console.log('in add room to user', room, user)
   helper.addDoctoUser(user, room, function(result){
     res.send(result);
   });
 })
 
 app.post('/adduser', function(req, res){
-  var username = req.body.username;
-  console.log('server sees username to save', username)
-  helper.saveuser(username, function(result){
+  var user = req.body.user;
+  console.log('server sees username to save', user)
+  helper.saveuser(user, function(result){
     res.send(result);
   });
 })
@@ -227,13 +271,20 @@ io.on('connection', function(socket){
 
       io.sockets.in(room).emit('created', room, socket.id);
 
-      db.Doc.findOne({where: {
-        doc_name: room
-      }})
-      .then(function(doc){
-        console.log('found doc', doc)
-        io.to(socket.id).emit('found latest doc', doc);
-      })
+
+      // docExists(socket.id, room, function(exists){
+      //   if(exists){
+      //     db.Doc.findOne({where: {
+      //       doc_name: room
+      //     }})
+      //     .then(function(doc){
+      //       console.log('found doc', doc)
+      //       io.to(socket.id).emit('found latest doc', doc);
+      //     })
+      //   } else {
+             
+      //   }
+      // })
 
 
     } else if (numClients === 2) {
