@@ -25,10 +25,6 @@ class DocContainer extends React.Component {
     console.log(this.props.socket);
     this.props.socket.disconnect();
     this.props.dispatch({
-      type: 'UPDATE_ROOM',
-      room: null
-    });
-    this.props.dispatch({
       type: 'UPDATE_SOCKET',
       socket: null
     });

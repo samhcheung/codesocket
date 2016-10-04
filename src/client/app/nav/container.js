@@ -44,6 +44,7 @@ class NavContainer extends React.Component {
               context.saveroom(room, function(roomname){
                 context.saveroomtouser(username, room, function(userroom){
                   console.log('saved user room', userroom);
+                  hashHistory.push('/loading');
                   hashHistory.push('/doc');
                 })
                 
@@ -114,6 +115,7 @@ class NavContainer extends React.Component {
           userName: username
         });
         context.saveroomtouser(username, room, function(userroom){
+          hashHistory.push('/loading');
           hashHistory.push('/doc');
         })
       });
