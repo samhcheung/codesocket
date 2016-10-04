@@ -2,13 +2,13 @@ var db = require('../db/index.js');
 
 
 function docExists(user, docname, callback){
-	console.log()
+	//console.log()
 	db.Doc.findOne({
 		where: {
 			doc_name: docname
 		}
 	}).then(function(doc){
-		console.log('found doc', doc)
+		//console.log('found doc', doc)
 		if(doc === null){
 			//room does not exist
 			// addDocToDB(user, docname)
@@ -21,28 +21,28 @@ function docExists(user, docname, callback){
 }
 
 function addDocToDB(docname, callback){
-	console.log('in addDocToDB', docname)
+	//console.log('in addDocToDB', docname)
 	db.Doc.findOrCreate({
 		where: {
 			doc_name: docname
 		}
 	})
 	.then(function(newDoc) {
-		console.log('callback', callback)
+		//console.log('callback', callback)
 		// callback(newDoc);
 		callback(newDoc)
 	})
 }
 
 function saveuser(username, callback){
-	console.log('in helper ', username)
+	//console.log('in helper ', username)
 	db.User.findOrCreate({
 		where: {
 			user_name: username
 		}
 	})
 	.then(function(user){
-		console.log('user', user);
+		//console.log('user', user);
 		callback(user);
 	})
 }
@@ -58,7 +58,7 @@ function addDoctoUser(user, doc, callback){
 			user_name: user
 		}})
 		.then(function(foundUser){
-			console.log('doc added', newDoc, foundUser)
+			//console.log('doc added', newDoc, foundUser)
 			if (foundUser) {
 				foundUser.addDoc(newDoc);
 				callback(foundUser);
@@ -71,13 +71,13 @@ function addDoctoUser(user, doc, callback){
 
 function fetchDocContent(room, socket) {
 	var users = socket.rooms[room];
-	console.log('users', users);
+	//console.log('users', users);
 	if(users.length > 1) {
 		//get their stuff
-		console.log('more than one user!')
+		//console.log('more than one user!')
 		socket.broadcast.to(room).emit('fetch latest version', '');
 		socket.on('latest version', function(latest){
-			console.log('got latest---------', latest);
+			//console.log('got latest---------', latest);
 		})
 	} else {
 		//ask db for latest;
@@ -85,7 +85,7 @@ function fetchDocContent(room, socket) {
 			doc_name: room
 		}})
 		.then(function(doc){
-			console.log('found doc', doc)
+			//console.log('found doc', doc)
 		})
 	}
 //if anyone connected? 

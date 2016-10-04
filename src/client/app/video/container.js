@@ -88,7 +88,7 @@ class VideoContainer extends React.Component {
     socket.on('message', function(message) {
       console.log('Client received message:', message);
 
-      if (message === 'got user media' + room) {
+      if (message === 'got user media') {
         maybeStart();
       } else if (message.type === 'offer') {
         if (!isInitiator && !isStarted) {
@@ -104,7 +104,7 @@ class VideoContainer extends React.Component {
           candidate: message.candidate
         });
         pc.addIceCandidate(candidate);
-      } else if (message === 'bye' + room && isStarted) {
+      } else if (message === 'bye' && isStarted) {
         console.log('handling remote hangup!!!!!!!');
         handleRemoteHangup();
         isInitiator = true;
@@ -130,7 +130,7 @@ class VideoContainer extends React.Component {
       console.log('Adding local stream.');
       localVideo.src = window.URL.createObjectURL(stream);
       localStream = stream;
-      sendMessage('got user media' + room);
+      sendMessage('got user media');
       if (isInitiator) {
         maybeStart();
       }
@@ -164,7 +164,7 @@ class VideoContainer extends React.Component {
     }
 
     window.onbeforeunload = function() {
-      sendMessage('bye' + room);
+      sendMessage('bye');
     };
 
     /////////////////////////////////////////////////////////
@@ -275,7 +275,7 @@ class VideoContainer extends React.Component {
     function hangup() {
       console.log('Hanging up.');
       stop();
-      sendMessage('bye' + room);
+      sendMessage('bye');
     }
 
     function handleRemoteHangup() {

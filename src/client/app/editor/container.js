@@ -58,8 +58,9 @@ class EditorContainer extends React.Component {
       // var delta = {
       //   ops: [{insert: doc['doc_content']}]
       // }
-      if(doc.data.length > 0) {
-        quill.setContents(JSON.parse(doc['doc_content']), 'api');
+      var docContent = JSON.parse(doc['doc_content']);
+      if (docContent) {
+        quill.setContents(docContent, 'api');
       }
     })
 

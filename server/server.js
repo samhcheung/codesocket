@@ -97,7 +97,7 @@ app.get('/roomExists', function(req, res){
   var room = req.query.room;
 
   docExists(user, room, function(exists){
-     console.log('exists', exists);
+     //console.log('exists', exists);
      if(!exists){
        // helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
          // helper.addDoctoUser(req.query.user, req.query.room, function(result){
@@ -111,7 +111,7 @@ app.get('/roomExists', function(req, res){
 
   app.post('/addroom', function(req, res){
     var room = req.body.room;
-    console.log('server sees username to save', room)
+    //console.log('server sees username to save', room)
     helper.addDocToDB(room, function(result){
       res.send(result);
     });
@@ -120,7 +120,7 @@ app.get('/roomExists', function(req, res){
   app.post('/addroomtouser', function(req, res){
     var room = req.body.room;
     var user = req.body.user;
-    console.log('server sees username to save', room, user)
+    //console.log('server sees username to save', room, user)
     helper.addDoctoUser(user, room, function(result){
       res.send(result);
     });
@@ -150,7 +150,7 @@ app.post('/addroomtouser', function(req, res){
   // helper.
   var room = req.body.room;
   var user = req.body.user;
-  console.log('in add room to user', room, user)
+  //console.log('in add room to user', room, user)
   helper.addDoctoUser(user, room, function(result){
     res.send(result);
   });
@@ -158,11 +158,12 @@ app.post('/addroomtouser', function(req, res){
 
 app.post('/adduser', function(req, res){
   var user = req.body.user;
-  console.log('server sees username to save', user)
+  //console.log('server sees username to save', user)
   helper.saveuser(user, function(result){
     res.send(result);
   });
 })
+
 // Begin socket component
 var io = require('socket.io')(httpsServer);
 var commands = [];
@@ -182,27 +183,15 @@ io.on('connection', function(socket){
 
     log('Client said: ', message);
 
-    var clientID = socket.id;
-    //console.log(Object.keys(socket.rooms));
     // clientRooms is an array of all the rooms I am in.
     var clientRooms = Object.keys(socket.rooms).filter(function(aRoom) {
-      return (aRoom === clientID) ? false : true;
+      return (aRoom === socket.id) ? false : true;
     });
     
     // Relay the message to each user in my room
     clientRooms.forEach(function(aRoom) {
       socket.broadcast.to(aRoom).emit('message', message);
-
-      // io.sockets.in(aRoom).emit('message', message);
-      if (message === 'bye' + aRoom) {
-        if (roomClients[aRoom] > 0) {
-          console.log('in bye room. decrementing room count')
-          roomClients[aRoom]--;
-        }
-      }
     });
-
-    //socket.broadcast.emit('message', message);
   });
 
   socket.on('create or join', function(room) {
@@ -222,25 +211,27 @@ io.on('connection', function(socket){
     // var exists = helper.docExists(room, fetch);
     // console.log('exists', exists);
 
-    console.log('create or join')
+    console.log('create or join');
 
     log('Received request to create or join room ' + room);
     console.log('Received request to create or join room ' + room);
 
-    if (io.sockets.sockets.length === 0) {
-      roomClients = {};
-    }
-    if ((!roomClients[room]) || (roomClients[room] === 0)) {
-      roomClients[room] = 1;
-    } else {
-      roomClients[room]++;
-    }
-
     var users = Object.keys(socket.rooms).length;
-    var numClients = roomClients[room];
+    var numClients;
+    var socketRoom = io.sockets.adapter.rooms[room];
 
-    console.log('roomClients', roomClients)
-    console.log('users count---', numClients);
+    if (socketRoom) {
+      numClients = socketRoom.length + 1;
+    } else {
+      numClients = 1;
+    }
+
+    //console.log('==== socket adapter rooms ', io.sockets.adapter.rooms[room]);
+
+
+
+    //console.log('roomClients', roomClients)
+    //console.log('users count---', numClients);
     // if(numClients * 1 > 1) {
     //   //get their stuff
     //   console.log('more than one user!')
@@ -256,7 +247,6 @@ io.on('connection', function(socket){
     //     io.to(socket.id).emit('found latest doc', doc);
     //   })
     // }
-
 
     console.log('numClients', numClients)
     //var numClients = io.sockets.sockets.length;
@@ -274,13 +264,13 @@ io.on('connection', function(socket){
 
       // docExists(socket.id, room, function(exists){
       //   if(exists){
-      //     db.Doc.findOne({where: {
-      //       doc_name: room
-      //     }})
-      //     .then(function(doc){
-      //       console.log('found doc', doc)
-      //       io.to(socket.id).emit('found latest doc', doc);
-      //     })
+      db.Doc.findOne({where: {
+        doc_name: room
+      }})
+      .then(function(doc) {
+        //console.log('found doc', doc)
+        io.to(socket.id).emit('found latest doc', doc);
+      });
       //   } else {
              
       //   }
@@ -289,35 +279,38 @@ io.on('connection', function(socket){
 
     } else if (numClients === 2) {
 
-      console.log('more than one user!')
+      //console.log('more than one user!')
 
-      console.log('two clients',room, socket.id)
+      //console.log('two clients',room, socket.id)
       socket.join(room);
 
-      console.log('---AFTER JOIN ROOM -----')
+      //console.log('---AFTER JOIN ROOM -----')
       log('Client ID ' + socket.id + ' joined room ' + room);
       io.sockets.in(room).emit('join', room);
-            console.log('---AFTER JOIN emit -----')
+            //console.log('---AFTER JOIN emit -----')
 
       //socket.emit('joined', room, socket.id);
       io.sockets.in(room).emit('joined', room, socket.id);
-            console.log('---AFTER JOINed emit -----')
+            //console.log('---AFTER JOINed emit -----')
 
       io.sockets.in(room).emit('ready');
-            console.log('---AFTER ready emit -----')
+            //console.log('---AFTER ready emit -----')
 
       socket.broadcast.to(room).emit('fetch live version', socket.id);
-            console.log('---AFTER fetch live emit -----')
+            //console.log('---AFTER fetch live emit -----')
 
-    } else { // max two clients
-      console.log('IN CLIENT MORE THAN TWO')
-      io.sockets.in(room).emit('full', room);
+    } else { // max two clients for video.  3+ join as code-collab only
+      //io.sockets.in(room).emit('full', room);
+      socket.join(room);
+      socket.broadcast.to(room).emit('fetch live version', socket.id);
       //socket.emit('full', room);
     }
+    console.log('Room ' + room + ' now has ' + numClients + ' users.');
+
   });
 
   socket.on('live version', function(latest){
-    console.log('got live v---------', latest);
+    //console.log('got live v---------', latest);
     var requestId = latest.requestId;
     var delta = latest.delta;
     io.to(requestId).emit('fetched live', delta)
@@ -374,7 +367,7 @@ io.on('connection', function(socket){
   // *********** End WebRTC Socket ************
   
   // *********** Begin Quill Socket ************
-  console.log('a user connected');
+  //console.log('a user connected');
   socket.on('typed', function(delta) {
     commands.push(delta)
     console.log(commands);
@@ -392,7 +385,6 @@ io.on('connection', function(socket){
       socket.broadcast.to(aRoom).emit('receive', delta);
     });
   });
-
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
