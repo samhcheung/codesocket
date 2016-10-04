@@ -194,7 +194,7 @@ io.on('connection', function(socket){
       socket.broadcast.to(aRoom).emit('message', message);
 
       // io.sockets.in(aRoom).emit('message', message);
-      if (message === 'bye' + aRoom) {
+      if (message === 'bye') {
         if (roomClients[aRoom] > 0) {
           console.log('in bye room. decrementing room count')
           roomClients[aRoom]--;
@@ -237,7 +237,21 @@ io.on('connection', function(socket){
     }
 
     var users = Object.keys(socket.rooms).length;
-    var numClients = roomClients[room];
+    //var numClients = roomClients[room];
+
+    var numClients;
+
+    var socketRoom = io.sockets.adapter.rooms[room];
+
+    if (socketRoom) {
+      numClients = socketRoom.length + 1;
+    } else {
+      numClients = 1;
+    }
+
+    //console.log('==== socket adapter rooms ', io.sockets.adapter.rooms[room]);
+
+
 
     //console.log('roomClients', roomClients)
     //console.log('users count---', numClients);
@@ -256,7 +270,6 @@ io.on('connection', function(socket){
     //     io.to(socket.id).emit('found latest doc', doc);
     //   })
     // }
-
 
     console.log('numClients', numClients)
     //var numClients = io.sockets.sockets.length;
@@ -277,8 +290,8 @@ io.on('connection', function(socket){
       db.Doc.findOne({where: {
         doc_name: room
       }})
-      .then(function(doc){
-        console.log('found doc', doc)
+      .then(function(doc) {
+        //console.log('found doc', doc)
         io.to(socket.id).emit('found latest doc', doc);
       });
       //   } else {
