@@ -309,11 +309,14 @@ io.on('connection', function(socket){
       socket.broadcast.to(room).emit('fetch live version', socket.id);
             //console.log('---AFTER fetch live emit -----')
 
-    } else { // max two clients
-      console.log('ROOM IS FULL')
-      io.sockets.in(room).emit('full', room);
+    } else { // max two clients for video.  3+ join as code-collab only
+      //io.sockets.in(room).emit('full', room);
+      socket.join(room);
+      socket.broadcast.to(room).emit('fetch live version', socket.id);
       //socket.emit('full', room);
     }
+    console.log('Room ' + room + ' now has ' + numClients + ' users.');
+
   });
 
   socket.on('live version', function(latest){
