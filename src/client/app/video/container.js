@@ -12,7 +12,7 @@ class VideoContainer extends React.Component {
   // }
   componentWillUnmount () {
     console.log('video will unmount');
-    console.log(this.props.pc)
+    // console.log(this.props.pc)
     
     if(this.props.pc.signalingState !== 'closed') {
       this.props.pc.close();
@@ -23,7 +23,6 @@ class VideoContainer extends React.Component {
       type: 'UPDATE_SOCKET',
       socket: null
     });
-    console.log(this.props)
   }
   componentDidMount() {
     var isChannelReady = false;
