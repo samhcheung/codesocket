@@ -97,7 +97,7 @@ app.get('/roomExists', function(req, res){
   var room = req.query.room;
 
   docExists(user, room, function(exists){
-     console.log('exists', exists);
+     //console.log('exists', exists);
      if(!exists){
        // helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
          // helper.addDoctoUser(req.query.user, req.query.room, function(result){
@@ -111,7 +111,7 @@ app.get('/roomExists', function(req, res){
 
   app.post('/addroom', function(req, res){
     var room = req.body.room;
-    console.log('server sees username to save', room)
+    //console.log('server sees username to save', room)
     helper.addDocToDB(room, function(result){
       res.send(result);
     });
@@ -120,7 +120,7 @@ app.get('/roomExists', function(req, res){
   app.post('/addroomtouser', function(req, res){
     var room = req.body.room;
     var user = req.body.user;
-    console.log('server sees username to save', room, user)
+    //console.log('server sees username to save', room, user)
     helper.addDoctoUser(user, room, function(result){
       res.send(result);
     });
@@ -150,7 +150,7 @@ app.post('/addroomtouser', function(req, res){
   // helper.
   var room = req.body.room;
   var user = req.body.user;
-  console.log('in add room to user', room, user)
+  //console.log('in add room to user', room, user)
   helper.addDoctoUser(user, room, function(result){
     res.send(result);
   });
@@ -158,7 +158,7 @@ app.post('/addroomtouser', function(req, res){
 
 app.post('/adduser', function(req, res){
   var user = req.body.user;
-  console.log('server sees username to save', user)
+  //console.log('server sees username to save', user)
   helper.saveuser(user, function(result){
     res.send(result);
   });
@@ -239,8 +239,8 @@ io.on('connection', function(socket){
     var users = Object.keys(socket.rooms).length;
     var numClients = roomClients[room];
 
-    console.log('roomClients', roomClients)
-    console.log('users count---', numClients);
+    //console.log('roomClients', roomClients)
+    //console.log('users count---', numClients);
     // if(numClients * 1 > 1) {
     //   //get their stuff
     //   console.log('more than one user!')
@@ -274,13 +274,13 @@ io.on('connection', function(socket){
 
       // docExists(socket.id, room, function(exists){
       //   if(exists){
-      //     db.Doc.findOne({where: {
-      //       doc_name: room
-      //     }})
-      //     .then(function(doc){
-      //       console.log('found doc', doc)
-      //       io.to(socket.id).emit('found latest doc', doc);
-      //     })
+      db.Doc.findOne({where: {
+        doc_name: room
+      }})
+      .then(function(doc){
+        console.log('found doc', doc)
+        io.to(socket.id).emit('found latest doc', doc);
+      });
       //   } else {
              
       //   }
@@ -289,35 +289,35 @@ io.on('connection', function(socket){
 
     } else if (numClients === 2) {
 
-      console.log('more than one user!')
+      //console.log('more than one user!')
 
-      console.log('two clients',room, socket.id)
+      //console.log('two clients',room, socket.id)
       socket.join(room);
 
-      console.log('---AFTER JOIN ROOM -----')
+      //console.log('---AFTER JOIN ROOM -----')
       log('Client ID ' + socket.id + ' joined room ' + room);
       io.sockets.in(room).emit('join', room);
-            console.log('---AFTER JOIN emit -----')
+            //console.log('---AFTER JOIN emit -----')
 
       //socket.emit('joined', room, socket.id);
       io.sockets.in(room).emit('joined', room, socket.id);
-            console.log('---AFTER JOINed emit -----')
+            //console.log('---AFTER JOINed emit -----')
 
       io.sockets.in(room).emit('ready');
-            console.log('---AFTER ready emit -----')
+            //console.log('---AFTER ready emit -----')
 
       socket.broadcast.to(room).emit('fetch live version', socket.id);
-            console.log('---AFTER fetch live emit -----')
+            //console.log('---AFTER fetch live emit -----')
 
     } else { // max two clients
-      console.log('IN CLIENT MORE THAN TWO')
+      console.log('ROOM IS FULL')
       io.sockets.in(room).emit('full', room);
       //socket.emit('full', room);
     }
   });
 
   socket.on('live version', function(latest){
-    console.log('got live v---------', latest);
+    //console.log('got live v---------', latest);
     var requestId = latest.requestId;
     var delta = latest.delta;
     io.to(requestId).emit('fetched live', delta)
@@ -374,7 +374,7 @@ io.on('connection', function(socket){
   // *********** End WebRTC Socket ************
   
   // *********** Begin Quill Socket ************
-  console.log('a user connected');
+  //console.log('a user connected');
   socket.on('typed', function(delta) {
     commands.push(delta)
     console.log(commands);
@@ -392,7 +392,6 @@ io.on('connection', function(socket){
       socket.broadcast.to(aRoom).emit('receive', delta);
     });
   });
-
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
