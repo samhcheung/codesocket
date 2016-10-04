@@ -11,7 +11,19 @@ class VideoContainer extends React.Component {
   // static propTypes = {
   // }
   componentWillUnmount () {
-    
+    console.log('video will unmount');
+    console.log(this.props.pc)
+    console.log(this.props.pc.signalingState)
+    if(this.props.pc.signalingState !== 'closed') {
+      this.props.pc.close();
+    }
+    this.props.socket.emit('message', 'bye');
+    this.props.socket.disconnect();
+    this.props.dispatch({
+      type: 'UPDATE_SOCKET',
+      socket: null
+    });
+    console.log(this.props)
   }
   componentDidMount() {
     var isChannelReady = false;
@@ -21,6 +33,7 @@ class VideoContainer extends React.Component {
     var pc;
     var remoteStream;
     var turnReady;
+    var context = this;
 
     var pcConfig = {
       'iceServers': [{
@@ -178,6 +191,10 @@ class VideoContainer extends React.Component {
         pc.onaddstream = handleRemoteStreamAdded;
         pc.onremovestream = handleRemoteStreamRemoved;
         console.log('Created RTCPeerConnnection');
+        context.props.dispatch({
+              type: 'UPDATE_PC', 
+              pc: pc
+        });
       } catch (e) {
         console.log('Failed to create PeerConnection, exception: ' + e.message);
         alert('Cannot create RTCPeerConnection object.');
@@ -399,8 +416,7 @@ class VideoContainer extends React.Component {
     // stopVideoButton.onclick = function() {
     //   hangup();
 
-    // };
-
+    // };  
   }
 
   render() {
@@ -418,7 +434,8 @@ function mapStateToProps(state) {
   return {
     userName: state.userReducer.userName,
     room: state.sessionReducer.room,
-    socket: state.sessionReducer.socket
+    socket: state.sessionReducer.socket,
+    pc: state.sessionReducer.pc
   }
 }
 

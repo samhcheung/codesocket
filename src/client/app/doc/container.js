@@ -22,12 +22,12 @@ class DocContainer extends React.Component {
 
   componentWillUnmount() {
     console.log('does doc unmount');
-    console.log(this.props.socket);
-    this.props.socket.disconnect();
-    this.props.dispatch({
-      type: 'UPDATE_SOCKET',
-      socket: null
-    });
+    // console.log(this.props.socket);
+    // this.props.socket.disconnect();
+    // this.props.dispatch({
+    //   type: 'UPDATE_SOCKET',
+    //   socket: null
+    // });
   }
 
   render () {
