@@ -8,7 +8,7 @@ const editorstyle = {
     "borderWidth": '1.5px',
     "borderColor":'rgb(199, 199, 199)',
     "padding": '5px',
-    "margin": '10px'
+    "margin": '10px',
   },
   editor: {
     "margin": '5px'

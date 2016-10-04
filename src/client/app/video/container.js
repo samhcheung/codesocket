@@ -10,7 +10,9 @@ class VideoContainer extends React.Component {
   }
   // static propTypes = {
   // }
-
+  componentWillUnmount () {
+    
+  }
   componentDidMount() {
     var isChannelReady = false;
     var isInitiator = false;
