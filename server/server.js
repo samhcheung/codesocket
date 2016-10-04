@@ -163,6 +163,7 @@ app.post('/adduser', function(req, res){
     res.send(result);
   });
 })
+
 // Begin socket component
 var io = require('socket.io')(httpsServer);
 var commands = [];
@@ -182,27 +183,15 @@ io.on('connection', function(socket){
 
     log('Client said: ', message);
 
-    var clientID = socket.id;
-    //console.log(Object.keys(socket.rooms));
     // clientRooms is an array of all the rooms I am in.
     var clientRooms = Object.keys(socket.rooms).filter(function(aRoom) {
-      return (aRoom === clientID) ? false : true;
+      return (aRoom === socket.id) ? false : true;
     });
     
     // Relay the message to each user in my room
     clientRooms.forEach(function(aRoom) {
       socket.broadcast.to(aRoom).emit('message', message);
-
-      // io.sockets.in(aRoom).emit('message', message);
-      if (message === 'bye') {
-        if (roomClients[aRoom] > 0) {
-          console.log('in bye room. decrementing room count')
-          roomClients[aRoom]--;
-        }
-      }
     });
-
-    //socket.broadcast.emit('message', message);
   });
 
   socket.on('create or join', function(room) {
@@ -222,25 +211,13 @@ io.on('connection', function(socket){
     // var exists = helper.docExists(room, fetch);
     // console.log('exists', exists);
 
-    console.log('create or join')
+    console.log('create or join');
 
     log('Received request to create or join room ' + room);
     console.log('Received request to create or join room ' + room);
 
-    if (io.sockets.sockets.length === 0) {
-      roomClients = {};
-    }
-    if ((!roomClients[room]) || (roomClients[room] === 0)) {
-      roomClients[room] = 1;
-    } else {
-      roomClients[room]++;
-    }
-
     var users = Object.keys(socket.rooms).length;
-    //var numClients = roomClients[room];
-
     var numClients;
-
     var socketRoom = io.sockets.adapter.rooms[room];
 
     if (socketRoom) {
