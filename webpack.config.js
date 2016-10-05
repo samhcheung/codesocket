@@ -11,7 +11,7 @@ module.exports = {
     APP_DIR + '/index.jsx'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'src/client/dist'),
     filename: 'bundle.js',
     publicPath: '/static/'
   },
