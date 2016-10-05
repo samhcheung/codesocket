@@ -56,7 +56,7 @@ var httpsServer = https.createServer({
 }, app);
 
     // webpackDevHelper = require('./index.dev.js');
-useWebpackMiddleware(app);
+//useWebpackMiddleware(app);
 
 app.use(express.static('./src/client'));
 //add bodyParser
