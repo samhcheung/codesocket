@@ -13,11 +13,21 @@ class DocContainer extends React.Component {
 
   componentWillMount() {
     console.log('ever comes here')
-    var socket = io();
+    var socket = io();//{'forceNew':true}
     this.props.dispatch({
       type: 'UPDATE_SOCKET',
       socket: socket
     });
+  }
+
+  componentWillUnmount() {
+    console.log('does doc unmount');
+    // console.log(this.props.socket);
+    // this.props.socket.disconnect();
+    // this.props.dispatch({
+    //   type: 'UPDATE_SOCKET',
+    //   socket: null
+    // });
   }
 
   render () {
@@ -50,8 +60,8 @@ function mapStateToProps(state){
   return {
     // userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
     // myInserts: state.userReducer.myInserts, //<=== shouldnt have to do this...? 
-    // socket: state.sessionReducer.socket 
+    socket: state.sessionReducer.socket 
   }
 }
 
- export default connect()(DocContainer)
+ export default connect(mapStateToProps)(DocContainer)

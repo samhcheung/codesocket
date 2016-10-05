@@ -219,6 +219,7 @@ io.on('connection', function(socket){
     var users = Object.keys(socket.rooms).length;
     var numClients;
     var socketRoom = io.sockets.adapter.rooms[room];
+    console.log(io.sockets.adapter.rooms);
 
     if (socketRoom) {
       numClients = socketRoom.length + 1;

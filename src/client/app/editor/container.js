@@ -19,6 +19,11 @@ class EditorContainer extends React.Component {
       languages: ['javascript']
     });
   }
+
+  componentWillUnmount() {
+    console.log('does editor unmount');
+  }
+
   componentDidMount() {
     var context = this; 
     console.log('----------context', context, context.props.myInserts);

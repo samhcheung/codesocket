@@ -8,7 +8,9 @@ import DocContainer from './doc/container';
 var routes = (
   <Router history={hashHistory}>
     <Route path='/' component={Home}>
+      <IndexRoute />
       <Route path='/doc' component={DocContainer} />
+      <Route path='/loading' />
     </Route>
   </Router>
 )

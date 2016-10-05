@@ -20,7 +20,7 @@ const NavPresentation = (props) => {
     return (
       <div className='loadingscreen'>
         <div className="row" style={navstyle.mainheader}>
-          <div className="text-center" >Code Socket</div>
+          <div className="text-center" ><Link to="/">Code Socket</Link></div>
         </div>
         <div className="row" style={navstyle.navbuttons}>
           <div className="col-sm-3 text-center"><Link >Rooms</Link></div>

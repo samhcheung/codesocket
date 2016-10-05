@@ -3,7 +3,8 @@ const sessionInitialState = {
   room: '',
   quill: null,
   modalopen: false,
-  videoChannelReady: false
+  videoChannelReady: false,
+  pc: null
 }
 
 export default function sessionReducer (state = sessionInitialState, action) {
@@ -36,6 +37,12 @@ export default function sessionReducer (state = sessionInitialState, action) {
      return {
        ...state, 
        modalopen: action.modalopen
+     }
+    }
+    case 'UPDATE_PC' : {
+     return {
+       ...state, 
+       pc: action.pc
      }
     }
     default : {
