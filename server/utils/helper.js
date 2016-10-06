@@ -2,92 +2,92 @@ var db = require('../db/index.js');
 
 
 function docExists(user, docname, callback){
-	//console.log()
-	db.Doc.findOne({
-		where: {
-			doc_name: docname
-		}
-	}).then(function(doc){
-		//console.log('found doc', doc)
-		if(doc === null){
-			//room does not exist
-			// addDocToDB(user, docname)
-			callback(false);
-			//create room in db
-		} else {
-			callback(true);
-		}
-	})
+  //console.log()
+  db.Doc.findOne({
+    where: {
+      doc_name: docname
+    }
+  }).then(function(doc){
+    //console.log('found doc', doc)
+    if(doc === null){
+      //room does not exist
+      // addDocToDB(user, docname)
+      callback(false);
+      //create room in db
+    } else {
+      callback(true);
+    }
+  })
 }
 
 function addDocToDB(docname, callback){
-	//console.log('in addDocToDB', docname)
-	db.Doc.findOrCreate({
-		where: {
-			doc_name: docname
-		}
-	})
-	.then(function(newDoc) {
-		//console.log('callback', callback)
-		// callback(newDoc);
-		callback(newDoc)
-	})
+  //console.log('in addDocToDB', docname)
+  db.Doc.findOrCreate({
+    where: {
+      doc_name: docname
+    }
+  })
+  .then(function(newDoc) {
+    //console.log('callback', callback)
+    // callback(newDoc);
+    callback(newDoc)
+  })
 }
 
 function saveuser(username, callback){
-	//console.log('in helper ', username)
-	db.User.findOrCreate({
-		where: {
-			user_name: username
-		}
-	})
-	.then(function(user){
-		//console.log('user', user);
-		callback(user);
-	})
+  //console.log('in helper ', username)
+  db.User.findOrCreate({
+    where: {
+      user_name: username
+    }
+  })
+  .then(function(user){
+    //console.log('user', user);
+    callback(user);
+  })
 }
 
 function addDoctoUser(user, doc, callback){
-	db.Doc.findOne({
-		where: {
-			doc_name: doc
-		}
-	})
-	.then(function(newDoc){
-		db.User.findOne({where: {
-			user_name: user
-		}})
-		.then(function(foundUser){
-			//console.log('doc added', newDoc, foundUser)
-			if (foundUser) {
-				foundUser.addDoc(newDoc);
-				callback(foundUser);
-			} else {
-				callback(null);
-			}
-		})
-	})
+  db.Doc.findOne({
+    where: {
+      doc_name: doc
+    }
+  })
+  .then(function(newDoc){
+    db.User.findOne({where: {
+      user_name: user
+    }})
+    .then(function(foundUser){
+      //console.log('doc added', newDoc, foundUser)
+      if (foundUser) {
+        foundUser.addDoc(newDoc);
+        callback(foundUser);
+      } else {
+        callback(null);
+      }
+    })
+  })
 }
 
 function fetchDocContent(room, socket) {
-	var users = socket.rooms[room];
-	//console.log('users', users);
-	if(users.length > 1) {
-		//get their stuff
-		//console.log('more than one user!')
-		socket.broadcast.to(room).emit('fetch latest version', '');
-		socket.on('latest version', function(latest){
-			//console.log('got latest---------', latest);
-		})
-	} else {
-		//ask db for latest;
-		db.Doc.findOne({where: {
-			doc_name: room
-		}})
-		.then(function(doc){
-			//console.log('found doc', doc)
-		})
-	}
+  var users = socket.rooms[room];
+  //console.log('users', users);
+  if(users.length > 1) {
+    //get their stuff
+    //console.log('more than one user!')
+    socket.broadcast.to(room).emit('fetch latest version', '');
+    socket.on('latest version', function(latest){
+      //console.log('got latest---------', latest);
+    })
+  } else {
+    //ask db for latest;
+    db.Doc.findOne({where: {
+      doc_name: room
+    }})
+    .then(function(doc){
+      //console.log('found doc', doc)
+    })
+  }
 //if anyone connected? 
 //if connected, get their stuff
 
@@ -96,28 +96,28 @@ function fetchDocContent(room, socket) {
 
 }
 function fetchrooms(callback){
-	db.Doc.findAll()
-	.then(function(docs){
-		// console.log('found docs', docs)
-		if(docs === null){
-			callback(null);
-		} else {
-			// console.log('docs', docs);
-			//docs {}?
-			callback(docs);
-		}
-	})
+  db.Doc.findAll()
+  .then(function(docs){
+    // console.log('found docs', docs)
+    if(docs === null){
+      callback(null);
+    } else {
+      // console.log('docs', docs);
+      //docs {}?
+      callback(docs);
+    }
+  })
 }
 
 function checkLogin(req, res, next) {
-	console.log(req.session.passport,'between passport and passportuser' ,req.session.passport.user);
+  // console.log(req.session.passport,'between passport and passportuser' ,req.session.passport.user);
  //  if (req.session.passport !== undefined && req.session.passport.user !== undefined) {
  //    next();
  //  } else {
  //    res.send('you are not logged in!');
  //  }
   if (req.isAuthenticated()) {
-  	return next();
+    return next();
   }
   res.redirect('/login');
 }

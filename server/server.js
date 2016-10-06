@@ -50,13 +50,9 @@ var app = express();
 //var http = require('http').Server(app);
 var db = require('./db/index.js');
 
-var User = require('./db/index.js').User;
 var passport = require('passport');
-//var passportGithub = require('./auth/github');
+var passportGithub = require('./auth/github');
 var session = require('express-session');
-
-var GitHubStrategy = require('passport-github').Strategy;
-var GithubCreds = require('./config/auth.keys');
 
 var httpsServer = https.createServer({
   key: fs.readFileSync('./server/key.pem'),
@@ -64,32 +60,6 @@ var httpsServer = https.createServer({
 }, app);
 
 /*************************** Begin Auth Component ***************************/
-
-passport.use(new GitHubStrategy({
-  clientID: GithubCreds.clientID,
-  clientSecret: GithubCreds.clientSecret,
-  callbackURL: GithubCreds.callbackURL
-},
-function(accessToken, refreshToken, profile, cb) {
-
-  console.log('===this is profile', profile);
-
-  var searchQuery = {
-    where: {
-      github_id: profile.id,
-      user_name: profile.username
-    }
-  };
-
-   // update the user if s/he exists or add a new user
-  User.findOrCreate(searchQuery).then(function(user) {
-    //console.log('user inside github.js====', user);
-    //console.log('the cb is: ', cb);
-    return cb(null, user);
-  });
-}
-
-));
 
 app.use(session({
   secret: 'the_best_ajaxta_secret_ever',
@@ -100,45 +70,23 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-passport.serializeUser(function(user, done) {
-  //console.log('calling done in serializeUser.  user is: ', user);
-  done(null, user);
-});
-
-passport.deserializeUser(function(id, done) {
-    //console.log('in desriakdjize user.  id is ', id);
-
-  User.findOne({
-    where: {github_id: id[0].github_id}
-  }).then(function(user) {
-        //console.log('deserializeUser user is: ', user)
-
-    done(null, user);
-  }).catch(function (err) {
-    done(err);
-    console.log(err);    
-  });
-});
-
-
-
-app.get('/auth/github', passport.authenticate('github', { scope: [ 'user:email' ] }));
+app.get('/auth/github', passportGithub.authenticate('github', { scope: [ 'user:email' ] }));
 
 app.get('/auth/github/callback',
-  passport.authenticate('github', { failureRedirect: '/login' }),
+  passportGithub.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication
-    console.log(req.session, '========req.session!!!');
-    //console.log(res, '=====res from server.js auth/callback');
     res.redirect('/secure');
-    //res.json(req.user);
-
   }
 );
 
-app.get('/login', function(req, res, next) {
+app.get('/login', function(req, res) {
   res.send('Go back and register!');
+});
+
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
 });
 
 app.get('/secure', helper.checkLogin, function(req, res) {
@@ -148,8 +96,7 @@ app.get('/secure', helper.checkLogin, function(req, res) {
 /***************************** End Auth Component ****************************/
 
 
-
-    // webpackDevHelper = require('./index.dev.js');
+// webpackDevHelper = require('./index.dev.js');
 useWebpackMiddleware(app);
 
 app.use(express.static('./src/client'));

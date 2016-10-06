@@ -14,45 +14,20 @@ function(accessToken, refreshToken, profile, cb) {
 
   var searchQuery = {
     where: {
-      github_id: profile.id
-      //user_name: profile.displayName
+      github_id: profile.id,
+      user_name: profile.username
     }
   };
 
    // update the user if s/he exists or add a new user
-  User.findOrCreate({where: {github_id: profile.id}}).then(function(user) {
-    //console.log('user inside github.js====', user);
-    //console.log('the cb is: ', cb);
+  User.findOrCreate(searchQuery).then(function(user) {
     return cb(null, user);
   });
 }
 
 ));
 
-// serialize user into the session
-passport.serializeUser(function(user, done) {
-  console.log('calling done in serializeUser.  user is: ', user);
-  done(null, user);
-});
-
-passport.deserializeUser(function(id, done) {
-
-  console.log('in desriakdjize user.  id is ', id);
-
-  User.findOne({
-    where: {github_id: id.id}
-  }).then(function(user) {
-
-    console.log('deserializeUser user is: ', user)
-
-    done(null, user);
-  }).catch(function (err) {
-    done(err);
-    console.log(err);    
-  });
-});
-
-
-//init();
+// Call serialize/deserialize
+init();
 
 module.exports = passport;
