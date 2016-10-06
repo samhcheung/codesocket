@@ -142,16 +142,16 @@ app.post('/savedoc', helper.checkLogin, function(req, res) {
 })
 
 var oTransform = function(newObj, oldObj, callback){
-  // console.log('newop', newOp);
-  // console.log('old', oldOp);
+  console.log('newop', newObj);
+  console.log('old', oldObj);
   var newOp = newObj.op[0];
   var oldOp = oldObj.op[0];
 
   var newInsertion = newOp.retain;
   var oldInsertion = oldOp.retain;
 
-  // console.log('newInsertion', newInsertion);
-  // console.log('oldinsertion', oldInsertion);
+  console.log('newInsertion', newInsertion);
+  console.log('oldinsertion', oldInsertion);
   if(newInsertion >= oldInsertion){
     newInsertion++;
     newOp.retain = newInsertion;
@@ -159,8 +159,8 @@ var oTransform = function(newObj, oldObj, callback){
     oldInsertion++;
     oldOp.retain = oldInsertion;
   }
-  // console.log('2newop', newOp);
-  // console.log('2old', oldOp);
+  console.log('2newop', newOp);
+  console.log('2old', oldOp);
   callback(newObj);
   // if(oldOp.)
   //if item has insert as key
@@ -265,12 +265,8 @@ io.on('connection', function(socket){
 
   socket.on('add inflight op', function(inFlightOp){
 
-    // console.log('inFlightOp', inFlightOp);
-    // console.log('pre History', history)
-    // // console.log('pre inFlightOp', inFlightOp.history );
-    // console.log('pre inFlightOp', inFlightOp );
-    // console.log('pre inFlightOp', inFlightOp['history'] );
-    // console.log('pre inFlightOp', history[inFlightOp.history], history[inFlightOp.history] === true);
+    console.log('inFlightOp', inFlightOp);
+    console.log('pre History', history)
 
     if(history[inFlightOp.room] !== undefined && history[inFlightOp.room][inFlightOp.history] !== undefined){
       //change was there already
