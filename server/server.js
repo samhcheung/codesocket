@@ -50,10 +50,104 @@ var app = express();
 //var http = require('http').Server(app);
 var db = require('./db/index.js');
 
+var User = require('./db/index.js').User;
+var passport = require('passport');
+//var passportGithub = require('./auth/github');
+var session = require('express-session');
+
+var GitHubStrategy = require('passport-github').Strategy;
+var GithubCreds = require('./config/auth.keys');
+
 var httpsServer = https.createServer({
   key: fs.readFileSync('./server/key.pem'),
   cert: fs.readFileSync('./server/cert.pem')
 }, app);
+
+/*************************** Begin Auth Component ***************************/
+
+passport.use(new GitHubStrategy({
+  clientID: GithubCreds.clientID,
+  clientSecret: GithubCreds.clientSecret,
+  callbackURL: GithubCreds.callbackURL
+},
+function(accessToken, refreshToken, profile, cb) {
+
+  console.log('===this is profile', profile);
+
+  var searchQuery = {
+    where: {
+      github_id: profile.id,
+      user_name: profile.username
+    }
+  };
+
+   // update the user if s/he exists or add a new user
+  User.findOrCreate(searchQuery).then(function(user) {
+    //console.log('user inside github.js====', user);
+    //console.log('the cb is: ', cb);
+    return cb(null, user);
+  });
+}
+
+));
+
+app.use(session({
+  secret: 'the_best_ajaxta_secret_ever',
+  resave: true,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+passport.serializeUser(function(user, done) {
+  //console.log('calling done in serializeUser.  user is: ', user);
+  done(null, user);
+});
+
+passport.deserializeUser(function(id, done) {
+    //console.log('in desriakdjize user.  id is ', id);
+
+  User.findOne({
+    where: {github_id: id[0].github_id}
+  }).then(function(user) {
+        //console.log('deserializeUser user is: ', user)
+
+    done(null, user);
+  }).catch(function (err) {
+    done(err);
+    console.log(err);    
+  });
+});
+
+
+
+app.get('/auth/github', passport.authenticate('github', { scope: [ 'user:email' ] }));
+
+app.get('/auth/github/callback',
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication
+    console.log(req.session, '========req.session!!!');
+    //console.log(res, '=====res from server.js auth/callback');
+    res.redirect('/secure');
+    //res.json(req.user);
+
+  }
+);
+
+app.get('/login', function(req, res, next) {
+  res.send('Go back and register!');
+});
+
+app.get('/secure', helper.checkLogin, function(req, res) {
+  res.send('Successfully logged in');
+});
+
+/***************************** End Auth Component ****************************/
+
+
 
     // webpackDevHelper = require('./index.dev.js');
 useWebpackMiddleware(app);
@@ -63,11 +157,20 @@ app.use(express.static('./src/client'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-
+// This never triggers?
 app.get('/', function(req, res) {
-	res.send();
-})
+	res.send('Hello World');
+});
+
+// var check = function(req, res, next) {
+//   console.log('got thru check');
+//   next();
+// };
+
+
+
 app.get('/doclist', function(req, res) {
+  console.log(req.user, '<=== req.user from doclist in server.js');
   helper.fetchrooms(function(docs){
     res.send(docs);
   })
@@ -107,7 +210,7 @@ app.get('/roomExists', function(req, res){
      } else {
        res.send(true);
      }  
-  })
+  });
 
   app.post('/addroom', function(req, res){
     var room = req.body.room;
@@ -115,8 +218,8 @@ app.get('/roomExists', function(req, res){
     helper.addDocToDB(room, function(result){
       res.send(result);
     });
+  });
 
-  })
   app.post('/addroomtouser', function(req, res){
     var room = req.body.room;
     var user = req.body.user;
@@ -124,7 +227,7 @@ app.get('/roomExists', function(req, res){
     helper.addDoctoUser(user, room, function(result){
       res.send(result);
     });
-  })
+  });
   // helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
   //   helper.addDoctoUser(req.query.user, req.query.room, function(result){
   //     res.send(false);
@@ -144,7 +247,7 @@ app.get('/roomExists', function(req, res){
   //     res.send(true);
   //   } 
   // })
-})
+});
 
 app.post('/addroomtouser', function(req, res){
   // helper.
@@ -167,8 +270,6 @@ app.post('/adduser', function(req, res){
 // Begin socket component
 var io = require('socket.io')(httpsServer);
 var commands = [];
-// This object has {aRoomName: # of users in this room}
-var roomClients = {};
 
 io.on('connection', function(socket){
 
@@ -227,28 +328,6 @@ io.on('connection', function(socket){
       numClients = 1;
     }
 
-    //console.log('==== socket adapter rooms ', io.sockets.adapter.rooms[room]);
-
-
-
-    //console.log('roomClients', roomClients)
-    //console.log('users count---', numClients);
-    // if(numClients * 1 > 1) {
-    //   //get their stuff
-    //   console.log('more than one user!')
-    //   socket.broadcast.to(room).emit('fetch live version', socket.id);
-
-    // } else {
-    //   //ask db for latest;
-    //   db.Doc.findOne({where: {
-    //     doc_name: room
-    //   }})
-    //   .then(function(doc){
-    //     console.log('found doc', doc)
-    //     io.to(socket.id).emit('found latest doc', doc);
-    //   })
-    // }
-
     console.log('numClients', numClients)
     //var numClients = io.sockets.sockets.length;
     log('Room ' + room + ' now has ' + numClients + ' client(s)');
@@ -262,7 +341,6 @@ io.on('connection', function(socket){
 
       io.sockets.in(room).emit('created', room, socket.id);
 
-
       // docExists(socket.id, room, function(exists){
       //   if(exists){
       db.Doc.findOne({where: {
@@ -272,16 +350,10 @@ io.on('connection', function(socket){
         //console.log('found doc', doc)
         io.to(socket.id).emit('found latest doc', doc);
       });
-      //   } else {
-             
-      //   }
-      // })
-
 
     } else if (numClients === 2) {
 
       //console.log('more than one user!')
-
       //console.log('two clients',room, socket.id)
       socket.join(room);
 
@@ -315,41 +387,7 @@ io.on('connection', function(socket){
     var requestId = latest.requestId;
     var delta = latest.delta;
     io.to(requestId).emit('fetched live', delta)
-  })
-  // socket.on('join room', function(room) {
-  //   console.log(room, '===== JOIN ROOM');
-  //   log('Received request to join room ' + room);
-
-  //   if (io.sockets.sockets.length === 0) {
-  //     roomClients = {};
-  //   }
-  //   if ((!roomClients[room]) || (roomClients[room] === 0)) {
-  //     roomClients[room] = 1;
-  //   } else {
-  //     roomClients[room]++;
-  //   }
-
-  //   var numClients = roomClients[room];
-
-  //   log('Room ' + room + ' now has ' + numClients + ' client(s)');
-
-  //   if (numClients === 1) {
-  //     socket.join(room);
-  //     log('Client ID ' + socket.id + ' created room ' + room);
-  //     io.sockets.in(room).emit('created', room, socket.id);
-
-  //   } else if (numClients === 2) {
-  //     socket.join(room);
-  //     log('Client ID ' + socket.id + ' joined room ' + room);
-  //     io.sockets.in(room).emit('join', room);
-  //     io.sockets.in(room).emit('joined', room, socket.id);
-
-  //     io.sockets.in(room).emit('ready');  
-  //   } else { // max two clients
-
-  //     io.sockets.in(room).emit('full', room);
-  //   }
-  // });
+  });
 
   socket.on('ipaddr', function() {
     var ifaces = os.networkInterfaces();
@@ -396,8 +434,6 @@ io.on('connection', function(socket){
     socket.broadcast.emit('done', index);
   })
 
-
-
   // socket.emit('fetch rooms', 'get existing rooms');
   // socket.on('got room list', function(docs){  
 
@@ -405,18 +441,7 @@ io.on('connection', function(socket){
 });
 
 
-
-
 // app.use('/api/', require('./config/router'))
-
-// *************************** Begin DB Test Component ***************************
-
-
-
-
-
-
-// **************************** End DB Test Component ****************************
 
 httpsServer.listen(3000, function () {
   console.log('Example https app listening on port 3000!');

@@ -109,9 +109,23 @@ function fetchrooms(callback){
 	})
 }
 
+function checkLogin(req, res, next) {
+	console.log(req.session.passport,'between passport and passportuser' ,req.session.passport.user);
+ //  if (req.session.passport !== undefined && req.session.passport.user !== undefined) {
+ //    next();
+ //  } else {
+ //    res.send('you are not logged in!');
+ //  }
+  if (req.isAuthenticated()) {
+  	return next();
+  }
+  res.redirect('/login');
+}
+
 module.exports.docExists = docExists;
 module.exports.fetchDocContent = fetchDocContent;
 module.exports.fetchrooms = fetchrooms;
 module.exports.addDoctoUser = addDoctoUser;
 module.exports.addDocToDB = addDocToDB;
 module.exports.saveuser = saveuser;
+module.exports.checkLogin = checkLogin;

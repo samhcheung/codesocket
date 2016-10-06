@@ -1,17 +1,18 @@
 var Sequelize = require('sequelize');
 var db = new Sequelize('codesocket', '', '', {
- dialect: 'postgres',
- port: 5432,
- logging: false
+  dialect: 'postgres',
+  port: 5432,
+  logging: false
 });
 
 var User = db.define('users', {
-    user_name: Sequelize.STRING
+  user_name: Sequelize.STRING,
+  github_id: Sequelize.STRING
 });
 
 var Doc = db.define('docs', {
- doc_name: Sequelize.STRING,
- doc_content: Sequelize.TEXT,
+  doc_name: Sequelize.STRING,
+  doc_content: Sequelize.TEXT,
 });
 
 // var UserDoc = db.define('userdocs', {

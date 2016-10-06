@@ -7,5 +7,6 @@ bower_components/
 *.env
 *.DS_Store
 *.pem
+*.keys
 build/
 dist/
