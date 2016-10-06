@@ -21,7 +21,7 @@ function(accessToken, refreshToken, profile, cb) {
 
    // update the user if s/he exists or add a new user
   User.findOrCreate(searchQuery).then(function(user) {
-    return cb(null, user);
+    return cb(null, {github_id: profile.id, user_name: profile.username});
   });
 }
 

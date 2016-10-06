@@ -65,7 +65,7 @@ app.use(session({
   secret: 'the_best_ajaxta_secret_ever',
   resave: true,
   saveUninitialized: true,
-  cookie: { secure: true }
+  cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -76,6 +76,8 @@ app.get('/auth/github/callback',
   passportGithub.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication
+    console.log(res.req.session.passport.user, '<---')
+
     res.redirect('/secure');
   }
 );
@@ -90,8 +92,12 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('/secure', helper.checkLogin, function(req, res) {
-  res.send('Successfully logged in');
+  // res.send('Successfully logged in');
+  res.redirect('/')
 });
+app.get('/access', helper.checkLogin, function(req, res) {
+  res.send(req.session.passport.user);
+})
 
 /***************************** End Auth Component ****************************/
 
@@ -123,7 +129,7 @@ app.get('/doclist', function(req, res) {
   })
 })
 
-app.post('/savedoc', function(req, res) {
+app.post('/savedoc', helper.checkLogin, function(req, res) {
   db.Doc.update({
     doc_name:req.body.room,
     doc_content: req.body.contents

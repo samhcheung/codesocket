@@ -9,7 +9,7 @@ module.exports = function() {
 
   passport.deserializeUser(function(id, done) {
     User.findOne({
-      where: {github_id: id[0].github_id}
+      where: {github_id: id.github_id}
     }).then(function(user) {
 
       done(null, user);
