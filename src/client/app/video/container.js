@@ -14,7 +14,7 @@ class VideoContainer extends React.Component {
     console.log('video will unmount');
     // console.log(this.props.pc)
     
-    if(this.props.pc.signalingState !== 'closed') {
+    if(this.props.pc && this.props.pc.signalingState !== 'closed') {
       this.props.pc.close();
     }
     this.props.socket.emit('message', 'bye');

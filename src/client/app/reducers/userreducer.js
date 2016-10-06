@@ -1,5 +1,5 @@
 const userInitialState = {
-  userName: 'Anonymous',
+  userName: '',
   myInserts: [],
   isInitiator: false
 }

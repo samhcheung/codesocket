@@ -23,11 +23,12 @@ const NavPresentation = (props) => {
           <div className="text-center" ><Link to="/">Code Socket</Link></div>
         </div>
         <div className="row" style={navstyle.navbuttons}>
-          <div className="col-sm-3 text-center"><Link >Rooms</Link></div>
+          <div className="col-sm-2 text-center"><Link >Rooms</Link></div>
           <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
           <div className="col-sm-2 text-center" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
           <div className="col-sm-2 text-center">History</div>
-          <div className="col-sm-3 text-center"> {props.userName}</div>
+          <div className="col-sm-2 text-center"> {props.userName}</div>
+          <div className="col-sm-2 text-center"><Link href="auth/github">Login</Link></div>
         </div>
 
         <Modal

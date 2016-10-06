@@ -17,8 +17,19 @@ class NavContainer extends React.Component {
   // componentWillMount() {
   // } 
 
-  componentDidMount() {
+  componentWillMount() {
+    var context = this;
     //console.log('it hit componentDidMount =====>', this.state.user, this.props);
+    axios.get('/access')
+    .then( function(obj) {
+      console.log('axios success')
+      console.log(obj);
+      context.props.dispatch({
+          type: 'UPDATE_USER', 
+          userName: obj.data.user_name
+        });
+      
+    })
   }
   addDoc() {
     var context = this;
