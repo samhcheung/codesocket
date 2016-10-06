@@ -1,0 +1,6 @@
+//Github OAUTH keys
+module.exports = {
+  clientID: 'your app client id from github',
+  clientSecret: 'your app client secret from github',
+  callbackURL: 'https://localhost:3000/auth/callback'
+}
