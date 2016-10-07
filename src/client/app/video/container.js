@@ -23,6 +23,14 @@ class VideoContainer extends React.Component {
       type: 'UPDATE_SOCKET',
       socket: null
     });
+    if(this.localstream) {
+      this.localstream.getVideoTracks()[0].stop()
+      this.localstream.getAudioTracks()[0].stop()
+    }
+    if(this.remotestream) {
+      this.remotestream.getVideoTracks()[0].stop()
+      this.remotestream.getAudioTracks()[0].stop()
+    }
   }
   componentDidMount() {
     var isChannelReady = false;
@@ -144,6 +152,7 @@ class VideoContainer extends React.Component {
       console.log('Adding local stream.');
       localVideo.src = window.URL.createObjectURL(stream);
       localStream = stream;
+      context.localstream =localStream;
       sendMessage('got user media');
       if (isInitiator) {
         maybeStart();
@@ -220,6 +229,7 @@ class VideoContainer extends React.Component {
       console.log('Remote stream added.');
       remoteVideo.src = window.URL.createObjectURL(event.stream);
       remoteStream = event.stream;
+      context.remotestream = remoteStream;
     }
 
     function handleCreateOfferError(event) {

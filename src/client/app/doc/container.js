@@ -19,14 +19,36 @@ class DocContainer extends React.Component {
       type: 'UPDATE_SOCKET',
       socket: socket
     });
+    this.props.dispatch({
+      type: 'UPDATE_ROOM',
+      room: this.props.params.roomname
+    });
 
   }
   componentWillReceiveProps(newProps) {
+    var context = this;
     console.log(newProps)
+    console.log(this.props.params.roomname, newProps.params.roomname)
     if(this.props.params.roomname !== newProps.params.roomname) {
+      this.props.dispatch({
+        type: 'UPDATE_ROOM',
+        room: newProps.params.roomname
+      });
       hashHistory.push('/loading');
-      hashHistory.push('/doc/' + newProps.params.roomname);
+      //console.log('after', newProps.params.roomname)
     }
+    axios.get('/access')
+    .then( function(obj) {
+      console.log('axios success in doc')
+      if(!obj.data.user_name) {
+          hashHistory.push('/');
+      }
+      context.props.dispatch({
+          type: 'UPDATE_USER', 
+          userName: obj.data.user_name
+        });
+      
+    })
   }
   componentDidMount() {
     console.log(this.props.params.roomname);
@@ -43,9 +65,6 @@ class DocContainer extends React.Component {
         hashHistory.push('/');
       }
     });
-    if(!this.props.userName) {
-      hashHistory.push('/');
-    }
   }
 
   componentWillUnmount() {

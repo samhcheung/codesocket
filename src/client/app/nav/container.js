@@ -24,6 +24,9 @@ class NavContainer extends React.Component {
     .then( function(obj) {
       console.log('axios success')
       console.log(obj);
+      if(!obj.data.user_name) {
+          hashHistory.push('/');
+      }
       context.props.dispatch({
           type: 'UPDATE_USER', 
           userName: obj.data.user_name
@@ -40,6 +43,10 @@ class NavContainer extends React.Component {
     //     type: 'UPDATE_USER', 
     //     userName: username
     //   });
+    context.props.dispatch({
+        type: 'DOC_SELECTION_MODAL', 
+        modalopen: false
+      });
     if(!this.props.userName) {
       alert('you are not logged in');
       hashHistory.push('/');
