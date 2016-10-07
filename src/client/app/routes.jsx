@@ -9,7 +9,8 @@ var routes = (
   <Router history={hashHistory}>
     <Route path='/' component={Home}>
       <IndexRoute />
-      <Route path='/doc' component={DocContainer} />
+      <Route path='/doc' />
+      <Route path='/doc/:roomname' component={DocContainer} />
       <Route path='/loading' />
     </Route>
   </Router>
