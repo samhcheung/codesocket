@@ -259,7 +259,8 @@ app.get('/roomExists', function(req, res){
   //     helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
   //       helper.addDoctoUser(req.query.user, req.query.room, function(result){
   //         res.send(false);
-  //       })
+  //       })inFlightOp
+
   //     })
   //   } else {
   //     res.send(true);
@@ -300,12 +301,12 @@ io.on('connection', function(socket){
 
   socket.on('add inflight op', function(inFlightOp){
     console.log('----------------------started')
+    var inFlightOp = JSON.parse(inFlightOp)
     console.log('inFlightOp', inFlightOp);
     // console.log('pre History', history)
     if(isValid(inFlightOp)){
       console.log('in valid, about to emit clear inflight op')
       io.to(socket.id).emit('clear inflight', inFlightOp);
-      updateServerState(inFlightOp);
       if(history[inFlightOp.room] !== undefined && history[inFlightOp.room][inFlightOp.history] !== undefined){
         //change was there already
           console.log('before transformed. should be obj', inFlightOp);
@@ -313,6 +314,7 @@ io.on('connection', function(socket){
         oTransform(inFlightOp, history[inFlightOp.room][inFlightOp.history][0], function(transformed){
           // console.log('transformed. should be obj', transformed);
           // console.log('room', inFlightOp.room);
+          updateServerState(inFlightOp);
           console.log('----------------------emited')
           history[inFlightOp.room][inFlightOp.history].push(transformed)
           io.sockets.in(inFlightOp.room).emit('newOp', transformed);
@@ -327,7 +329,7 @@ io.on('connection', function(socket){
         history[inFlightOp.room][parent] = [inFlightOp];
         // console.log('room:-', inFlightOp.room)
           console.log('----------------------emited')
-
+        updateServerState(inFlightOp);
         io.sockets.in(inFlightOp.room).emit('newOp', inFlightOp);
       } else {
         console.log('room but no parent/conflict')
@@ -335,14 +337,11 @@ io.on('connection', function(socket){
         history[inFlightOp.room][parent] = [inFlightOp];
         // console.log('room:-', inFlightOp.room)
           console.log('----------------------emited')
-
+        updateServerState(inFlightOp);
         io.sockets.in(inFlightOp.room).emit('newOp', inFlightOp);
-
-        // socket.broadcast.to(inFlightOp.room).emit('newOp', inFlightOp);
-
       }
     } else {
-      console.log('in rejected', inFlightOp, serverState)
+      console.log('-------------in rejected-----------', inFlightOp, serverState)
       io.to(socket.id).emit('rejected op', inFlightOp)
     }
 
