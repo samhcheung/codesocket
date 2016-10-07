@@ -25,7 +25,7 @@ class DocContainer extends React.Component {
     console.log(newProps)
     if(this.props.params.roomname !== newProps.params.roomname) {
       hashHistory.push('/');
-      hashHistory.push('/docs/' + newProps.params.roomname);
+      hashHistory.push('/doc/' + newProps.params.roomname);
     }
   }
   componentDidMount() {
