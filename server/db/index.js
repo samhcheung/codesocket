@@ -1,5 +1,5 @@
 var Sequelize = require('sequelize');
-var db = new Sequelize('codesocket', '', '', {
+var db = new Sequelize('codesocket', 'postgres', 'hr47', {
   dialect: 'postgres',
   port: 5432,
   logging: false
