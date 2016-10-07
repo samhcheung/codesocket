@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import EditorContainer from '../editor/container';
 import VideoContainer from '../video/container';
 import ConsoleContainer from '../console/container';
+import axios from 'axios'
 
 class DocContainer extends React.Component {
 
@@ -18,6 +19,25 @@ class DocContainer extends React.Component {
       type: 'UPDATE_SOCKET',
       socket: socket
     });
+
+  }
+  componentDidMount() {
+    console.log(this.props.params.roomname);
+    axios.get('/roomExists', {params: {user: this.props.userName, room: this.props.params.roomname}})
+    .then(function(roomExists){
+      console.log('does room exist???', roomExists.data)
+      if(roomExists.data) {
+        this.props.dispatch({
+          type: 'UPDATE_ROOM',
+          room: this.props.params.roomname
+        });
+      } else {
+        hashHistory.push('/');
+      }
+    });
+    if(!this.props.userName) {
+      hashHistory.push('/');
+    }
   }
 
   componentWillUnmount() {
@@ -58,7 +78,7 @@ class DocContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    // userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
+    userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
     // myInserts: state.userReducer.myInserts, //<=== shouldnt have to do this...? 
     socket: state.sessionReducer.socket 
   }
