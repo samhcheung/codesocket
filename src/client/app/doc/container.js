@@ -21,15 +21,23 @@ class DocContainer extends React.Component {
     });
 
   }
+  componentWillReceiveProps(newProps) {
+    console.log(newProps)
+    if(this.props.params.roomname !== newProps.params.roomname) {
+      hashHistory.push('/');
+      hashHistory.push('/docs/' + newProps.params.roomname);
+    }
+  }
   componentDidMount() {
     console.log(this.props.params.roomname);
+    var context = this;
     axios.get('/roomExists', {params: {user: this.props.userName, room: this.props.params.roomname}})
     .then(function(roomExists){
       console.log('does room exist???', roomExists.data)
       if(roomExists.data) {
-        this.props.dispatch({
+        context.props.dispatch({
           type: 'UPDATE_ROOM',
-          room: this.props.params.roomname
+          room: context.props.params.roomname
         });
       } else {
         hashHistory.push('/');
