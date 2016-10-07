@@ -17,18 +17,42 @@ class NavContainer extends React.Component {
   // componentWillMount() {
   // } 
 
-  componentDidMount() {
+  componentWillMount() {
+    var context = this;
     //console.log('it hit componentDidMount =====>', this.state.user, this.props);
+    axios.get('/access')
+    .then( function(obj) {
+      console.log('axios success')
+      console.log(obj);
+      if(!obj.data.user_name) {
+          hashHistory.push('/');
+      }
+      context.props.dispatch({
+          type: 'UPDATE_USER', 
+          userName: obj.data.user_name
+        });
+      
+    })
   }
   addDoc() {
     var context = this;
     console.log('==================props', this.props)
-    var username = prompt('What\'s your name?');
-    if(username){
-      context.props.dispatch({
-        type: 'UPDATE_USER', 
-        userName: username
+    //var username = prompt('What\'s your name?');
+    // if(username){
+    //   context.props.dispatch({
+    //     type: 'UPDATE_USER', 
+    //     userName: username
+    //   });
+    context.props.dispatch({
+        type: 'DOC_SELECTION_MODAL', 
+        modalopen: false
       });
+    if(!this.props.userName) {
+      alert('you are not logged in');
+      hashHistory.push('/');
+    }
+    if(this.props.userName) {
+      var username = this.props.userName;
       var room = prompt('Enter a room name.');
       if(room){
         context.props.dispatch({
@@ -45,7 +69,7 @@ class NavContainer extends React.Component {
                 context.saveroomtouser(username, room, function(userroom){
                   console.log('saved user room', userroom);
                   hashHistory.push('/loading');
-                  hashHistory.push('/doc');
+                  hashHistory.push('/doc/' + room);
                 })
                 
               });
@@ -103,8 +127,12 @@ class NavContainer extends React.Component {
       room: room
     })
     console.log('=====================room', room)
-    var username = prompt('What\'s your name?');
-    if(username) {
+    if(!this.props.userName) {
+      alert('you are not logged in');
+      hashHistory.push('/');
+    }
+    if(this.props.userName) {
+      var username = this.props.userName;
       context.props.dispatch({
         type: 'DOC_SELECTION_MODAL', 
         modalopen: false
@@ -116,7 +144,7 @@ class NavContainer extends React.Component {
         });
         context.saveroomtouser(username, room, function(userroom){
           hashHistory.push('/loading');
-          hashHistory.push('/doc');
+          hashHistory.push('/doc/' + room);
         })
       });
       // .then(function(room){

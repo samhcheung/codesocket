@@ -14,7 +14,7 @@ class VideoContainer extends React.Component {
     console.log('video will unmount');
     // console.log(this.props.pc)
     
-    if(this.props.pc.signalingState !== 'closed') {
+    if(this.props.pc && this.props.pc.signalingState !== 'closed') {
       this.props.pc.close();
     }
     this.props.socket.emit('message', 'bye');
@@ -23,6 +23,14 @@ class VideoContainer extends React.Component {
       type: 'UPDATE_SOCKET',
       socket: null
     });
+    if(this.localstream) {
+      this.localstream.getVideoTracks()[0].stop()
+      this.localstream.getAudioTracks()[0].stop()
+    }
+    if(this.remotestream) {
+      this.remotestream.getVideoTracks()[0].stop()
+      this.remotestream.getAudioTracks()[0].stop()
+    }
   }
   componentDidMount() {
     var isChannelReady = false;
@@ -35,9 +43,16 @@ class VideoContainer extends React.Component {
     var context = this;
 
     var pcConfig = {
-      'iceServers': [{
-        'url': 'stun:stun.l.google.com:19302'
-      }]
+     'iceServers': [
+        {
+         'url': 'stun:stun.l.google.com:19302'
+        },
+        {
+         'url': 'turn:numb.viagenie.ca',
+         'username': 'stephenjleung@yahoo.com',
+         'credential': 'ajaxtripleactionhr47'
+        }
+      ]
     };
 
     // Set up audio and video regardless of what devices are present.
@@ -144,6 +159,7 @@ class VideoContainer extends React.Component {
       console.log('Adding local stream.');
       localVideo.src = window.URL.createObjectURL(stream);
       localStream = stream;
+      context.localstream =localStream;
       sendMessage('got user media');
       if (isInitiator) {
         maybeStart();
@@ -185,7 +201,7 @@ class VideoContainer extends React.Component {
 
     function createPeerConnection() {
       try {
-        pc = new RTCPeerConnection(null);
+        pc = new RTCPeerConnection(pcConfig);
         pc.onicecandidate = handleIceCandidate;
         pc.onaddstream = handleRemoteStreamAdded;
         pc.onremovestream = handleRemoteStreamRemoved;
@@ -220,6 +236,7 @@ class VideoContainer extends React.Component {
       console.log('Remote stream added.');
       remoteVideo.src = window.URL.createObjectURL(event.stream);
       remoteStream = event.stream;
+      context.remotestream = remoteStream;
     }
 
     function handleCreateOfferError(event) {
