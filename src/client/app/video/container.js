@@ -43,9 +43,16 @@ class VideoContainer extends React.Component {
     var context = this;
 
     var pcConfig = {
-      'iceServers': [{
-        'url': 'stun:stun.l.google.com:19302'
-      }]
+     'iceServers': [
+        {
+         'url': 'stun:stun.l.google.com:19302'
+        },
+        {
+         'url': 'turn:numb.viagenie.ca',
+         'username': 'stephenjleung@yahoo.com',
+         'credential': 'ajaxtripleactionhr47'
+        }
+      ]
     };
 
     // Set up audio and video regardless of what devices are present.
@@ -194,7 +201,7 @@ class VideoContainer extends React.Component {
 
     function createPeerConnection() {
       try {
-        pc = new RTCPeerConnection(null);
+        pc = new RTCPeerConnection(pcConfig);
         pc.onicecandidate = handleIceCandidate;
         pc.onaddstream = handleRemoteStreamAdded;
         pc.onremovestream = handleRemoteStreamRemoved;
