@@ -223,8 +223,13 @@ var isValid = function(operation, room){
   }
 }
 
+<<<<<<< HEAD
 var updateServerState = function(operation, room){
   console.log('in update server state', operation)
+=======
+var updateServerState = function(operation){
+  console.log(operation);
+>>>>>>> Console logs and stuff
   var retain = operation.op[0].retain;
   var insert = operation.op[1].insert;
   var deleteop = operation.op[1].delete;
