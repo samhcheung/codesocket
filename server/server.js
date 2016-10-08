@@ -59,8 +59,6 @@ var httpsServer = https.createServer({
   cert: fs.readFileSync('./server/cert.pem')
 }, app);
 
-/*************************** Begin Auth Component ***************************/
-
 app.use(session({
   secret: 'the_best_ajaxta_secret_ever',
   resave: true,
@@ -99,10 +97,20 @@ app.get('/access', helper.checkLogin, function(req, res) {
   res.send(req.session.passport.user);
 })
 
-/***************************** End Auth Component ****************************/
+var history = {
+  // 'room1': {
+//      'history1': [{},{}],
+//      'history2': [{},{}],
+  // }
+    // 'room2': {
+//      'history1': [{},{}],
+//      'history2': [{},{}],
+  // }
+}
 
+var serverState = '\n';
 
-// webpackDevHelper = require('./index.dev.js');
+    // webpackDevHelper = require('./index.dev.js');
 useWebpackMiddleware(app);
 
 app.use(express.static('./src/client'));
@@ -143,8 +151,64 @@ app.post('/savedoc', helper.checkLogin, function(req, res) {
 
 })
 
+var oTransform = function(newObj, oldObj, callback){
+  console.log('----------------------in oTransform')
+
+  console.log('newop', newObj);
+  console.log('old', oldObj);
+  var newOp = newObj.op[0];
+  var oldOp = oldObj.op[0];
+
+  var newInsertion = newOp.retain;
+  var oldInsertion = oldOp.retain;
+
+  console.log('newInsertion', newInsertion);
+  console.log('oldinsertion', oldInsertion);
+  if(newInsertion >= oldInsertion){
+    newInsertion++;
+    newOp.retain = newInsertion;
+  } else {
+    // oldInsertion++;
+    // oldOp.retain = oldInsertion;
+  }
+  console.log('2newop', newOp);
+  console.log('2old', oldOp);
+  callback(newObj);
+  // if(oldOp.)
+  //if item has insert as key
+  //ir item has retain as key
+}
+
+// app.post('/addops', function(req, res){
+
+var isValid = function(operation){
+  console.log('is valide operation', operation, serverState)
+  if(operation.history === serverState){
+    console.log('true')
+    return true;
+  } else {
+    console.log('false')
+    return false;
+  }
+}
+
+var updateServerState = function(operation){
+  var retain = operation.op[0].retain;
+  var insert = operation.op[1].insert;
+  console.log('before serverState', serverState);
+  console.log('retain', retain);
+  console.log('insert', insert);
+
+  if(serverState === '\n'){
+    console.log('in true condition')
+    serverState = insert + '\n';
+  } else {
+    serverState = serverState.slice(0, retain) + insert + serverState.slice(retain);
+  }
+  console.log('after serverState', serverState);
+}
+
 var docExists = function(user, room, callback) {
-  // callback
   helper.docExists(user, room, callback);
 }
 
@@ -164,23 +228,24 @@ app.get('/roomExists', function(req, res){
        res.send(true);
      }  
   });
+})
 
-  app.post('/addroom', function(req, res){
-    var room = req.body.room;
-    //console.log('server sees username to save', room)
-    helper.addDocToDB(room, function(result){
-      res.send(result);
-    });
+app.post('/addroom', function(req, res){
+  var room = req.body.room;
+  //console.log('server sees username to save', room)
+  helper.addDocToDB(room, function(result){
+    res.send(result);
+  });
+});
+
+app.post('/addroomtouser', function(req, res){
+  var room = req.body.room;
+  var user = req.body.user;
+  //console.log('server sees username to save', room, user)
+  helper.addDoctoUser(user, room, function(result){
+    res.send(result);
   });
 
-  app.post('/addroomtouser', function(req, res){
-    var room = req.body.room;
-    var user = req.body.user;
-    //console.log('server sees username to save', room, user)
-    helper.addDoctoUser(user, room, function(result){
-      res.send(result);
-    });
-  });
   // helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
   //   helper.addDoctoUser(req.query.user, req.query.room, function(result){
   //     res.send(false);
@@ -194,7 +259,8 @@ app.get('/roomExists', function(req, res){
   //     helper.addDocToDB(req.query.user, req.query.room, function(newDoc){
   //       helper.addDoctoUser(req.query.user, req.query.room, function(result){
   //         res.send(false);
-  //       })
+  //       })inFlightOp
+
   //     })
   //   } else {
   //     res.send(true);
@@ -233,10 +299,59 @@ io.on('connection', function(socket){
     socket.emit('log', array);
   }
 
+  socket.on('add inflight op', function(inFlightOp){
+    // console.log('----------------------started')
+    var inFlightOp = JSON.parse(inFlightOp)
+    // console.log('inFlightOp', inFlightOp);
+    // console.log('pre History', history)
+    if(isValid(inFlightOp)){
+
+      // console.log('in valid, about to emit clear inflight op')
+      io.to(socket.id).emit('clear inflight', inFlightOp);
+
+      if(history[inFlightOp.room] !== undefined && history[inFlightOp.room][inFlightOp.history] !== undefined){
+        //change was there already
+        // console.log('before transformed. should be obj', inFlightOp);
+        //transform
+        oTransform(inFlightOp, history[inFlightOp.room][inFlightOp.history][0], function(transformed){
+          // console.log('transformed. should be obj', transformed);
+          // console.log('room', inFlightOp.room);
+          updateServerState(inFlightOp);
+          // console.log('----------------------emited')
+          history[inFlightOp.room][inFlightOp.history].push(transformed)
+          io.sockets.in(inFlightOp.room).emit('newOp', transformed);
+        })
+
+      } else if (history[inFlightOp.room] === undefined) {
+        // console.log('no room yet')
+        history[inFlightOp.room] = {};
+        // console.log(inFlightOp.history)
+        var myhistory = inFlightOp.history;
+        history[inFlightOp.room][myhistory] = [inFlightOp];
+        // console.log('room:-', inFlightOp.room)
+          console.log('----------------------emited')
+        updateServerState(inFlightOp);
+        io.sockets.in(inFlightOp.room).emit('newOp', inFlightOp);
+
+      } else {
+        console.log('room but no myhistory/conflict')
+        var myhistory = inFlightOp.history;
+        history[inFlightOp.room][myhistory] = [inFlightOp];
+        // console.log('room:-', inFlightOp.room)
+          console.log('----------------------emited')
+        updateServerState(inFlightOp);
+        io.sockets.in(inFlightOp.room).emit('newOp', inFlightOp);
+      }
+      
+    } else {
+      console.log('-------------in rejected-----------', inFlightOp, serverState)
+      io.to(socket.id).emit('rejected op', inFlightOp)
+    }
+  })
+
   socket.on('message', function(message) {
 
     log('Client said: ', message);
-
     // clientRooms is an array of all the rooms I am in.
     var clientRooms = Object.keys(socket.rooms).filter(function(aRoom) {
       return (aRoom === socket.id) ? false : true;
@@ -360,32 +475,32 @@ io.on('connection', function(socket){
   
   // *********** Begin Quill Socket ************
   //console.log('a user connected');
-  socket.on('typed', function(delta) {
-    commands.push(delta)
-    console.log(commands);
-    // socket.broadcast.emit('receive',delta);
-    // console.log('socket id', socket.id)
-    // console.log('socket rooms', socket.rooms)
+  // socket.on('typed', function(delta) {
+  //   commands.push(delta)
+  //   console.log(commands);
+  //   // socket.broadcast.emit('receive',delta);
+  //   // console.log('socket id', socket.id)
+  //   // console.log('socket rooms', socket.rooms)
 
-    var clientID = socket.id;
-    var clientRooms = Object.keys(socket.rooms).filter(function(aRoom) {
-      return (aRoom === clientID) ? false : true;
-    });
-    console.log('rooms', clientRooms, clientID)
-    clientRooms.forEach(function(aRoom) {
-      console.log('===========', aRoom, clientID)
-      socket.broadcast.to(aRoom).emit('receive', delta);
-    });
-  });
+  //   var clientID = socket.id;
+  //   var clientRooms = Object.keys(socket.rooms).filter(function(aRoom) {
+  //     return (aRoom === clientID) ? false : true;
+  //   });
+  //   console.log('rooms', clientRooms, clientID)
+  //   clientRooms.forEach(function(aRoom) {
+  //     console.log('===========', aRoom, clientID)
+  //     socket.broadcast.to(aRoom).emit('receive', delta);
+  //   });
+  // });
 
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
+  // socket.on('disconnect', function(){
+  //   console.log('user disconnected');
+  // });
 
-  socket.on('changesToApply', function(index){
-    console.log('oldIndex', index);
-    socket.broadcast.emit('done', index);
-  })
+  // socket.on('changesToApply', function(index){
+  //   console.log('oldIndex', index);
+  //   socket.broadcast.emit('done', index);
+  // })
 
   // socket.emit('fetch rooms', 'get existing rooms');
   // socket.on('got room list', function(docs){  

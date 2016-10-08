@@ -4,7 +4,15 @@ const sessionInitialState = {
   quill: null,
   modalopen: false,
   videoChannelReady: false,
-  pc: null
+  pc: null,
+  buffer: [],
+  serverquill: null,
+  quillHistory: '',
+  inFlightOp: [],
+  incomingOp: {},
+  serverState: '',
+  rejectedOp: {}
+  // serverEditor: []
 }
 
 export default function sessionReducer (state = sessionInitialState, action) {
@@ -13,6 +21,38 @@ export default function sessionReducer (state = sessionInitialState, action) {
      return {
        ...state, 
        socket: action.socket
+     }
+    }  
+    case 'UPDATE_REJECTEDOP' : {
+     return {
+       ...state, 
+       rejectedOp: action.rejectedOp
+     }
+    }  
+
+    case 'UPDATE_SERVERSTATE' : {
+     return {
+       ...state, 
+       serverState: action.serverState
+     }
+    }    
+    case 'UPDATE_INCOMINGOP' : {
+     return {
+       ...state, 
+       incomingOp: action.incomingOp
+     }
+    }    
+    case 'UPDATE_BUFFER' : {
+     return {
+       ...state, 
+       buffer: action.buffer
+     }
+    }  
+    case 'UPDATE_INFLIGHTOP' : {
+      console.log('in in flight reducer')
+     return {
+       ...state, 
+       inFlightOp: action.inFlightOp
      }
     }    
     case 'VIDEO_CHANNEL_READY' : {
@@ -31,6 +71,20 @@ export default function sessionReducer (state = sessionInitialState, action) {
       return {
         ...state,
         quill: action.quill
+      }
+    }    
+    case 'UPDATE_SERVERQUILL' : {
+      console.log('i am in reducer for UPDATE_SERVERQUILL', action.serverquill)
+      return {
+        ...state,
+        serverquill: action.serverquill
+      }
+    }
+    case 'UPDATE_QUILLHISTORY' : {
+      console.log('i am in reducer for quillHistory', action.quillHistory)
+      return {
+        ...state,
+        quillHistory: action.quillHistory
       }
     }
     case 'DOC_SELECTION_MODAL' : {
