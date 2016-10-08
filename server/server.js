@@ -318,6 +318,7 @@ io.on('connection', function(socket){
           // console.log('room', inFlightOp.room);
           updateServerState(inFlightOp);
           // console.log('----------------------emited')
+          io.to(socket.id).emit('clear inflight', inFlightOp);
           history[inFlightOp.room][inFlightOp.history].push(transformed)
           io.sockets.in(inFlightOp.room).emit('newOp', transformed);
         })
@@ -327,6 +328,7 @@ io.on('connection', function(socket){
         history[inFlightOp.room] = {};
         // console.log(inFlightOp.history)
         var myhistory = inFlightOp.history;
+        io.to(socket.id).emit('clear inflight', inFlightOp);
         history[inFlightOp.room][myhistory] = [inFlightOp];
         // console.log('room:-', inFlightOp.room)
           console.log('----------------------emited')
@@ -336,6 +338,7 @@ io.on('connection', function(socket){
       } else {
         console.log('room but no myhistory/conflict')
         var myhistory = inFlightOp.history;
+        io.to(socket.id).emit('clear inflight', inFlightOp);
         history[inFlightOp.room][myhistory] = [inFlightOp];
         // console.log('room:-', inFlightOp.room)
           console.log('----------------------emited')

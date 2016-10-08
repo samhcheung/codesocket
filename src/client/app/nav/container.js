@@ -27,12 +27,16 @@ class NavContainer extends React.Component {
       if(!obj.data.user_name) {
           hashHistory.push('/');
       }
-      context.props.dispatch({
-          type: 'UPDATE_USER', 
-          userName: obj.data.user_name
-        });
-      
+      // context.props.dispatch({
+      //     type: 'UPDATE_USER', 
+      //     userName: obj.data.user_name
+      //   });
     })
+    
+    context.props.dispatch({
+        type: 'UPDATE_USER', 
+        userName: 'dani'
+      });
   }
   addDoc() {
     var context = this;
