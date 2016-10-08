@@ -15,9 +15,9 @@ class EditorContainer extends React.Component {
   }
 
   componentWillMount() {
-    hljs.configure({   // optionally configure hljs
-      languages: ['javascript']
-    });
+    // hljs.configure({   // optionally configure hljs
+    //   languages: ['javascript']
+    // });
   }
 
   componentWillUnmount() {
@@ -35,9 +35,14 @@ class EditorContainer extends React.Component {
     // var socket = io();
     var quill = new Quill('#editor', {
         modules: {
+<<<<<<< HEAD
         // syntax: true,              // Include syntax module
           toolbar: false
         // toolbar: [['code-block']]  // Include button in toolbar
+=======
+        //syntax: true,              // Include syntax module
+        toolbar: [['code-block']]  // Include button in toolbar
+>>>>>>> Console logs and stuff
       },
       formats: ['code-block'],
       theme: 'snow'
@@ -48,11 +53,19 @@ class EditorContainer extends React.Component {
     // console.log('serverquill', serverquill);
 
 
+<<<<<<< HEAD
     // document.getElementsByClassName('ql-code-block')[0].click();
     //document.getElementsByClassName('ql-toolbar')[0].remove();
     hljs.configure({   // optionally configure hljs
       languages: ['javascript']
     });
+=======
+    document.getElementsByClassName('ql-code-block')[0].click();
+    document.getElementsByClassName('ql-toolbar')[0].remove();
+    // hljs.configure({   // optionally configure hljs
+    //   languages: ['javascript']
+    // });
+>>>>>>> Console logs and stuff
 
     socket.on('fetched live', function(latest){
       quill.setContents(latest, 'api');
@@ -347,7 +360,7 @@ class EditorContainer extends React.Component {
         newInsertion = oldHistory.length - 1;
       }
       oldHistory = oldHistory.slice(0, newInsertion) + newObj.op[1].insert + oldHistory.slice(newInsertion);
-
+      console.log('OLD HISTORY NEW CONSOLE LOG 2016 ', oldHistory)
       if(newInsertion > oldInsertion){
         newInsertion++;
         newOp.retain = newInsertion;
@@ -401,6 +414,7 @@ class EditorContainer extends React.Component {
     var starttyping = function(){
       var char = Math.floor(Math.random()*10) + '';
       var index = Math.floor(Math.random() * (this.props.quill.getText().length -2)) + 1;
+      console.log('=================GET TEXT', this.props.quill.getText(), this.props.quill.getText().length)
       var op = [{retain: index}, {insert: char}];
       console.log('op', op)
 
