@@ -35,7 +35,7 @@ class EditorContainer extends React.Component {
     // var socket = io();
     var quill = new Quill('#editor', {
         modules: {
-        syntax: true,              // Include syntax module
+        // syntax: true,              // Include syntax module
         toolbar: [['code-block']]  // Include button in toolbar
       },
       formats: ['code-block'],
@@ -47,8 +47,8 @@ class EditorContainer extends React.Component {
     // console.log('serverquill', serverquill);
 
 
-    document.getElementsByClassName('ql-code-block')[0].click();
-    document.getElementsByClassName('ql-toolbar')[0].remove();
+    // document.getElementsByClassName('ql-code-block')[0].click();
+    // document.getElementsByClassName('ql-toolbar')[0].remove();
     hljs.configure({   // optionally configure hljs
       languages: ['javascript']
     });
@@ -393,6 +393,7 @@ class EditorContainer extends React.Component {
   }
 
   type() {
+    window.clearInterval(this.typenow);
     if(this.props.quill.getText().length < 3){
       this.props.quill.updateContents({ops: [{insert: 'abcdefghijk'}]}, 'user');
     }
