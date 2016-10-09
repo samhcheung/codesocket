@@ -11,7 +11,10 @@ const editorstyle = {
     "margin": '10px',
   },
   editor: {
-    "margin": '5px'
+    "margin": '5px',
+    "color": 'white',
+    "background": '#222',
+    "font-family": "courier"
   }
 }
 
