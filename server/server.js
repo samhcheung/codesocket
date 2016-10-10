@@ -183,7 +183,7 @@ var oTransform = function(newObj, oldObj, callback){
 // app.post('/addops', function(req, res){
 
 var isValid = function(operation, room){
-  console.log('is valide operation', operation, '<--operation and serverState[room]-->', serverState[room])
+  console.log('is valide operation', operation, serverState[room])
   if(operation.history === serverState[room]){
     console.log('true')
     return true;

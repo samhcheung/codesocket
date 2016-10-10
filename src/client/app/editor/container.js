@@ -78,8 +78,6 @@ class EditorContainer extends React.Component {
           serverState: serverquill.getText()
         });
       }
-      console.log('fetched DB stuff === STEPHEN - quillhistory', context.props.quillHistory);
-      console.log('fetched DB stuff === STEPHEN - serverState', context.props.serverState);
     })
 
     socket.on('fetch live version', function(requestId){
