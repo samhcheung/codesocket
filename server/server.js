@@ -196,15 +196,24 @@ var isValid = function(operation, room){
 var updateServerState = function(operation, room){
   var retain = operation.op[0].retain;
   var insert = operation.op[1].insert;
-  console.log('before serverState', serverState[room]);
+  var deleteop = operation.op[1].delete;
+  console.log('before serverState', serverState);
   console.log('retain', retain);
   console.log('insert', insert);
 
   if(serverState[room] === '\n'){
     console.log('in true condition')
-    serverState[room] = insert + '\n';
+    if(insert!== undefined) {
+      serverState[room] = insert + '\n';
+    }
   } else {
-    serverState[room] = serverState[room].slice(0, retain) + insert + serverState[room].slice(retain);
+    if(insert!== undefined) {
+      serverState[room] = serverState[room].slice(0, retain) + insert + serverState[room].slice(retain);
+    } else if (deleteop !== undefined) {
+      serverState[room] = serverState[room].slice(0, retain) + serverState[room].slice(retain+1);
+    } else {
+      console.log('BLARGH should not come in here');
+    }
   }
   console.log('after serverState', serverState[room]);
 }

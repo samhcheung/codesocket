@@ -180,13 +180,29 @@ class EditorContainer extends React.Component {
       if(transformedOp.op[0].retain === 0){
         console.log('delete retains 0');
         var serverOpRetain = 0;
-        var serverOpInsert = transformedOp.op[1].insert;
-        var serverOp = [{insert: serverOpInsert}]
+        var serverOp = null;
+        //This changes retain 0 inserts and deletes to just be [{insert: 'x'}] or [{delete: 'x'}]
+        //
+        if( transformedOp.op[1].insert !== undefined) {
+          var serverOpInsert = transformedOp.op[1].insert;
+          serverOp = [{insert: serverOpInsert}]
+        } else if ( transformedOp.op[1].delete !== undefined ) {
+          var serverOpDelete = transformedOp.op[1].delete;
+          serverOp = [{delete: serverOpDelete}]
+        }
 
       } else {
+        // If retain > 0, just pass it along
+        //
         var serverOpRetain = transformedOp.op[0].retain;
-        var serverOpInsert = transformedOp.op[1].insert;
-        var serverOp = [{retain: serverOpRetain}, {insert: serverOpInsert}]
+        var serverOp = null;
+        if(transformedOp.op[1].insert !== undefined) {
+          var serverOpInsert = transformedOp.op[1].insert;
+          serverOp = [{retain: serverOpRetain}, {insert: serverOpInsert}]
+        } else if (transformedOp.op[1].delete !== undefined) {
+          var serverOpDelete = transformedOp.op[1].delete;
+          serverOp = [{retain: serverOpRetain}, {delete: serverOpDelete}]
+        }
       }
 
       if(transformedOp.id !== socket.id){
@@ -294,10 +310,17 @@ class EditorContainer extends React.Component {
       console.log('inflightop---------->', context.props.inFlightOp)
 
       if(context.props.inFlightOp.length){
+        //Check if it is an insert or delete operation and adjust the opPackage as necessary
+        //
         var insert = context.props.inFlightOp[0].op[1].insert;
+        var deleteop = context.props.inFlightOp[0].op[1].delete;
         var retain = context.props.inFlightOp[0].op[0].retain;
         var history = context.props.inFlightOp[0].history;
-        var op = [{retain: retain}, {insert: insert}]
+        if(insert !== undefined) {
+          var op = [{retain: retain}, {insert: insert}]
+        } else if (deleteop !== undefined) {
+          var op = [{retain: retain}, {delete: deleteop}]
+        }
         var opPackage = {
           history: history,
           id: socket.id,
@@ -344,10 +367,14 @@ class EditorContainer extends React.Component {
     console.log('old', bridge);
     console.log('how many in buffer', bridge.length);
     var newOp = newObj.op[0];
+    var newOp_insert = newObj.op[1].insert;
+    var newOp_delete = newObj.op[1].delete;
     for(var i = 0; i < bridge.length; i++){
       console.log('otransform came here once-----------')
       var oldHistory = bridge[i].history;
       var oldOp = bridge[i].op[0];
+      var oldOp_insert = bridge[i].op[1].insert;
+      var oldOp_delete = bridge[i].op[1].delete;
       //oldop is an array of arrays of one op
       console.log('oldOp', oldOp);
 
@@ -356,18 +383,39 @@ class EditorContainer extends React.Component {
 
       console.log('newInsertion', newInsertion);
       console.log('oldinsertion', oldInsertion);
-      if(newInsertion >= oldHistory.length){
-        newInsertion = oldHistory.length - 1;
-      }
-      oldHistory = oldHistory.slice(0, newInsertion) + newObj.op[1].insert + oldHistory.slice(newInsertion);
-      console.log('OLD HISTORY NEW CONSOLE LOG 2016 ', oldHistory)
-      if(newInsertion > oldInsertion){
-        newInsertion++;
-        newOp.retain = newInsertion;
-      } else {
-        oldInsertion++;
-        oldOp.retain = oldInsertion;
-        console.log('buffer history before', oldHistory)
+      //Commented out by Sam, idk if it changes anything V
+      // if(newInsertion >= oldHistory.length){
+      //   newInsertion = oldHistory.length - 1;
+      // }
+
+      if(newOp_insert !== undefined) {
+        oldHistory = oldHistory.slice(0, newInsertion) + newObj.op[1].insert + oldHistory.slice(newInsertion);
+        if(newInsertion > oldInsertion){
+          if(oldOp_insert !== undefined) {
+            newInsertion++;
+          } else if (oldOp_delete !== undefined) {
+            newInsertion--;
+          }
+          newOp.retain = newInsertion;
+        } else {
+          oldInsertion++;
+          oldOp.retain = oldInsertion;
+          console.log('buffer history before', oldHistory)
+        }
+      } else if(newOp_delete !== undefined) {
+        //Delete char @ delete retain index from history
+        oldHistory = oldHistory.slice(0, newInsertion) + oldHistory.slice(newInsertion+1);
+        if(newInsertion > oldinsertion) {
+          if(oldOp_insert !== undefined) {
+            newInsertion++;
+          } else if (oldOp_delete !== undefined) {
+            newInsertion--;
+          }
+          newOp.retain = newInsertion;
+        } else {
+          oldInsertion--;
+          oldOp.retain = oldInsertion;
+        }
       }
 
 
