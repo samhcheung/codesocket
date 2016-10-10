@@ -56,6 +56,13 @@ class EditorContainer extends React.Component {
 
     socket.on('fetched live', function(latest){
       quill.setContents(latest, 'api');
+      serverquill.setContents(latest, 'api');
+      context.props.dispatch({
+        type: 'UPDATE_SERVERSTATE', 
+        serverState: serverquill.getText()
+      });
+      console.log('fetched live stuff === STEPHEN - quillhistory', context.props.quillHistory);
+      console.log('fetched live stuff === STEPHEN - serverState', context.props.serverState);
     });
 
     socket.on('found latest doc', function(doc){
