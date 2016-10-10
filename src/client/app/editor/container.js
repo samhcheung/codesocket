@@ -61,8 +61,7 @@ class EditorContainer extends React.Component {
         type: 'UPDATE_SERVERSTATE', 
         serverState: serverquill.getText()
       });
-      console.log('fetched live stuff === STEPHEN - quillhistory', context.props.quillHistory);
-      console.log('fetched live stuff === STEPHEN - serverState', context.props.serverState);
+
     });
 
     socket.on('found latest doc', function(doc){
@@ -73,7 +72,14 @@ class EditorContainer extends React.Component {
       var docContent = JSON.parse(doc['doc_content']);
       if (docContent) {
         quill.setContents(docContent, 'api');
+        serverquill.setContents(docContent, 'api');
+        context.props.dispatch({
+          type: 'UPDATE_SERVERSTATE', 
+          serverState: serverquill.getText()
+        });
       }
+      console.log('fetched DB stuff === STEPHEN - quillhistory', context.props.quillHistory);
+      console.log('fetched DB stuff === STEPHEN - serverState', context.props.serverState);
     })
 
     socket.on('fetch live version', function(requestId){
