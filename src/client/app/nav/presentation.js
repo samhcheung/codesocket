@@ -30,22 +30,28 @@ const NavPresentation = (props) => {
           <div className="col-sm-2 text-center"> {props.userName}</div>
           <div className="col-sm-2 text-center"><Link href="auth/github">Login</Link></div>
         </div>
-
+        
         <Modal
           style={{
             content: {
-              color: 'lightsteelblue'
+              color: '#2323EE',
+              "maxWidth": '50%',
+              "textAlign": 'center',
+              "listStyle": 'none',
+              width: 'inherit',
+              height: 'inherit',
+              margin: '0 auto'
             }
           }}
           isOpen={props.isOpen}
           onRequestClose={props.closeModal}
         >
           <h1>Document List</h1>
-          {props.doclist && props.doclist.map((doc, index) => <li key={index} onClick={e=>props.joinDoc(e)}>{doc['doc_name']}</li>)}
+          {props.doclist && props.doclist.map((doc, index) => <li key={index} ><span onClick={e=>props.joinDoc(e)}>{doc['doc_name']}</span></li>)}
           <button onClick={props.closeModal}>Close</button>
           <button onClick={props.addDoc}>Create New Doc</button>
         </Modal>
-      </div>
+        </div>
       )
 }
 

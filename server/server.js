@@ -108,7 +108,8 @@ var history = {
   // }
 }
 
-var serverState = '\n';
+//var serverState = '\n';
+var serverState = {};
 
     // webpackDevHelper = require('./index.dev.js');
 useWebpackMiddleware(app);
@@ -181,9 +182,9 @@ var oTransform = function(newObj, oldObj, callback){
 
 // app.post('/addops', function(req, res){
 
-var isValid = function(operation){
-  console.log('is valide operation', operation, serverState)
-  if(operation.history === serverState){
+var isValid = function(operation, room){
+  console.log('is valide operation', operation, serverState[room])
+  if(operation.history === serverState[room]){
     console.log('true')
     return true;
   } else {
@@ -192,20 +193,20 @@ var isValid = function(operation){
   }
 }
 
-var updateServerState = function(operation){
+var updateServerState = function(operation, room){
   var retain = operation.op[0].retain;
   var insert = operation.op[1].insert;
-  console.log('before serverState', serverState);
+  console.log('before serverState', serverState[room]);
   console.log('retain', retain);
   console.log('insert', insert);
 
-  if(serverState === '\n'){
+  if(serverState[room] === '\n'){
     console.log('in true condition')
-    serverState = insert + '\n';
+    serverState[room] = insert + '\n';
   } else {
-    serverState = serverState.slice(0, retain) + insert + serverState.slice(retain);
+    serverState[room] = serverState[room].slice(0, retain) + insert + serverState[room].slice(retain);
   }
-  console.log('after serverState', serverState);
+  console.log('after serverState', serverState[room]);
 }
 
 var docExists = function(user, room, callback) {
@@ -304,7 +305,7 @@ io.on('connection', function(socket){
     var inFlightOp = JSON.parse(inFlightOp)
     // console.log('inFlightOp', inFlightOp);
     // console.log('pre History', history)
-    if(isValid(inFlightOp)){
+    if(isValid(inFlightOp, inFlightOp.room)){
 
       // console.log('in valid, about to emit clear inflight op')
       io.to(socket.id).emit('clear inflight', inFlightOp);
@@ -316,7 +317,7 @@ io.on('connection', function(socket){
         oTransform(inFlightOp, history[inFlightOp.room][inFlightOp.history][0], function(transformed){
           // console.log('transformed. should be obj', transformed);
           // console.log('room', inFlightOp.room);
-          updateServerState(inFlightOp);
+          updateServerState(inFlightOp, inFlightOp.room);
           // console.log('----------------------emited')
           io.to(socket.id).emit('clear inflight', inFlightOp);
           history[inFlightOp.room][inFlightOp.history].push(transformed)
@@ -332,7 +333,7 @@ io.on('connection', function(socket){
         history[inFlightOp.room][myhistory] = [inFlightOp];
         // console.log('room:-', inFlightOp.room)
           console.log('----------------------emited')
-        updateServerState(inFlightOp);
+        updateServerState(inFlightOp, inFlightOp.room);
         io.sockets.in(inFlightOp.room).emit('newOp', inFlightOp);
 
       } else {
@@ -342,12 +343,12 @@ io.on('connection', function(socket){
         history[inFlightOp.room][myhistory] = [inFlightOp];
         // console.log('room:-', inFlightOp.room)
           console.log('----------------------emited')
-        updateServerState(inFlightOp);
+        updateServerState(inFlightOp, inFlightOp.room);
         io.sockets.in(inFlightOp.room).emit('newOp', inFlightOp);
       }
       
     } else {
-      console.log('-------------in rejected-----------', inFlightOp, serverState)
+      console.log('-------------in rejected-----------', inFlightOp, serverState[inFlightOp.room])
       io.to(socket.id).emit('rejected op', inFlightOp)
     }
   })
@@ -406,6 +407,7 @@ io.on('connection', function(socket){
     if (numClients === 1) {
       console.log('one client')
       socket.join(room);
+      serverState[room] = '\n';
       log('Client ID ' + socket.id + ' created room ' + room);
       
       //socket.emit('created', room, socket.id);
