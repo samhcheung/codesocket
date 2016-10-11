@@ -76,4 +76,23 @@
 
 	  });
 
+	  describe('get list', function () {
+	    console.log('i am inside get list');
+
+	    var newContent = {
+	      'room': 'hello', 
+	      'contents': [{retain: 1}, {insert: 'neww'}]
+	    }
+
+	    it('should get list', function(done) {
+	  
+	      request(app)
+	        .get('/doclist')
+	        .expect((res) => {
+	        	// console.log(res);
+	        	expect(res.body.length).to.not.equal(0)})
+	        .end(done);
+	    });
+
+	  });
 	});
