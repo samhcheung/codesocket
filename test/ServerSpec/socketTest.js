@@ -13,7 +13,8 @@ const options = {
 describe('Socket.io', () => {
   var socket;
   var socket2;
-  beforeEach(function(done) {
+
+  beforeEach(function() {
     // Setup
     socket = ioClient.connect('https://localhost:3000', {
         'reconnection delay' : 0
@@ -22,14 +23,13 @@ describe('Socket.io', () => {
     });
     socket.on('connect', function() {
         console.log('worked...');
-        done();
     });
     socket.on('disconnect', function() {
         console.log('disconnected...');
     })
   });
 
-  afterEach(function(done) {
+  afterEach(function() {
        // Cleanup
        if(socket.connected) {
            console.log('disconnecting...');
@@ -38,7 +38,6 @@ describe('Socket.io', () => {
            // There will not be a connection unless you have done() in beforeEach, socket.on('connect'...)
            console.log('no connection to break...');
        }
-  done()
    });
 
   describe('Room Creation', () => {
@@ -51,6 +50,7 @@ describe('Socket.io', () => {
         done();
       });
     });
+
   })
 
   describe('Room Join', () => {
@@ -62,17 +62,22 @@ describe('Socket.io', () => {
       //     , 'reopen delay' : 0
       //     , 'force new connection' : true
       // });
-      socket2 = ioClient.connect('https://localhost:3000', 
-        options);
+      socket2 = ioClient.connect('https://localhost:3000', {
+        'reconnection delay' : 0
+        , 'reopen delay' : 0
+        , 'force new connection' : true
+      });
+
       socket.emit('create or join', 'testRoom');
-      socket2.emit('create or join', 'testRoom')
+      socket.on('ready', function(){
+        socket2.emit('create or join', 'testRoom')
+      })
 
       socket2.on('connect', function() {
-          console.log('worked...');
-          done();
+          console.log('socket2 worked...');
       });
       socket2.on('disconnect', function() {
-          console.log('disconnected...');
+          console.log('socket2 disconnected...');
       })
       done()
     });
