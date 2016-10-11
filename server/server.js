@@ -166,7 +166,7 @@ var oTransform = function(newObj, oldObj, callback){
   console.log('newInsertion', newInsertion);
   console.log('oldinsertion', oldInsertion);
   if(newInsertion >= oldInsertion){
-    newInsertion++;
+    //newInsertion++;
     newOp.retain = newInsertion;
   } else {
     // oldInsertion++;
@@ -181,7 +181,6 @@ var oTransform = function(newObj, oldObj, callback){
 }
 
 // app.post('/addops', function(req, res){
-
 var isValid = function(operation, room){
   console.log('is valide operation', operation, serverState[room])
   if(operation.history === serverState[room]){
@@ -317,12 +316,14 @@ io.on('connection', function(socket){
     if(isValid(inFlightOp, inFlightOp.room)){
 
       // console.log('in valid, about to emit clear inflight op')
-      io.to(socket.id).emit('clear inflight', inFlightOp);
+      //io.to(socket.id).emit('clear inflight', inFlightOp);
 
       if(history[inFlightOp.room] !== undefined && history[inFlightOp.room][inFlightOp.history] !== undefined){
         //change was there already
         // console.log('before transformed. should be obj', inFlightOp);
         //transform
+        //console.log('before otransform passing in ', history[inFlightOp.room])
+        console.log('before otransform passing in ', history[inFlightOp.room][inFlightOp.history][0])
         oTransform(inFlightOp, history[inFlightOp.room][inFlightOp.history][0], function(transformed){
           // console.log('transformed. should be obj', transformed);
           // console.log('room', inFlightOp.room);
@@ -357,7 +358,7 @@ io.on('connection', function(socket){
       }
       
     } else {
-      console.log('-------------in rejected-----------', inFlightOp, serverState[inFlightOp.room])
+      //console.log('-------------in rejected-----------', inFlightOp, serverState[inFlightOp.room])
       io.to(socket.id).emit('rejected op', inFlightOp)
     }
   })

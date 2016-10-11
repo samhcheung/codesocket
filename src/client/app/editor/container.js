@@ -35,14 +35,9 @@ class EditorContainer extends React.Component {
     // var socket = io();
     var quill = new Quill('#editor', {
         modules: {
-<<<<<<< HEAD
         // syntax: true,              // Include syntax module
           toolbar: false
         // toolbar: [['code-block']]  // Include button in toolbar
-=======
-        //syntax: true,              // Include syntax module
-        toolbar: [['code-block']]  // Include button in toolbar
->>>>>>> Console logs and stuff
       },
       formats: ['code-block'],
       theme: 'snow'
@@ -53,19 +48,11 @@ class EditorContainer extends React.Component {
     // console.log('serverquill', serverquill);
 
 
-<<<<<<< HEAD
     // document.getElementsByClassName('ql-code-block')[0].click();
     //document.getElementsByClassName('ql-toolbar')[0].remove();
     hljs.configure({   // optionally configure hljs
       languages: ['javascript']
     });
-=======
-    document.getElementsByClassName('ql-code-block')[0].click();
-    document.getElementsByClassName('ql-toolbar')[0].remove();
-    // hljs.configure({   // optionally configure hljs
-    //   languages: ['javascript']
-    // });
->>>>>>> Console logs and stuff
 
     socket.on('fetched live', function(latest){
       quill.setContents(latest, 'api');
@@ -189,6 +176,8 @@ class EditorContainer extends React.Component {
         } else if ( transformedOp.op[1].delete !== undefined ) {
           var serverOpDelete = transformedOp.op[1].delete;
           serverOp = [{delete: serverOpDelete}]
+        } else {
+          console.log('SHOULD NEVER GET HERE RETAIN === 0')
         }
 
       } else {
@@ -202,6 +191,8 @@ class EditorContainer extends React.Component {
         } else if (transformedOp.op[1].delete !== undefined) {
           var serverOpDelete = transformedOp.op[1].delete;
           serverOp = [{retain: serverOpRetain}, {delete: serverOpDelete}]
+        } else {
+          console.log('SHOULD NEVER GET HERE RETAIN > 0')
         }
       }
 
@@ -269,7 +260,7 @@ class EditorContainer extends React.Component {
           // apply result to 
       } 
       //update server quill
-
+      console.log('serverOP before updating serverquill', serverOp[0], serverOp[1])
       serverquill.updateContents({ops:serverOp}, 'api');
       context.props.dispatch({
         type: 'UPDATE_SERVERSTATE', 
@@ -456,14 +447,20 @@ class EditorContainer extends React.Component {
 
   type() {
     window.clearInterval(this.typenow);
+    window.counter = 0;
     if(this.props.quill.getText().length < 3){
       this.props.quill.updateContents({ops: [{insert: 'abcdefghijk'}]}, 'user');
     }
     var starttyping = function(){
+      window.counter++;
       var char = Math.floor(Math.random()*10) + '';
       var index = Math.floor(Math.random() * (this.props.quill.getText().length -2)) + 1;
       console.log('=================GET TEXT', this.props.quill.getText(), this.props.quill.getText().length)
       var op = [{retain: index}, {insert: char}];
+      if(window.counter=== 10) {
+        window.counter = 0;
+      }
+      var op = [{retain: 2}, {insert: ''+window.counter}];
       console.log('op', op)
 
       this.props.quill.updateContents({ops: op}, 'user');
