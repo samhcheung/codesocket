@@ -53,6 +53,10 @@ var db = require('./db/index.js');
 var passport = require('passport');
 var passportGithub = require('./auth/github');
 var session = require('express-session');
+var redisStore = require('connect-redis')(session);
+var redis   = require("redis");
+var client  = redis.createClient();
+
 
 var httpsServer = https.createServer({
   key: fs.readFileSync('./server/key.pem'),
@@ -60,9 +64,10 @@ var httpsServer = https.createServer({
 }, app);
 
 app.use(session({
+  store: new redisStore({ host: 'localhost', port: 6379, client: client, ttl: 260}),
   secret: 'the_best_ajaxta_secret_ever',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 }
 }));
 app.use(passport.initialize());
@@ -85,8 +90,16 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
-  req.logout();
-  res.redirect('/');
+  console.log('session key at logout', req.session.key)
+
+  if(req.session.key) {
+    req.logout()
+  req.session.destroy(function(){
+    res.redirect('/');
+  });
+  } else {
+      res.redirect('/');
+  }
 });
 
 app.get('/secure', helper.checkLogin, function(req, res) {
