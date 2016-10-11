@@ -359,6 +359,7 @@ io.on('connection', function(socket){
       
     } else {
       //console.log('-------------in rejected-----------', inFlightOp, serverState[inFlightOp.room])
+
       io.to(socket.id).emit('rejected op', inFlightOp)
     }
   })
