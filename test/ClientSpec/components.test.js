@@ -1,9 +1,9 @@
 // __tests__/components.test.js
-jest.dontMock('../src/client/app/console/container.js');
+jest.dontMock('.../src/client/app/console/container.js');
 
 import React from 'react';
 import renderer from 'react-test-renderer';
-import {ConsoleContainer} from '../src/client/app/console/container.js';
+import {ConsoleContainer} from '.../src/client/app/console/container.js';
 // var {store} = require('../src/client/app/index.jsx');
 import { fromJS } from 'immutable';
 import {Provider} from 'react-redux';

@@ -3,8 +3,8 @@
 	// var mocha = require('mocha');
 	var expect = chai.expect;
 	var request = require('supertest');
-	var {app, io} = require('../server/server.js');
-	var {User, Doc} = require('../server/db/index.js');
+	var {app, io} = require('.../server/server.js');
+	var {User, Doc} = require('.../server/db/index.js');
 	// var sinon = require('sinon');
 	const ioClient = require('socket.io-client');
 	const socketURL = 'http://0.0.0.0:3000';
