@@ -37,18 +37,18 @@ class DocContainer extends React.Component {
       hashHistory.push('/loading');
       //console.log('after', newProps.params.roomname)
     }
-    // axios.get('/access')
-    // .then( function(obj) {
-    //   console.log('axios success in doc')
-    //   if(!obj.data.user_name) {
-    //       hashHistory.push('/');
-    //   }
-    //   context.props.dispatch({
-    //       type: 'UPDATE_USER', 
-    //       userName: obj.data.user_name
-    //     });
+    axios.get('/access')
+    .then( function(obj) {
+      console.log('axios success in doc')
+      if(!obj.data.user_name) {
+          hashHistory.push('/');
+      }
+      context.props.dispatch({
+          type: 'UPDATE_USER', 
+          userName: obj.data.user_name
+        });
       
-    // })
+    })
   }
   componentDidMount() {
     console.log(this.props.params.roomname);
