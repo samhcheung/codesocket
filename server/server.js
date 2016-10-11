@@ -64,12 +64,20 @@ var httpsServer = https.createServer({
 }, app);
 
 app.use(session({
-  store: new redisStore({ host: 'localhost', port: 6379, client: client, ttl: 260}),
+  store: new redisStore({client: client}),
   secret: 'the_best_ajaxta_secret_ever',
-  resave: false,
-  saveUninitialized: false,
+  resave: true,
+  saveUninitialized: true,
   cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 }
 }));
+
+// app.use(session({
+//   secret: 'the_best_ajaxta_secret_ever',
+//   resave: true,
+//   saveUninitialized: true,
+//   cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 }
+// }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -80,6 +88,7 @@ app.get('/auth/github/callback',
   function(req, res) {
     // Successful authentication
     console.log(res.req.session.passport.user, '<---')
+    console.log(req.isAuthenticated(), '<-----------------')
 
     res.redirect('/secure');
   }
@@ -90,16 +99,18 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
-  console.log('session key at logout', req.session.key)
 
-  if(req.session.key) {
+  // if(req.session.key) {
+          req.session.destroy();
+
     req.logout()
-  req.session.destroy(function(){
-    res.redirect('/');
-  });
-  } else {
+
+  // req.session.destroy(function(){
+    // res.redirect('/');
+  // });
+  // } else {
       res.redirect('/');
-  }
+  // }
 });
 
 app.get('/secure', helper.checkLogin, function(req, res) {
