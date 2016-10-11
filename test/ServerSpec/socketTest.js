@@ -52,5 +52,50 @@ describe('Socket.io', () => {
       });
     });
   })
-  
+
+  describe('Room Join', () => {
+
+    beforeEach(function(done) {
+      // Setup
+      // socket = ioClient.connect('https://localhost:3000', {
+      //     'reconnection delay' : 0
+      //     , 'reopen delay' : 0
+      //     , 'force new connection' : true
+      // });
+      socket2 = ioClient.connect('https://localhost:3000', 
+        options);
+      socket.emit('create or join', 'testRoom');
+      socket2.emit('create or join', 'testRoom')
+
+      socket2.on('connect', function() {
+          console.log('worked...');
+          done();
+      });
+      socket2.on('disconnect', function() {
+          console.log('disconnected...');
+      })
+      done()
+    });
+
+    afterEach(function(done) {
+         // Cleanup
+         // if(socket2.connected) {
+         //     console.log('disconnecting...');
+         //     socket2.disconnect();
+         // } else {
+         //     // There will not be a connection unless you have done() in beforeEach, socket.on('connect'...)
+         //     console.log('no connection to break...');
+         // }
+         done()
+     });
+
+    it('should be able to join existing room', (done) => {
+      // socket2.emit('create or join', 'testRoom');
+      socket2.on('ready', () => {
+        console.log('in ready')
+        expect(io.sockets.adapter.rooms['testRoom'].length).to.equal(2)
+        done();
+      });
+    })
+  })
 })
