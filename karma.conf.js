@@ -12,6 +12,7 @@ webpackDevConfig.module = {
       }
     ],
 }
+var nodeExternals = require('webpack-node-externals');
 
 
 module.exports = function(config) {
@@ -21,7 +22,7 @@ module.exports = function(config) {
         // base path, that will be used to resolve files and exclude
         basePath: './',
 
-        frameworks: ['jasmine', 'requirejs','browserify'],
+        frameworks: ['browserify', 'mocha'],
         webpack: {
           devtool: 'inline-source-map',
           module: {
@@ -32,13 +33,19 @@ module.exports = function(config) {
                 test: /\.jsx?$/
               }
             ],
-          }
+          },
+          target: 'node',
+          externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
         },
         webpackMiddleware: {
           noInfo: true
         },
         files: [
         // 'node_modules/react/react.js',
+            './node_modules/requirejs/**/*.js',
+            './node_modules/require/**/*.js',
+            './node_modules/chai/chai.js',
+            // './node_modules/supertest/**/*.js',
             './node_modules/phantomjs-polyfill/bind-polyfill.js',
             'tests.webpack.js',
             // 'node_modules/*',
@@ -56,8 +63,10 @@ module.exports = function(config) {
         exclude: [
         ],
         preprocessors: {
-        //     'node_modules/*': ['browserify'],
-        //     'Source/*.js': ['browserify'],
+            './node_modules/require/**/*.js': ['browserify'],
+            './node_modules/chai/**/*.js': ['browserify'],
+            './node_modules/requirejs/**/*.js': ['browserify'],
+            './node_modules/supertest/**/*.js': ['browserify'],
             'utils/*': ['browserify'],
         //     // 'Source/client/app/index.jsx': ['webpack', 'sourcemap'],
         //     'Source/client/app/**/*.js': ['browserify'],

@@ -13,7 +13,7 @@ const reducers = combineReducers({
  groupReducer
 });
 
-const store = createStore(reducers);
+export const store = createStore(reducers);
 
 
 render(
@@ -24,4 +24,3 @@ render(
 	);
 
 console.log('Hello World');
-export default store

@@ -139,14 +139,16 @@ app.get('/doclist', function(req, res) {
 })
 
 app.post('/savedoc', helper.checkLogin, function(req, res) {
+  console.log('in save doc')
   db.Doc.update({
     doc_name:req.body.room,
     doc_content: req.body.contents
   },
   {
     where: {doc_name:req.body.room}
-  }).then(function() {
-    res.send('/savedoc success!')
+  }).then(function(result) {
+    console.log('in then of savedoc', result)
+    res.status(201).send(result)
   });
 
 
@@ -306,7 +308,7 @@ var io = require('socket.io')(httpsServer);
 var commands = [];
 
 io.on('connection', function(socket){
-
+  console.log('on connection')
   // *********** Begin WebRTC Socket ************
   function log() {
     var array = ['Message from server:'];
@@ -385,7 +387,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('create or join', function(room) {
-    //console.log(room, '===== ROOM');
+    console.log(room, '===== ROOM');
     // var fetch = function(exists) {
     //   if(exists){
     //     console.log('doc exists')
@@ -447,6 +449,8 @@ io.on('connection', function(socket){
         }
         io.to(socket.id).emit('found latest doc', doc);
       });
+      io.sockets.in(room).emit('ready');
+
 
     } else if (numClients === 2) {
 
@@ -543,3 +547,8 @@ io.on('connection', function(socket){
 httpsServer.listen(3000, function () {
   console.log('Example https app listening on port 3000!');
 });
+
+module.exports.io = io;
+module.exports.app = app;
+
+

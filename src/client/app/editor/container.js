@@ -3,10 +3,9 @@ import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 import { connect } from 'react-redux'
 import EditorPresentation from './presentation'
 import axios from 'axios'
-
 var Quill = require('quill');
 
-class EditorContainer extends React.Component {
+export class EditorContainer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -47,12 +46,11 @@ class EditorContainer extends React.Component {
     var serverquill = new Quill('#serverEditor')
     // console.log('serverquill', serverquill);
 
-
-    // document.getElementsByClassName('ql-code-block')[0].click();
-    //document.getElementsByClassName('ql-toolbar')[0].remove();
-    hljs.configure({   // optionally configure hljs
-      languages: ['javascript']
-    });
+    document.getElementsByClassName('ql-code-block')[0].click();
+    document.getElementsByClassName('ql-toolbar')[0].remove();
+    // hljs.configure({   // optionally configure hljs
+    //   languages: ['javascript']
+    // });
 
     socket.on('fetched live', function(latest){
       quill.setContents(latest, 'api');
