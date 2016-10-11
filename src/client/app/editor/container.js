@@ -15,9 +15,9 @@ class EditorContainer extends React.Component {
   }
 
   componentWillMount() {
-    hljs.configure({   // optionally configure hljs
-      languages: ['javascript']
-    });
+    // hljs.configure({   // optionally configure hljs
+    //   languages: ['javascript']
+    // });
   }
 
   componentWillUnmount() {
@@ -178,13 +178,35 @@ class EditorContainer extends React.Component {
       if(transformedOp.op[0].retain === 0){
         console.log('delete retains 0');
         var serverOpRetain = 0;
-        var serverOpInsert = transformedOp.op[1].insert;
-        var serverOp = [{insert: serverOpInsert}]
+        var serverOp = null;
+        //This changes retain 0 inserts and deletes to just be [{insert: 'x'}] or [{delete: 'x'}]
+        //
+        if( transformedOp.op[1].insert !== undefined) {
+          var serverOpInsert = transformedOp.op[1].insert;
+          serverOp = [{insert: serverOpInsert}]
+        } else if ( transformedOp.op[1].delete !== undefined ) {
+          var serverOpDelete = transformedOp.op[1].delete;
+          serverOp = [{delete: serverOpDelete}]
+        }
+        if( transformedOp.op[2] !== undefined ) {
+          serverOp = [{insert: transformedOp.op[1].insert}, {delete: transformedOp.op[2].delete} ]
+        }
 
       } else {
+        // If retain > 0, just pass it along
+        //
         var serverOpRetain = transformedOp.op[0].retain;
-        var serverOpInsert = transformedOp.op[1].insert;
-        var serverOp = [{retain: serverOpRetain}, {insert: serverOpInsert}]
+        var serverOp = null;
+        if(transformedOp.op[1].insert !== undefined) {
+          var serverOpInsert = transformedOp.op[1].insert;
+          serverOp = [{retain: serverOpRetain}, {insert: serverOpInsert}]
+        } else if (transformedOp.op[1].delete !== undefined) {
+          var serverOpDelete = transformedOp.op[1].delete;
+          serverOp = [{retain: serverOpRetain}, {delete: serverOpDelete}]
+        } 
+        if( transformedOp.op[2] !== undefined ) {
+          serverOp = [{retain: serverOpRetain}, {insert: transformedOp.op[1].insert}, {delete: transformedOp.op[2].delete} ]
+        }
       }
 
       if(transformedOp.id !== socket.id){
@@ -251,7 +273,7 @@ class EditorContainer extends React.Component {
           // apply result to 
       } 
       //update server quill
-
+      console.log('serverOP before updating serverquill', serverOp[0], serverOp[1])
       serverquill.updateContents({ops:serverOp}, 'api');
       context.props.dispatch({
         type: 'UPDATE_SERVERSTATE', 
@@ -288,14 +310,26 @@ class EditorContainer extends React.Component {
     socket.on('rejected op', function(operation){
       //add to buffer and update
 
-      console.log('in rejected op ===================', operation)
-      console.log('inflightop---------->', context.props.inFlightOp)
+      //console.log('in rejected op ===================', operation)
+      //console.log('inflightop---------->', context.props.inFlightOp)
 
       if(context.props.inFlightOp.length){
+        //Check if it is an insert or delete operation and adjust the opPackage as necessary
+        //
         var insert = context.props.inFlightOp[0].op[1].insert;
+        var deleteop = context.props.inFlightOp[0].op[1].delete;
         var retain = context.props.inFlightOp[0].op[0].retain;
         var history = context.props.inFlightOp[0].history;
-        var op = [{retain: retain}, {insert: insert}]
+        if(insert !== undefined) {
+          var op = [{retain: retain}, {insert: insert}]
+        } else if (deleteop !== undefined) {
+          var op = [{retain: retain}, {delete: deleteop}]
+        }
+        if(context.props.inFlightOp[0].op[2]) {
+          deleteop = context.props.inFlightOp[0].op[2].delete;
+          var op = [{retain: retain}, {insert: insert}, {delete: deleteop}]
+        }
+
         var opPackage = {
           history: history,
           id: socket.id,
@@ -306,7 +340,7 @@ class EditorContainer extends React.Component {
           type: 'UPDATE_REJECTEDOP',
           rejectedOp: opPackage
         })
-        console.log('opPackage', opPackage);
+        //console.log('opPackage', opPackage);
         // console.log('opPackage', context.props.opPackage);
         socket.emit('add inflight op', JSON.stringify(opPackage));
       }
@@ -342,10 +376,16 @@ class EditorContainer extends React.Component {
     console.log('old', bridge);
     console.log('how many in buffer', bridge.length);
     var newOp = newObj.op[0];
+    var newOp_insert = newObj.op[1].insert;
+    var newOp_delete = newObj.op[1].delete;
+    var newOp2 = newObj.op[2];
     for(var i = 0; i < bridge.length; i++){
       console.log('otransform came here once-----------')
       var oldHistory = bridge[i].history;
       var oldOp = bridge[i].op[0];
+      var oldOp_insert = bridge[i].op[1].insert;
+      var oldOp_delete = bridge[i].op[1].delete;
+      var oldOp2 = bridge[i].op[2];
       //oldop is an array of arrays of one op
       console.log('oldOp', oldOp);
 
@@ -353,23 +393,57 @@ class EditorContainer extends React.Component {
       var oldInsertion = oldOp.retain;
 
       console.log('newInsertion', newInsertion);
-      console.log('oldinsertion', oldInsertion);
-      if(newInsertion >= oldHistory.length){
-        newInsertion = oldHistory.length - 1;
+      console.log('oldInsertion', oldInsertion);
+      //Commented out by Sam, idk if it changes anything V
+      // if(newInsertion >= oldHistory.length){
+      //   newInsertion = oldHistory.length - 1;
+      // }
+
+      if(newOp_insert !== undefined) {
+        if(newOp2) {
+          oldHistory = oldHistory.slice(0, newInsertion) + oldHistory.slice(newInsertion+newOp2.delete);
+        }
+
+        oldHistory = oldHistory.slice(0, newInsertion) + newObj.op[1].insert + oldHistory.slice(newInsertion);
+        if(newInsertion > oldInsertion){
+          if(oldOp_insert !== undefined) {
+            newInsertion += oldOp_insert.length;
+            if(oldOp2) {
+              newInsertion -= oldOp2.delete;
+            }
+          } else if (oldOp_delete !== undefined) {
+            newInsertion-= oldOp_delete;
+          }
+          newOp.retain = newInsertion;
+        } else {
+          oldInsertion += newObj.op[1].insert.length;
+          if(newOp2) {
+            oldInsertion -= newOp2.delete;
+          }
+          oldOp.retain = oldInsertion;
+          //console.log('buffer history before', oldHistory)
+        }
+      } else if(newOp_delete !== undefined) {
+        //Delete char @ delete retain index from history
+        oldHistory = oldHistory.slice(0, newInsertion) + oldHistory.slice(newInsertion+1);
+        if(newInsertion >= oldInsertion) {
+          if(oldOp_insert !== undefined) {
+            newInsertion += oldOp_insert.length;
+            if(oldOp2) {
+              newInsertion -= oldOp2.delete;
+            }
+          } else if (oldOp_delete !== undefined) {
+            newInsertion-= oldOp_delete;
+          }
+          newOp.retain = newInsertion;
+        } else {
+          oldInsertion-= newOp_delete;
+          oldOp.retain = oldInsertion;
+        }
       }
-      oldHistory = oldHistory.slice(0, newInsertion) + newObj.op[1].insert + oldHistory.slice(newInsertion);
-
-      if(newInsertion > oldInsertion){
-        newInsertion++;
-        newOp.retain = newInsertion;
-      } else {
-        oldInsertion++;
-        oldOp.retain = oldInsertion;
-        console.log('buffer history before', oldHistory)
-      }
 
 
-      console.log('buffer history after', oldHistory)
+      //console.log('buffer history after', oldHistory)
       bridge[i].history = oldHistory;
       console.log('2buffer', bridge);
       console.log('2op', newObj.op[0].retain);
@@ -406,13 +480,20 @@ class EditorContainer extends React.Component {
 
   type() {
     window.clearInterval(this.typenow);
+    window.counter = 0;
     if(this.props.quill.getText().length < 3){
       this.props.quill.updateContents({ops: [{insert: 'abcdefghijk'}]}, 'user');
     }
     var starttyping = function(){
+      window.counter++;
       var char = Math.floor(Math.random()*10) + '';
       var index = Math.floor(Math.random() * (this.props.quill.getText().length -2)) + 1;
+      console.log('=================GET TEXT', this.props.quill.getText(), this.props.quill.getText().length)
       var op = [{retain: index}, {insert: char}];
+      if(window.counter=== 10) {
+        window.counter = 0;
+      }
+      var op = [{retain: 2}, {insert: ''+window.counter}];
       console.log('op', op)
 
       this.props.quill.updateContents({ops: op}, 'user');
