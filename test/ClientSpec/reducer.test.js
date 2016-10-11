@@ -1,4 +1,4 @@
-var groupReducer = require('../src/client/app/reducers/groupreducer.js').default
+var groupReducer = require('../../src/client/app/reducers/groupreducer.js').default
 console.log(groupReducer)
 
 describe('groupReducer', function() {
@@ -19,7 +19,7 @@ describe('groupReducer', function() {
 });
 
 
-var reducer = require('../src/client/app/reducers/groupreducer.js')
+var reducer = require('../../src/client/app/reducers/groupreducer.js')
 console.log('reducer', reducer);
 
 describe('todos reducer', () => {

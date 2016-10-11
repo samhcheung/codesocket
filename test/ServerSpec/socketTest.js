@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const {io} = require('.../server/server.js');
+const {io} = require('../../server/server.js');
 // const {User, Room} = require('../../../server/database/db-config');
 const ioClient = require('socket.io-client');
 const socketURL = 'http://0.0.0.0:3000';

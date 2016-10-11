@@ -9,7 +9,7 @@
     "start": "node server/server.js",
     "test": "npm run test:server & npm run test:client",
     "test:client": "jest",
-    "test:server": "mocha test/",
+    "test:server": "mocha test/ServerSpec/",
     "testfiles": "karma test"
   },
   "jest": {
