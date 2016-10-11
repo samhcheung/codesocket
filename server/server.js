@@ -407,7 +407,11 @@ io.on('connection', function(socket){
     if (numClients === 1) {
       console.log('one client')
       socket.join(room);
+      
+      // Reset serverState and history on being the first to enter a doc.
       serverState[room] = '\n';
+      delete history[room];
+
       log('Client ID ' + socket.id + ' created room ' + room);
       
       //socket.emit('created', room, socket.id);
@@ -421,6 +425,9 @@ io.on('connection', function(socket){
       }})
       .then(function(doc) {
         //console.log('found doc', doc)
+        if (JSON.parse(doc['doc_content'])) {
+          serverState[room] = JSON.parse(doc['doc_content'])[0].insert;
+        }
         io.to(socket.id).emit('found latest doc', doc);
       });
 

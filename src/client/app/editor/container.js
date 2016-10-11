@@ -56,6 +56,12 @@ class EditorContainer extends React.Component {
 
     socket.on('fetched live', function(latest){
       quill.setContents(latest, 'api');
+      serverquill.setContents(latest, 'api');
+      context.props.dispatch({
+        type: 'UPDATE_SERVERSTATE', 
+        serverState: serverquill.getText()
+      });
+
     });
 
     socket.on('found latest doc', function(doc){
@@ -66,6 +72,11 @@ class EditorContainer extends React.Component {
       var docContent = JSON.parse(doc['doc_content']);
       if (docContent) {
         quill.setContents(docContent, 'api');
+        serverquill.setContents(docContent, 'api');
+        context.props.dispatch({
+          type: 'UPDATE_SERVERSTATE', 
+          serverState: serverquill.getText()
+        });
       }
     })
 
