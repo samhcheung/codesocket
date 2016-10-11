@@ -101,15 +101,15 @@ app.get('/login', function(req, res) {
 app.get('/logout', function(req, res) {
 
   // if(req.session.key) {
-          req.session.destroy();
+  req.session.destroy();
 
-    req.logout()
+  req.logout()
 
   // req.session.destroy(function(){
     // res.redirect('/');
   // });
   // } else {
-      res.redirect('/');
+  res.redirect('/');
   // }
 });
 
@@ -145,6 +145,7 @@ app.use(bodyParser.json());
 
 // This never triggers?
 app.get('/', function(req, res) {
+  console.log('in /')
 	res.send('Hello World');
 });
 
