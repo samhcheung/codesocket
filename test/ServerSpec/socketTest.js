@@ -41,5 +41,16 @@ describe('Socket.io', () => {
   done()
    });
 
+  describe('Room Creation', () => {
 
+    it('should create rooms', (done) => {
+      socket.emit('create or join', 'testRoom');
+      socket.on('ready', () => {
+        console.log('in ready')
+        expect(io.sockets.adapter.rooms).to.have.property('testRoom');
+        done();
+      });
+    });
+  })
+  
 })
