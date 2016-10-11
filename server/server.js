@@ -196,6 +196,9 @@ var updateServerState = function(operation, room){
   var retain = operation.op[0].retain;
   var insert = operation.op[1].insert;
   var deleteop = operation.op[1].delete;
+  if(operation.op[2] !== undefined) {
+    deleteop = operation.op[2].delete;
+  }
   console.log('before serverState', serverState);
   console.log('retain', retain);
   console.log('insert', insert);
@@ -206,13 +209,12 @@ var updateServerState = function(operation, room){
       serverState[room] = insert + '\n';
     }
   } else {
+    if (deleteop !== undefined) {
+      serverState[room] = serverState[room].slice(0, retain) + serverState[room].slice(retain+deleteop);
+    }
     if(insert!== undefined) {
       serverState[room] = serverState[room].slice(0, retain) + insert + serverState[room].slice(retain);
-    } else if (deleteop !== undefined) {
-      serverState[room] = serverState[room].slice(0, retain) + serverState[room].slice(retain+1);
-    } else {
-      console.log('BLARGH should not come in here');
-    }
+    } 
   }
   console.log('after serverState', serverState[room]);
 }

@@ -396,7 +396,7 @@ class EditorContainer extends React.Component {
       } else if(newOp_delete !== undefined && oldInsertion !== undefined) {
         //Delete char @ delete retain index from history
         oldHistory = oldHistory.slice(0, newInsertion) + oldHistory.slice(newInsertion+1);
-        if(newInsertion > oldInsertion) {
+        if(newInsertion >= oldInsertion) {
           if(oldOp_insert !== undefined) {
             newInsertion++;
           } else if (oldOp_delete !== undefined) {
