@@ -176,8 +176,9 @@ class EditorContainer extends React.Component {
         } else if ( transformedOp.op[1].delete !== undefined ) {
           var serverOpDelete = transformedOp.op[1].delete;
           serverOp = [{delete: serverOpDelete}]
-        } else {
-          console.log('SHOULD NEVER GET HERE RETAIN === 0')
+        }
+        if( transformedOp.op[2] !== undefined ) {
+          serverOp = [{insert: transformedOp.op[1].insert}, {delete: transformedOp.op[2].delete} ]
         }
 
       } else {
@@ -191,8 +192,9 @@ class EditorContainer extends React.Component {
         } else if (transformedOp.op[1].delete !== undefined) {
           var serverOpDelete = transformedOp.op[1].delete;
           serverOp = [{retain: serverOpRetain}, {delete: serverOpDelete}]
-        } else {
-          console.log('SHOULD NEVER GET HERE RETAIN > 0')
+        } 
+        if( transformedOp.op[2] !== undefined ) {
+          serverOp = [{retain: serverOpRetain}, {insert: transformedOp.op[1].insert}, {delete: transformedOp.op[2].delete} ]
         }
       }
 
@@ -312,6 +314,11 @@ class EditorContainer extends React.Component {
         } else if (deleteop !== undefined) {
           var op = [{retain: retain}, {delete: deleteop}]
         }
+        if(context.props.inFlightOp[0].op[2]) {
+          deleteop = context.props.inFlightOp[0].op[2].delete;
+          var op = [{retain: retain}, {insert: insert}, {delete: deleteop}]
+        }
+
         var opPackage = {
           history: history,
           id: socket.id,
@@ -360,12 +367,14 @@ class EditorContainer extends React.Component {
     var newOp = newObj.op[0];
     var newOp_insert = newObj.op[1].insert;
     var newOp_delete = newObj.op[1].delete;
+    var newOp2 = newObj.op[2];
     for(var i = 0; i < bridge.length; i++){
       console.log('otransform came here once-----------')
       var oldHistory = bridge[i].history;
       var oldOp = bridge[i].op[0];
       var oldOp_insert = bridge[i].op[1].insert;
       var oldOp_delete = bridge[i].op[1].delete;
+      var oldOp2 = bridge[i].op[2];
       //oldop is an array of arrays of one op
       console.log('oldOp', oldOp);
 
@@ -379,32 +388,45 @@ class EditorContainer extends React.Component {
       //   newInsertion = oldHistory.length - 1;
       // }
 
-      if(newOp_insert !== undefined && oldInsertion !== undefined) {
+      if(newOp_insert !== undefined) {
+        if(newOp2) {
+          oldHistory = oldHistory.slice(0, newInsertion) + oldHistory.slice(newInsertion+newOp2.delete);
+        }
+
         oldHistory = oldHistory.slice(0, newInsertion) + newObj.op[1].insert + oldHistory.slice(newInsertion);
         if(newInsertion > oldInsertion){
           if(oldOp_insert !== undefined) {
-            newInsertion++;
+            newInsertion += oldOp_insert.length;
+            if(oldOp2) {
+              newInsertion -= oldOp2.delete;
+            }
           } else if (oldOp_delete !== undefined) {
-            newInsertion--;
+            newInsertion-= oldOp_delete;
           }
           newOp.retain = newInsertion;
         } else {
-          oldInsertion++;
+          oldInsertion += newObj.op[1].insert.length;
+          if(newOp2) {
+            oldInsertion -= newOp2.delete;
+          }
           oldOp.retain = oldInsertion;
           //console.log('buffer history before', oldHistory)
         }
-      } else if(newOp_delete !== undefined && oldInsertion !== undefined) {
+      } else if(newOp_delete !== undefined) {
         //Delete char @ delete retain index from history
         oldHistory = oldHistory.slice(0, newInsertion) + oldHistory.slice(newInsertion+1);
         if(newInsertion >= oldInsertion) {
           if(oldOp_insert !== undefined) {
-            newInsertion++;
+            newInsertion += oldOp_insert.length;
+            if(oldOp2) {
+              newInsertion -= oldOp2.delete;
+            }
           } else if (oldOp_delete !== undefined) {
-            newInsertion--;
+            newInsertion-= oldOp_delete;
           }
           newOp.retain = newInsertion;
         } else {
-          oldInsertion--;
+          oldInsertion-= newOp_delete;
           oldOp.retain = oldInsertion;
         }
       }
