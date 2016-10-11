@@ -297,8 +297,8 @@ class EditorContainer extends React.Component {
     socket.on('rejected op', function(operation){
       //add to buffer and update
 
-      console.log('in rejected op ===================', operation)
-      console.log('inflightop---------->', context.props.inFlightOp)
+      //console.log('in rejected op ===================', operation)
+      //console.log('inflightop---------->', context.props.inFlightOp)
 
       if(context.props.inFlightOp.length){
         //Check if it is an insert or delete operation and adjust the opPackage as necessary
@@ -322,7 +322,7 @@ class EditorContainer extends React.Component {
           type: 'UPDATE_REJECTEDOP',
           rejectedOp: opPackage
         })
-        console.log('opPackage', opPackage);
+        //console.log('opPackage', opPackage);
         // console.log('opPackage', context.props.opPackage);
         socket.emit('add inflight op', JSON.stringify(opPackage));
       }
@@ -373,13 +373,13 @@ class EditorContainer extends React.Component {
       var oldInsertion = oldOp.retain;
 
       console.log('newInsertion', newInsertion);
-      console.log('oldinsertion', oldInsertion);
+      console.log('oldInsertion', oldInsertion);
       //Commented out by Sam, idk if it changes anything V
       // if(newInsertion >= oldHistory.length){
       //   newInsertion = oldHistory.length - 1;
       // }
 
-      if(newOp_insert !== undefined) {
+      if(newOp_insert !== undefined && oldInsertion !== undefined) {
         oldHistory = oldHistory.slice(0, newInsertion) + newObj.op[1].insert + oldHistory.slice(newInsertion);
         if(newInsertion > oldInsertion){
           if(oldOp_insert !== undefined) {
@@ -391,12 +391,12 @@ class EditorContainer extends React.Component {
         } else {
           oldInsertion++;
           oldOp.retain = oldInsertion;
-          console.log('buffer history before', oldHistory)
+          //console.log('buffer history before', oldHistory)
         }
-      } else if(newOp_delete !== undefined) {
+      } else if(newOp_delete !== undefined && oldInsertion !== undefined) {
         //Delete char @ delete retain index from history
         oldHistory = oldHistory.slice(0, newInsertion) + oldHistory.slice(newInsertion+1);
-        if(newInsertion > oldinsertion) {
+        if(newInsertion > oldInsertion) {
           if(oldOp_insert !== undefined) {
             newInsertion++;
           } else if (oldOp_delete !== undefined) {
@@ -410,7 +410,7 @@ class EditorContainer extends React.Component {
       }
 
 
-      console.log('buffer history after', oldHistory)
+      //console.log('buffer history after', oldHistory)
       bridge[i].history = oldHistory;
       console.log('2buffer', bridge);
       console.log('2op', newObj.op[0].retain);
