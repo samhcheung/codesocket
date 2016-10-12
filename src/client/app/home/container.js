@@ -3,7 +3,7 @@ import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 import { connect } from 'react-redux'
 import NavContainer from '../nav/container'
 
-export const Home = (props) => {
+const Home = (props) => {
   return (
     <div>
       <NavContainer/>
