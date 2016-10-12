@@ -19,7 +19,7 @@ describe('components', function() {
   		  <EditorPresentation saveCode={onButtonClick} />
   		);
   		// var header = wrapper.find('div').at(0);
-  		wrapper.find('div').at(3).simulate('click');
+  		wrapper.find('div').at(0).find('#savebutton').simulate('click');
   		expect(onButtonClick.callCount).to.not.equal(0);
 
     });
