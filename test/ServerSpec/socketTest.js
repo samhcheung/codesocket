@@ -37,7 +37,6 @@ describe('Socket.io', () => {
            console.log('disconnecting...');
            socket.disconnect();
        } else {
-           // There will not be a connection unless you have done() in beforeEach, socket.on('connect'...)
            console.log('no connection to break...');
        }
    });
@@ -55,7 +54,7 @@ describe('Socket.io', () => {
 
   })
 
-  describe('Room Join', () => {
+  describe('Join Room', () => {
 
     beforeEach(function(done) {
       // Setup
@@ -142,7 +141,6 @@ describe('Socket.io', () => {
              console.log('disconnecting...');
              socket2.disconnect();
          } else {
-             // There will not be a connection unless you have done() in beforeEach, socket.on('connect'...)
              console.log('no connection to break...');
          }
          done()
@@ -154,14 +152,14 @@ describe('Socket.io', () => {
         var opPackage = {
           history: '\n',
           id: socket.id,
-          op: [{retain: 0}, {insert: 'hi'}],
+          op: [{retain: 0}, {insert: 'h'}],
           room: 'testRoom'
         }
         socket.emit('add inflight op', JSON.stringify(opPackage))
 
         socket2.on('newOp', (opPackage) => {
-          console.log('in add inflight for socket2',opPackage)
-          expect(opPackage.op[1].insert).to.equal('hi')
+          // console.log('in add inflight for socket2',opPackage)
+          expect(opPackage.op[1].insert).to.equal('h')
           done();
         });
 
@@ -207,31 +205,38 @@ describe('Socket.io', () => {
      });
 
     it('should be able to able to do Operational Transformation', (done) => {
-      console.log('oTransform', oTransform)
+      // console.log('oTransform', oTransform)
       // socket2.emit('create or join', 'testRoom');
       socket2.on('ready', function(){
+        console.log('i am in ready of last one')
         var opPackage = {
-          history: '\n',
-          id: socket.id,
-          op: [{retain: 0}, {insert: 'h'}],
-          room: 'testRoom'
-        }
-
-        var opPackage2 = {
-          history: '\n',
+          history: 'h\n',
           id: socket.id,
           op: [{retain: 0}, {insert: 'i'}],
           room: 'testRoom'
         }
+        var bridge = [opPackage];
+
+        var opPackage2 = {
+          history: 'h\n',
+          id: socket.id,
+          op: [{retain: 0}, {insert: 'o'}],
+          room: 'testRoom'
+        }
+        var bridge2 = [opPackage2];
 
         socket.emit('add inflight op', JSON.stringify(opPackage))
 
-        socket2.emit('add inflight op', JSON.stringify(opPackage2))
+        // socket2.emit('add inflight op', JSON.stringify(opPackage2))
 
         socket2.on('newOp', (opPackage) => {
           console.log('in add inflight for socket2',opPackage)
-          expect(opPackage.op[1].insert).to.equal('hi')
-          done();
+          oTransform(opPackage, bridge2, function(newObj, newBridge){
+            expect(newObj.op[0].retain).to.equal(0);
+            expect(newBridge[0].op[0].retain).to.equal(1);
+            done();
+
+          })
         });
 
       })

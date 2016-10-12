@@ -70,7 +70,6 @@
 	        .post('/savedoc')
 	        .send(JSON.stringify(newContent))
 	        .expect((res) => {
-	        	// console.log('res', res)
 	        	expect(res.statusCode).to.not.equal(404)})
 	        .end(done);
 	    });
@@ -90,7 +89,6 @@
 	      request(app)
 	        .get('/doclist')
 	        .expect((res) => {
-	        	// console.log(res);
 	        	expect(res.body.length).to.not.equal(0)})
 	        .end(done);
 	    });
