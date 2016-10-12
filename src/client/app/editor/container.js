@@ -122,7 +122,9 @@ class EditorContainer extends React.Component {
 
         console.log('inflight Op:', context.props.inFlightOp);
 
-        if(context.props.serverState === context.props.quillHistory){
+        if(context.props.serverState === context.props.quillHistory 
+          && context.props.inFlightOp.length === 0
+          && context.props.buffer.length === 0){
           //send change to server
           
           if(delta.ops[0].retain === undefined){
@@ -164,10 +166,21 @@ class EditorContainer extends React.Component {
 
     context.props.socket.on('clear inflight', function(inFlightOp){
       console.log('in clear inflight!!------', inFlightOp)
-      context.props.dispatch({
-        type: 'UPDATE_INFLIGHTOP', 
-        inFlightOp: []
-      });
+      //console.log('context.props.inFlight is: ', context.props.inFlightOp);
+
+      if (JSON.stringify(inFlightOp.op) !== JSON.stringify(context.props.inFlightOp[0].op)) {
+        console.error('what? clearing a different inflight?', inFlightOp, context.props.inFlightOp);
+        // context.props.dispatch({
+        //   type: 'UPDATE_INFLIGHTOP', 
+        //   inFlightOp: inFlightOp
+        // });
+      } else {
+
+        context.props.dispatch({
+          type: 'UPDATE_INFLIGHTOP', 
+          inFlightOp: []
+        });
+      }
     })
 
     context.props.socket.on('newOp', function(transformedOp){
