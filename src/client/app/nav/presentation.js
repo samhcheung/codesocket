@@ -13,7 +13,7 @@ const navstyle = {
     "borderStyle": 'solid',
     "borderWidth": '1.5px',
     "borderColor":'rgb(199, 199, 199)',
-    "marginBottom": '10px'
+    // "marginBottom": '10px'
   }
 }
 export const NavPresentation = (props) => {
