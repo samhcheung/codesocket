@@ -495,13 +495,13 @@ class EditorContainer extends React.Component {
         window.counter = 0;
       }
       var op = [{retain: 2}, {insert: ''+window.counter}];
-      var op = [{retain: 2}, {delete: 1}, {retain: 1}, {delete: 3}];
+
       console.log('op', op)
 
       this.props.quill.updateContents({ops: op}, 'user');
     }
     var freq = Math.floor(Math.random()*500 + 300)
-    this.typenow = setTimeout(starttyping.bind(this), freq);
+    this.typenow = setInterval(starttyping.bind(this), freq);
     // var inject = [{retain:2}, {insert: 'DANI'}, {retain: 1}, {insert: 'SAM'}]
     // this.props.quill.updateContents({ops: inject}, 'user');
   }
