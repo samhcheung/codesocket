@@ -47,8 +47,8 @@ export class EditorContainer extends React.Component {
     var serverquill = new Quill('#serverEditor')
     // console.log('serverquill', serverquill);
 
-    document.getElementsByClassName('ql-code-block')[0].click();
-    document.getElementsByClassName('ql-toolbar')[0].remove();
+    // document.getElementsByClassName('ql-code-block')[0].click();
+    // document.getElementsByClassName('ql-toolbar')[0].remove();
     // hljs.configure({   // optionally configure hljs
     //   languages: ['javascript']
     // });
