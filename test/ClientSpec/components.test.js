@@ -8,28 +8,10 @@ import {ConsoleContainer} from '../../src/client/app/console/container.js';
 import { fromJS } from 'immutable';
 import {Provider} from 'react-redux';
 import sinon from 'sinon';
-// import configureStore from 'redux-mock-store';
-// const mockStore = configureStore();
-// var store = function(){
 
-// }
-//
 jest.mock('react/lib/ReactDefaultInjection')
 console.log('console', ConsoleContainer)
-	  // <Provider store={store}>
-	  //   {routes}
-	  // </Provider>
-	  // function createMockStore(state) {
-	  //   return {
-	  //     subscribe: () => {},
-	  //     dispatch: () => {},
-	  //     getState: () => {
-	  //       return {...state};
-	  //     }
-	  //   };
 
-	  // }
-// const dispatch = sinon.spy();
 function createMockStore(state) {
     return {
       subscribe: () => {},
