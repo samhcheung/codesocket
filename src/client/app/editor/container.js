@@ -3,10 +3,10 @@ import { Router, Route, hashHistory, IndexRoute, Link } from 'react-router'
 import { connect } from 'react-redux'
 import EditorPresentation from './presentation'
 import axios from 'axios'
-
 var Quill = require('quill');
+import oTransform from '../utils/otransform.js'
 
-class EditorContainer extends React.Component {
+export class EditorContainer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -47,12 +47,11 @@ class EditorContainer extends React.Component {
     var serverquill = new Quill('#serverEditor')
     // console.log('serverquill', serverquill);
 
-
     // document.getElementsByClassName('ql-code-block')[0].click();
-    //document.getElementsByClassName('ql-toolbar')[0].remove();
-    hljs.configure({   // optionally configure hljs
-      languages: ['javascript']
-    });
+    // document.getElementsByClassName('ql-toolbar')[0].remove();
+    // hljs.configure({   // optionally configure hljs
+    //   languages: ['javascript']
+    // });
 
     socket.on('fetched live', function(latest){
       quill.setContents(latest, 'api');
@@ -241,7 +240,7 @@ class EditorContainer extends React.Component {
             var inflightString = JSON.stringify(context.props.inFlightOp);
             var inflight = JSON.parse(inflightString)
 
-            context.oTransform(transformedOp, inflight, function(newTransformedOp, newBridge){
+            oTransform(transformedOp, inflight, function(newTransformedOp, newBridge){
 
               context.props.dispatch({
                 type: 'UPDATE_INCOMINGOP', 
@@ -264,7 +263,7 @@ class EditorContainer extends React.Component {
             var bufferString = JSON.stringify(context.props.buffer);
             var buffer = JSON.parse(bufferString);
 
-            context.oTransform(incoming, buffer, function(newTransformedOp, newBridge){
+            oTransform(incoming, buffer, function(newTransformedOp, newBridge){
               context.props.dispatch({
                 type: 'UPDATE_INCOMINGOP', 
                 incomingOp: newTransformedOp
@@ -384,93 +383,6 @@ class EditorContainer extends React.Component {
     console.log('---serverquill text', context.props.serverState)
     console.log('---serverquill text', context.props.serverState === context.props.quillHistory)
   } // ComponentDidMount
-
-  oTransform(newObj, bridge, callback){
-    console.log('newObj', newObj);
-    console.log('old', bridge);
-    console.log('how many in buffer', bridge.length);
-    var newOp = newObj.op[0];
-    var newOp_insert = newObj.op[1].insert;
-    var newOp_delete = newObj.op[1].delete;
-    var newOp2 = newObj.op[2];
-    for(var i = 0; i < bridge.length; i++){
-      console.log('otransform came here once-----------')
-      var oldHistory = bridge[i].history;
-      var oldOp = bridge[i].op[0];
-      var oldOp_insert = bridge[i].op[1].insert;
-      var oldOp_delete = bridge[i].op[1].delete;
-      var oldOp2 = bridge[i].op[2];
-      //oldop is an array of arrays of one op
-      console.log('oldOp', oldOp);
-
-      var newInsertion = newOp.retain;
-      var oldInsertion = oldOp.retain;
-
-      console.log('newInsertion', newInsertion);
-      console.log('oldInsertion', oldInsertion);
-      //Commented out by Sam, idk if it changes anything V
-      // if(newInsertion >= oldHistory.length){
-      //   newInsertion = oldHistory.length - 1;
-      // }
-
-      if(newOp_insert !== undefined) {
-        if(newOp2) {
-          oldHistory = oldHistory.slice(0, newInsertion) + oldHistory.slice(newInsertion+newOp2.delete);
-        }
-
-        oldHistory = oldHistory.slice(0, newInsertion) + newObj.op[1].insert + oldHistory.slice(newInsertion);
-        if(newInsertion > oldInsertion){
-          if(oldOp_insert !== undefined) {
-            newInsertion += oldOp_insert.length;
-            if(oldOp2) {
-              newInsertion -= oldOp2.delete;
-            }
-          } else if (oldOp_delete !== undefined) {
-            newInsertion-= oldOp_delete;
-          }
-          newOp.retain = newInsertion;
-        } else {
-          oldInsertion += newObj.op[1].insert.length;
-          if(newOp2) {
-            oldInsertion -= newOp2.delete;
-          }
-          oldOp.retain = oldInsertion;
-          //console.log('buffer history before', oldHistory)
-        }
-      } else if(newOp_delete !== undefined) {
-        //Delete char @ delete retain index from history
-        oldHistory = oldHistory.slice(0, newInsertion) + oldHistory.slice(newInsertion+1);
-        if(newInsertion >= oldInsertion) {
-          if(oldOp_insert !== undefined) {
-            newInsertion += oldOp_insert.length;
-            if(oldOp2) {
-              newInsertion -= oldOp2.delete;
-            }
-          } else if (oldOp_delete !== undefined) {
-            newInsertion-= oldOp_delete;
-          }
-          newOp.retain = newInsertion;
-        } else {
-          oldInsertion-= newOp_delete;
-          oldOp.retain = oldInsertion;
-        }
-      }
-
-
-      //console.log('buffer history after', oldHistory)
-      bridge[i].history = oldHistory;
-      console.log('2buffer', bridge);
-      console.log('2op', newObj.op[0].retain);
-    }
-    //update buffer
-    console.log('final update op', newObj)
-    console.log('final update bridge', bridge)
-    callback(newObj, bridge);
-
-    // if(oldOp.)
-    //if item has insert as key
-    //ir item has retain as key
-  }
   
   saveCode() {
     var contents = this.props.quill.getContents();

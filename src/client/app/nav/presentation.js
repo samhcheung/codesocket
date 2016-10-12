@@ -16,7 +16,7 @@ const navstyle = {
     "marginBottom": '10px'
   }
 }
-const NavPresentation = (props) => {
+export const NavPresentation = (props) => {
     return (
       <div className='loadingscreen'>
         <div className="row" style={navstyle.mainheader}>
@@ -25,7 +25,7 @@ const NavPresentation = (props) => {
         <div className="row" style={navstyle.navbuttons}>
           <div className="col-sm-2 text-center"><Link >Rooms</Link></div>
           <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
-          <div className="col-sm-2 text-center" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
+          <div className="col-sm-2 text-center" id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
           <div className="col-sm-2 text-center">History</div>
           <div className="col-sm-2 text-center"> {props.userName}</div>
           <div className="col-sm-2 text-center"><Link href="auth/github">Login</Link></div>

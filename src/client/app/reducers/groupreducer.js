@@ -1,8 +1,8 @@
-const sessionInitialState = {
+const groupInitialState = {
   doclist: []
 }
 
-export default function sessionReducer (state = sessionInitialState, action) {
+export default function groupReducer (state = groupInitialState, action) {
   switch(action.type){
     case 'UPDATE_DOC_LIST' : {
      return {

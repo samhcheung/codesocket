@@ -53,6 +53,10 @@ var db = require('./db/index.js');
 var passport = require('passport');
 var passportGithub = require('./auth/github');
 var session = require('express-session');
+var redisStore = require('connect-redis')(session);
+var redis   = require("redis");
+var client  = redis.createClient();
+
 
 var httpsServer = https.createServer({
   key: fs.readFileSync('./server/key.pem'),
@@ -60,11 +64,20 @@ var httpsServer = https.createServer({
 }, app);
 
 app.use(session({
+  store: new redisStore({client: client}),
   secret: 'the_best_ajaxta_secret_ever',
   resave: true,
   saveUninitialized: true,
   cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 }
 }));
+
+// app.use(session({
+//   secret: 'the_best_ajaxta_secret_ever',
+//   resave: true,
+//   saveUninitialized: true,
+//   cookie: { secure: true, maxAge: 1000 * 60 * 60 * 24 }
+// }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -75,6 +88,7 @@ app.get('/auth/github/callback',
   function(req, res) {
     // Successful authentication
     console.log(res.req.session.passport.user, '<---')
+    console.log(req.isAuthenticated(), '<-----------------')
 
     res.redirect('/secure');
   }
@@ -85,8 +99,18 @@ app.get('/login', function(req, res) {
 });
 
 app.get('/logout', function(req, res) {
-  req.logout();
+
+  // if(req.session.key) {
+  req.session.destroy();
+
+  req.logout()
+
+  // req.session.destroy(function(){
+    // res.redirect('/');
+  // });
+  // } else {
   res.redirect('/');
+  // }
 });
 
 app.get('/secure', helper.checkLogin, function(req, res) {
@@ -121,6 +145,7 @@ app.use(bodyParser.json());
 
 // This never triggers?
 app.get('/', function(req, res) {
+  console.log('in /')
 	res.send('Hello World');
 });
 
@@ -139,14 +164,16 @@ app.get('/doclist', function(req, res) {
 })
 
 app.post('/savedoc', helper.checkLogin, function(req, res) {
+  console.log('in save doc')
   db.Doc.update({
     doc_name:req.body.room,
     doc_content: req.body.contents
   },
   {
     where: {doc_name:req.body.room}
-  }).then(function() {
-    res.send('/savedoc success!')
+  }).then(function(result) {
+    console.log('in then of savedoc', result)
+    res.status(201).send(result)
   });
 
 
@@ -197,6 +224,7 @@ var isValid = function(operation, room){
 }
 
 var updateServerState = function(operation, room){
+  console.log('in update server state', operation)
   var retain = operation.op[0].retain;
   var insert = operation.op[1].insert;
   var deleteop = operation.op[1].delete;
@@ -306,7 +334,7 @@ var io = require('socket.io')(httpsServer);
 var commands = [];
 
 io.on('connection', function(socket){
-
+  console.log('on connection')
   // *********** Begin WebRTC Socket ************
   function log() {
     var array = ['Message from server:'];
@@ -385,7 +413,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('create or join', function(room) {
-    //console.log(room, '===== ROOM');
+    console.log(room, '===== ROOM');
     // var fetch = function(exists) {
     //   if(exists){
     //     console.log('doc exists')
@@ -447,6 +475,8 @@ io.on('connection', function(socket){
         }
         io.to(socket.id).emit('found latest doc', doc);
       });
+      io.sockets.in(room).emit('ready');
+
 
     } else if (numClients === 2) {
 
@@ -543,3 +573,8 @@ io.on('connection', function(socket){
 httpsServer.listen(3000, function () {
   console.log('Example https app listening on port 3000!');
 });
+
+module.exports.io = io;
+module.exports.app = app;
+
+

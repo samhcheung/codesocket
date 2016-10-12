@@ -6,7 +6,7 @@ import axios from 'axios'
 import Modal from 'react-modal';
 import querystring from 'querystring';
 
-class NavContainer extends React.Component {
+export class NavContainer extends React.Component {
 
   static propTypes = {
   };

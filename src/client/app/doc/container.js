@@ -6,7 +6,7 @@ import VideoContainer from '../video/container';
 import ConsoleContainer from '../console/container';
 import axios from 'axios'
 
-class DocContainer extends React.Component {
+export class DocContainer extends React.Component {
 
   constructor (props) {
     super(props);

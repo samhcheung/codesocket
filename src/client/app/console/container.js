@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import ConsolePresentation from './presentation'
 import axios from 'axios'
 
-class ConsoleContainer extends React.Component {
+export class ConsoleContainer extends React.Component {
 
   static propTypes = {
   }
