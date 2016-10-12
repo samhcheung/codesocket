@@ -179,15 +179,19 @@ var oTransform = function(newObj, oldObj, callback){
   //if item has insert as key
   //ir item has retain as key
 }
-
+var falseCounter = 0;
 // app.post('/addops', function(req, res){
 var isValid = function(operation, room){
-  console.log('is valide operation', operation, serverState[room])
+  //console.log('is valide operation', operation, serverState[room])
   if(operation.history === serverState[room]){
-    console.log('true')
+    console.log('true', operation);
     return true;
   } else {
-    console.log('false')
+    if (falseCounter < 20) {
+      console.log('false', operation);
+      falseCounter++;
+    }
+
     return false;
   }
 }
