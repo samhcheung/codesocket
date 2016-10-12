@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import EditorPresentation from './presentation'
 import axios from 'axios'
 var Quill = require('quill');
+import oTransform from '../utils/otransform.js'
 
 export class EditorContainer extends React.Component {
 
@@ -239,7 +240,7 @@ export class EditorContainer extends React.Component {
             var inflightString = JSON.stringify(context.props.inFlightOp);
             var inflight = JSON.parse(inflightString)
 
-            context.oTransform(transformedOp, inflight, function(newTransformedOp, newBridge){
+            oTransform(transformedOp, inflight, function(newTransformedOp, newBridge){
 
               context.props.dispatch({
                 type: 'UPDATE_INCOMINGOP', 
@@ -262,7 +263,7 @@ export class EditorContainer extends React.Component {
             var bufferString = JSON.stringify(context.props.buffer);
             var buffer = JSON.parse(bufferString);
 
-            context.oTransform(incoming, buffer, function(newTransformedOp, newBridge){
+            oTransform(incoming, buffer, function(newTransformedOp, newBridge){
               context.props.dispatch({
                 type: 'UPDATE_INCOMINGOP', 
                 incomingOp: newTransformedOp
