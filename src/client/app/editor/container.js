@@ -105,6 +105,7 @@ class EditorContainer extends React.Component {
     quill.on('text-change', function(delta,olddelta,source) {
       // console.log('get delta', delta.ops[0],delta.ops[1])
       console.log('omg-------------', delta)
+      // console.log('delta decompose', delta.transform())
 
       var arr = [];
 
@@ -507,6 +508,7 @@ class EditorContainer extends React.Component {
         window.counter = 0;
       }
       var op = [{retain: 2}, {insert: ''+window.counter}];
+
       console.log('op', op)
 
       this.props.quill.updateContents({ops: op}, 'user');
