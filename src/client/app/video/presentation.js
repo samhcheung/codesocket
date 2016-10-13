@@ -16,7 +16,7 @@ const mirrorVideo = {
 }
 const ownVideo = {
   right: 15,
-  top: 0,
+  top: 55,
   width: '30%',
   zIndex: 5,
   position: 'absolute'
@@ -24,6 +24,14 @@ const ownVideo = {
 const otherVideo = {
 
 };
+const roomLabel = {
+  textAlign: 'center',
+  border: '1px solid gray',
+  padding: '10px',
+  borderRadius: '4px',
+  margin: '0px 0px 12px 0px'
+
+}
 
 // <button id="stop-video">Stop Video Call</button>
 // <button id="call-video">Start Video Call</button>
@@ -32,9 +40,12 @@ const otherVideo = {
 const VideoPresentation = (props) => {
   return (
     <div>
+      <div style={roomLabel}>
+        RoomName
+      </div>
       <div id="videos" className="row" style={videoContainer}>
         <video id="localVideo" autoPlay muted style={{...ownVideo, ...mirrorVideo}} className=""></video>
-        <video id="remoteVideo" autoPlay style={videoStyle} className="col-sm-12"></video>
+        <video id="remoteVideo" autoPlay style={videoStyle} className="col-sm-12" poster="public/video_photo.jpg" ></video>
       </div>
     </div>
   )
