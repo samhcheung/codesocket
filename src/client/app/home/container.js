@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import NavContainer from '../nav/container'
 
 const Home = (props) => {
+	
   return (
     <div>
       <NavContainer/>

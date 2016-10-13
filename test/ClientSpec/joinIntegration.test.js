@@ -10,13 +10,16 @@ import {NavPresentation} from '../../src/client/app/nav/presentation.js';
 import { default as groupReducer } from '../../src/client/app/reducers/groupreducer.js'
 import sinon from 'sinon';
 
+
 function selectDoc(wrapper, item) {
     wrapper.find('Modal').at(0).find('li').at(0).simulate('click')
 }
 var openModalSpy = sinon.spy();
 // doclist
 function getMountedAndStore(initialState = undefined) {
+    console.log('groupreducer', groupReducer)
     const store = createStore(groupReducer, initialState)
+    console.log('got store:', store)
     const context = { store }
 
     return [mount(<NavContainer openModal={openModalSpy}/>, { context }), store]
@@ -26,14 +29,14 @@ function getMounted(initialState = undefined) {
     return getMountedAndStore(initialState)[0]
 }
 
-function assertItems(wrapper, items) {
-    expect(wrapper).to.have.exactly(1).descendants(NavPresentation)
-    items.forEach((item, index) => {
-        const itemLi = wrapper.find('li').at(index)
-        expect(itemLi).to.contain.text(item.item)
-        expect(itemLi).to.contain.text(item.done ? 'Not done' : 'Done')
-    })
-}
+// function assertItems(wrapper, items) {
+//     expect(wrapper).to.have.exactly(1).descendants(NavPresentation)
+//     items.forEach((item, index) => {
+//         const itemLi = wrapper.find('li').at(index)
+//         expect(itemLi).to.contain.text(item.item)
+//         expect(itemLi).to.contain.text(item.done ? 'Not done' : 'Done')
+//     })
+// }
 
 describe('Get doc list (Redux integration)', () => {
     it('should render items from the initial state', () => {
@@ -44,6 +47,7 @@ describe('Get doc list (Redux integration)', () => {
             ]
         }
         const wrapper = getMounted(initialState)
+        console.log('wrapper', wrapper)
 
         wrapper.find('div').at(0).find('div').at(0).find('#openModal').simulate('click');
         expect(openModalSpy.callCount).to.not.equal(0);
