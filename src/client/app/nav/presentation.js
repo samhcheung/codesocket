@@ -11,6 +11,7 @@ const navstyle = {
     verticalAlign: 'middle',
     "letterSpacing": 1.5,
     "fontWeight": 300,
+    'textDecoration': 'inherit',
   },
   topheader:{
     'borderBottom': '1px solid',
@@ -67,7 +68,7 @@ export const NavPresentation = (props) => {
       <div className='loadingscreen'>
       <div style={navstyle.topheader} className="row">
         <div className="" style={navstyle.navcontainer}>
-          <div style={navstyle.logo}><i className="fa fa-code"/> CodeSocket</div>
+          <a href="/" style={navstyle.logo}><i className="fa fa-code"/> CodeSocket</a>
           <div className="pull-right" style={navstyle.navbuttons}>
             {!props.userName ? <div className="pull-right"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
             : <div className="pull-right"><a href="logout" className="" style={navstyle.loginbutton}>Logout</a></div>}
