@@ -16,7 +16,8 @@ const roomLabel = {
 }
 const videoContainer = {
   margin: '10px',
-  paddingTop: '10px'
+  paddingTop: '10px',
+  textAlign: 'center'
   //border: '2px solid gray',
   //borderRadius: '10px'
   //width: '60%'
