@@ -439,7 +439,7 @@ class VideoContainer extends React.Component {
     return (
       <div>
         <div className="body-container">
-          <VideoPresentation userName={this.props.userName} room={this.props.room}/>
+          <VideoPresentation userName={this.props.userName} />
         </div>
       </div>
     )

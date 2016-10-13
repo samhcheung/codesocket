@@ -39,8 +39,8 @@ export class EditorContainer extends React.Component {
           toolbar: false
         // toolbar: [['code-block']]  // Include button in toolbar
       },
-      formats: ['code-block'],
-      theme: 'snow'
+      formats: ['code-block']
+      // theme: 'snow'
 
       });
 
@@ -492,7 +492,8 @@ export class EditorContainer extends React.Component {
       <div className="body-container">
         <EditorPresentation 
           saveCode={this.saveCode.bind(this)} 
-          runCode={this.runCode.bind(this)} 
+          runCode={this.runCode.bind(this)}
+          room = {this.props.room} 
         />
         <div style={{"display": "none"}} id='serverEditor' >
         </div>

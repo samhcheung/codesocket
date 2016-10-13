@@ -20,10 +20,10 @@ const consoleFrame = {
   // border: '1px solid black',
   marginTop: '0px',
   paddingTop: '10px',
-  marginLeft: '-20px',
+  //marginLeft: '-20px',
   color: 'white',
   fontSize: '1.1em',
-  background: '#000'
+  //background: '#000'
 };
 
 const ConsolePresentation = (props) => {
