@@ -98,15 +98,16 @@ export class LandingContainer extends React.Component {
 		    "letterSpacing": 1.5,
 		    "fontWeight": 300,
 		    "margin": 40
-	    	
     	},
     	tagline: {
+        "margin": 80,
 	    	"fontSize": 44,
 		    "fontWeight": 300,
 		    "fontFamily": "Ubuntu",
     		"color": "rgb(225, 225, 225)",
     	},
     	cta: {
+        "padding": 10,
 		    "margin": 40,
 		    "fontFamily": "Ubuntu",
 	    	"fontSize": 24,
@@ -126,45 +127,47 @@ export class LandingContainer extends React.Component {
     	}
   	  },
   	}
-  	// Real-time collaborative coding
-  	// for your engineering team
+
+		// {!this.props.userName ? <div className="text-center">
+  //         <a href="" className="btn btn-default" style={style.body.cta}>
+  //           <i className="fa fa-github fa-1x" style={style.body.github}/>Sign in with GitHub</a>
+  //       </div>: <div></div>}
+
     return (
     	<div style={style.body}>
-			<div className="text-center" style={style.body.logo}>CodeSocket</div> 
 			<div className="text-center" ref={(c) => this.tagline = c}  style={style.body.tagline}>
 				<div ref={(c) => this.tagline1 = c}></div>
 				<div ref={(c) => this.tagline2 = c}> </div>
 			
 			</div>
+  			<div className="text-center">
+  				<a href="auth/github" className="btn btn-default" style={style.body.cta}>
+  					<i className="fa fa-github fa-1x" style={style.body.github}/>Sign in with GitHub</a>
+  			</div>
 
-			<div className="text-center">
-				<a href="" className="btn btn-default" style={style.body.cta}>
-					<i className="fa fa-github fa-1x" style={style.body.github}/>Sign in with GitHub</a>
-			</div>
+  			<div>
+  				<div className="row" style={style.body.valueprops}>
 
-			<div>
-				<div className="row" style={style.body.valueprops}>
+  					<div className="col-md-4 text-center">
+  						<i className="fa fa-keyboard-o fa-5x" aria-hidden="true"/>
+  						<br></br>
+  						Robust real-time collaborative editing
+  					</div>
 
-					<div className="col-md-4 text-center">
-						<i className="fa fa-keyboard-o fa-5x" aria-hidden="true"/>
-						<br></br>
-						Robust real-time collaborative editing
-					</div>
+  					<div className="col-md-4 text-center">
+  						<i className="fa fa-video-camera fa-5x" aria-hidden="true"/>
+  						<br></br>
+  						Video chat with your coding partner
+  					</div>
 
-					<div className="col-md-4 text-center">
-						<i className="fa fa-video-camera fa-5x" aria-hidden="true"/>
-						<br></br>
-						Video chat with your coding partner
-					</div>
+  					<div className="col-md-4 text-center">
+  						<i className="fa fa-laptop fa-5x" aria-hidden="true"/>
+  						<br></br>
+  						Execute the code in one click
+  					</div>
 
-					<div className="col-md-4 text-center">
-						<i className="fa fa-laptop fa-5x" aria-hidden="true"/>
-						<br></br>
-						Execute the code in one click
-					</div>
-
-				</div>
-			</div>
+  				</div>
+  			</div>
      	</div>
     );
 
@@ -175,7 +178,7 @@ export class LandingContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    // userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
+    userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
     // myInserts: state.userReducer.myInserts, //<=== shouldnt have to do this...? 
     // socket: state.sessionReducer.socket 
   }

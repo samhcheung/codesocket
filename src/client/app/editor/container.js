@@ -383,6 +383,7 @@ export class EditorContainer extends React.Component {
     console.log('---serverquill text', context.props.serverState)
     console.log('---serverquill text', context.props.serverState === context.props.quillHistory)
   } // ComponentDidMount
+
   
   saveCode() {
     var contents = this.props.quill.getContents();
