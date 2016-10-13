@@ -4,40 +4,79 @@ import Modal from 'react-modal';
 
 const navstyle = {
   logo:{
-        "fontSize": 20,
-        "fontFamily": "Fredoka One",
-        "letterSpacing": 1.5,
-        "fontWeight": 300,
-      },
-  navbuttons: {
-    'padding':'20px',
-    'backgroundColor': 'rgb(38, 38, 38)',
-    'borderBottom': '1.5px solid',
-    'borderColor' : 'rgb(80, 80, 80)',
-    "fontFamily": "Ubuntu, sans-serif",
+    "fontSize": 22,
+    "fontFamily": "Fredoka One",
     "color": "rgb(225, 225, 225)",
-    "fontSize": 14,
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    "letterSpacing": 1.5,
+    "fontWeight": 300,
+  },
+  topheader:{
+    'borderBottom': '1px solid',
+    'borderColor' : 'rgb(80, 80, 80)',
+  },
+  navcontainer: {
+    'lineHeight': '70px',
+    'backgroundColor': 'rgb(38, 38, 38)',
+    'marginLeft': 60,
+    'marginRight': 60
+  },
+  navbuttons: {
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    "fontFamily": "Ubuntu, sans-serif",
+    "color": "rgb(155, 155, 155)",
+    "fontSize": 16,
     "fontWeight": 300
+  },
+  eachnavbutton:{
+    marginLeft: '30px',
   },
   loginbutton: {
     margin: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-    paddingLeft: 15,
-    paddingRight: 15
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginLeft: '30px',
+    border: '1px solid',
+    borderRadius: '5px',
+    color: 'rgb(155, 155, 155)'
   }
+
 }
+          // <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
+          // <div className="col-sm-2 text-center" id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
+          // <div className="col-sm-2 text-center">{props.userName}</div>
+          // <div className="col-sm-2 text-center"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
+
+
+          // <div className="row" style={navstyle.navcontainer}>
+          //   <div className="row" style={navstyle.navbuttons}>
+          //     <div className="col-sm-2 text-center" style={navstyle.logo}><i className="fa fa-code"/> CodeSocket</div>
+          //     <div className="col-sm-2 text-center"></div>
+          //     <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
+          //     <div className="col-sm-2 text-center" id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
+          //     <div className="col-sm-2 text-center">{props.userName}</div>
+          //     <div className="col-sm-2 text-center"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
+          //   </div>
+          // </div>
 export const NavPresentation = (props) => {
     return (
       <div className='loadingscreen'>
-        <div className="row" style={navstyle.navbuttons}>
-          <div className="col-sm-2 text-center" style={navstyle.logo}><i className="fa fa-code"/> CodeSocket</div>
-          <div className="col-sm-2 text-center"></div>
-          <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
-          <div className="col-sm-2 text-center" id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
-          <div className="col-sm-2 text-center">{props.userName}</div>
-          <div className="col-sm-2 text-center"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
+      <div style={navstyle.topheader} className="row">
+        <div className="" style={navstyle.navcontainer}>
+          <div style={navstyle.logo}><i className="fa fa-code"/> CodeSocket</div>
+          <div className="pull-right" style={navstyle.navbuttons}>
+            {!props.userName ? <div className="pull-right"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
+            : <div className="pull-right"><a href="logout" className="" style={navstyle.loginbutton}>Logout</a></div>}
+            <div className="pull-right" style={navstyle.eachnavbutton}>{props.userName}</div>
+            <div className="pull-right" style={navstyle.eachnavbutton} id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
+            <div className="pull-right" style={navstyle.eachnavbutton} onClick={e=>props.addDoc(e)}>Add New Doc</div>
+          </div>
         </div>
+      </div>
         
         <Modal
           style={{
@@ -61,6 +100,7 @@ export const NavPresentation = (props) => {
         </Modal>
         </div>
       )
+  
 }
 
 export default NavPresentation;
