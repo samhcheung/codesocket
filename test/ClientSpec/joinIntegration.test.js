@@ -9,20 +9,27 @@ import {NavContainer} from '../../src/client/app/nav/container.js';
 import {NavPresentation} from '../../src/client/app/nav/presentation.js';
 import { default as groupReducer } from '../../src/client/app/reducers/groupreducer.js'
 import sinon from 'sinon';
-
+var dani = new NavContainer()
+console.log('openmodal funct', dani.openModal)
 
 function selectDoc(wrapper, item) {
     wrapper.find('Modal').at(0).find('li').at(0).simulate('click')
 }
-var openModalSpy = sinon.spy();
+var openModal = function(modalopen) {
+    console.log('this', this)
+    console.log('modalopen', modalopen)
+    modalopen = true;
+}
+
+var openModalSpy = sinon.spy(openModal);
+console.log('openModalSpy', openModalSpy)
 // doclist
 function getMountedAndStore(initialState = undefined) {
     console.log('groupreducer', groupReducer)
     const store = createStore(groupReducer, initialState)
     console.log('got store:', store)
     const context = { store }
-
-    return [mount(<NavContainer openModal={openModalSpy}/>, { context }), store]
+    return [mount(<NavContainer />, { context }), store]
 }
 
 function getMounted(initialState = undefined) {
@@ -47,11 +54,14 @@ describe('Get doc list (Redux integration)', () => {
             ]
         }
         const wrapper = getMounted(initialState)
-        console.log('find opemodal', wrapper.find('div').at(0).find('div').at(0).find('#openModal').get(0))
+        const wrapperPres = mount(<NavPresentation openModal={()=>openModalSpy()} doclist={[1,2]} modalopen={true}/>)
+        
+        console.log('wrapper',wrapper)
+        console.log('wrapperPres',wrapperPres)
 
-        wrapper.find('#openModal').simulate('click');
+        wrapperPres.find('#openModal').simulate('click');
+        console.log('modal', wrapperPres.find('Modal'))
         expect(openModalSpy.callCount).to.not.equal(0);
-
         // assertItems(wrapper, [
         //         { doc_name: 'doc1'},
         //         { doc_name: 'doc2' },

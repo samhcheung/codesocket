@@ -14,17 +14,77 @@ export class LandingContainer extends React.Component {
   	// document.body.style.backgroundColor = 'rgb(30,30,30)'
   	// document.body.style.backgroundColor = 'rgb(13,1132,12)'
   	document.body.style.backgroundColor = 'rgb(38, 38, 38)'
-
-  }
-
-  componentWillReceiveProps(newProps) {
-
   }
   componentDidMount() {
-   
+  	this.type();
   }
 
-  componentWillUnmount() {
+  type() {
+  	console.log('in type')
+  	var context = this;
+	  	context.tagline1.textContent = '|';
+	  	var text1 = 'Real-time collaborative coding';
+	  	var text2 = 'for your engineering team';
+  	var i = 0;
+  	var j = 0;
+
+  	function next1() {
+  		context.tagline1.textContent = context.tagline1.textContent.slice(0, context.tagline1.textContent.length - 1);
+  	  if(i !== text1.length - 1){
+  	  	context.tagline1.textContent += text1[i] + '|';
+  	  } else {
+		context.tagline1.textContent += text1[i];
+  	  }
+
+  	  if(i === 8){
+	  	context.tagline2.textContent = '|';
+  	  	next2();
+  	  }
+
+  	  i++;
+
+  	  if (i < text1.length ) {
+  	    var typing = setTimeout(next1, 100);
+  	  }
+  	  
+  	}
+
+  	function next2() {
+  		context.tagline2.textContent = context.tagline2.textContent.slice(0, context.tagline2.textContent.length - 1);
+  	  if(j !== text2.length - 1){
+  	  	context.tagline2.textContent += text2[j] + '|';
+  	  } else {
+		context.tagline2.textContent += text2[j];
+  	  }
+  	  j++;
+
+  	  if (j < text2.length ) {
+  	    var typing = setTimeout(next2, 100);
+  	  }
+  	  
+  	}
+
+  	next1();
+
+	  	// clearTimeout(typing);
+
+
+  	  //   window.counter++;
+  	  //   var char = Math.floor(Math.random()*10) + '';
+  	  //   var index = Math.floor(Math.random() * (this.props.quill.getText().length -2)) + 1;
+  	  //   console.log('=================GET TEXT', this.props.quill.getText(), this.props.quill.getText().length)
+  	  //   var op = [{retain: index}, {insert: char}];
+  	  //   if(window.counter=== 10) {
+  	  //     window.counter = 0;
+  	  //   }
+  	  //   var op = [{retain: 2}, {insert: ''+window.counter}];
+
+  	  //   console.log('op', op)
+
+  	  //   this.props.quill.updateContents({ops: op}, 'user');
+  	  // }
+  	  // var freq = Math.floor(Math.random()*500 + 300)
+  	  // this.typenow = setInterval(starttyping.bind(this), freq);
   }
 
   render () {
@@ -66,12 +126,15 @@ export class LandingContainer extends React.Component {
     	}
   	  },
   	}
+  	// Real-time collaborative coding
+  	// for your engineering team
     return (
     	<div style={style.body}>
 			<div className="text-center" style={style.body.logo}>CodeSocket</div> 
-			<div className="text-center" style={style.body.tagline}>Real-time collaborative coding 
-			<br></br>
-			for your engineering team
+			<div className="text-center" ref={(c) => this.tagline = c}  style={style.body.tagline}>
+				<div ref={(c) => this.tagline1 = c}></div>
+				<div ref={(c) => this.tagline2 = c}> </div>
+			
 			</div>
 
 			<div className="text-center">
