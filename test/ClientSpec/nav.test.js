@@ -20,6 +20,7 @@ describe('components', function() {
   		);
   		// var header = wrapper.find('div').at(0);
   		wrapper.find('div').at(0).find('#savebutton').simulate('click');
+      console.log('onButtonClick.callCount', onButtonClick.callCount)
   		expect(onButtonClick.callCount).to.not.equal(0);
 
     });

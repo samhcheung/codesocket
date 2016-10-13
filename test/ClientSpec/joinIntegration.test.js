@@ -47,9 +47,9 @@ describe('Get doc list (Redux integration)', () => {
             ]
         }
         const wrapper = getMounted(initialState)
-        console.log('wrapper', wrapper)
+        console.log('find opemodal', wrapper.find('div').at(0).find('div').at(0).find('#openModal').get(0))
 
-        wrapper.find('div').at(0).find('div').at(0).find('#openModal').simulate('click');
+        wrapper.find('#openModal').simulate('click');
         expect(openModalSpy.callCount).to.not.equal(0);
 
         // assertItems(wrapper, [

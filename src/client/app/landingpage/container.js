@@ -47,13 +47,18 @@ export class LandingContainer extends React.Component {
     		"color": "rgb(225, 225, 225)",
     	},
     	cta: {
-		    "margin": 40
-
+		    "margin": 40,
+		    "fontFamily": "Ubuntu",
+	    	"fontSize": 24,
     	},
     	github: {
-    		height:"1.5em",
+    		// height:"1.5em",
+    		// margin: 10
+    		"marginRight": '10px'
     	},
     	valueprops: {
+    		"backgroundColor": "rgb(198, 61, 43)",
+    		"padding": 40,
 	    	"fontSize": 20,
 		    "fontWeight": 300,
 		    "fontFamily": "Ubuntu",
@@ -70,21 +75,32 @@ export class LandingContainer extends React.Component {
 			</div>
 
 			<div className="text-center">
-				<a href="" className="btn btn-default" style={style.body.cta}><span><img src={'../../public/assets/GitHub.png'} alt="img" className="img-responsive" style={style.body.github}/></span><span>Sign in with GitHub</span></a>
+				<a href="" className="btn btn-default" style={style.body.cta}>
+					<i className="fa fa-github fa-1x" style={style.body.github}/>Sign in with GitHub</a>
 			</div>
 
 			<div>
-			<div className="row" style={style.body.valueprops}>
+				<div className="row" style={style.body.valueprops}>
 
-			<div className="col-md-4 text-center"><i className="fa fa-keyboard-o fa-5x" aria-hidden="true"/>
-			<br></br>Robust real-time collaborative editing</div>
-			<div className="col-md-4 text-center"><i className="fa fa-video-camera fa-5x" aria-hidden="true"/>
-			<br></br>Video chat with your coding partner</div>
-			<div className="col-md-4 text-center"><i className="fa fa-laptop fa-5x" aria-hidden="true"/>
-			<br></br>
-			Execute the code in one click</div>
+					<div className="col-md-4 text-center">
+						<i className="fa fa-keyboard-o fa-5x" aria-hidden="true"/>
+						<br></br>
+						Robust real-time collaborative editing
+					</div>
 
-			</div>
+					<div className="col-md-4 text-center">
+						<i className="fa fa-video-camera fa-5x" aria-hidden="true"/>
+						<br></br>
+						Video chat with your coding partner
+					</div>
+
+					<div className="col-md-4 text-center">
+						<i className="fa fa-laptop fa-5x" aria-hidden="true"/>
+						<br></br>
+						Execute the code in one click
+					</div>
+
+				</div>
 			</div>
      	</div>
     );
