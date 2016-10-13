@@ -109,6 +109,27 @@ function fetchrooms(callback){
   })
 }
 
+function fetchMyrooms(req, callback){
+  // db.User.findOne({
+  //   where: {
+  //     user_name: user
+  //   }
+  // })
+  // .then(function(foundUser){
+    console.log('found req', req)
+    console.log('found user', req.user)
+    if(req.user){
+      req.user.getDocs()
+      .then(function(docs){
+        console.log('docs', docs);
+        callback(docs);
+        // res.send(docs);
+      })
+
+    }
+  // })
+}
+
 function checkLogin(req, res, next) {
   // console.log(req.session.passport,'between passport and passportuser' ,req.session.passport.user);
  //  if (req.session.passport !== undefined && req.session.passport.user !== undefined) {
@@ -131,3 +152,5 @@ module.exports.addDoctoUser = addDoctoUser;
 module.exports.addDocToDB = addDocToDB;
 module.exports.saveuser = saveuser;
 module.exports.checkLogin = checkLogin;
+module.exports.fetchMyrooms = fetchMyrooms;
+

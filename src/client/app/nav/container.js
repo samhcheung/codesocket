@@ -180,8 +180,9 @@ export class NavContainer extends React.Component {
     });  
 
     //fetch list of rooms
-    axios.get('/doclist')
+    axios.get('/doclist', {params: {user: context.props.userName}})
     .then(function(docs){
+      console.log('client got docs back', docs)
       context.props.dispatch({
         type: 'UPDATE_DOC_LIST', 
         doclist: docs.data
