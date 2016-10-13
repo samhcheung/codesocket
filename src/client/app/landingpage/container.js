@@ -127,8 +127,12 @@ export class LandingContainer extends React.Component {
     	}
   	  },
   	}
-  	// Real-time collaborative coding
-  	// for your engineering team
+
+		// {!this.props.userName ? <div className="text-center">
+  //         <a href="" className="btn btn-default" style={style.body.cta}>
+  //           <i className="fa fa-github fa-1x" style={style.body.github}/>Sign in with GitHub</a>
+  //       </div>: <div></div>}
+
     return (
     	<div style={style.body}>
 			<div className="text-center" ref={(c) => this.tagline = c}  style={style.body.tagline}>
@@ -174,7 +178,7 @@ export class LandingContainer extends React.Component {
 
 function mapStateToProps(state){
   return {
-    // userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
+    userName: state.userReducer.userName,//<=== shouldnt have to do this...? 
     // myInserts: state.userReducer.myInserts, //<=== shouldnt have to do this...? 
     // socket: state.sessionReducer.socket 
   }
