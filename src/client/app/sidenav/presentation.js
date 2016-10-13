@@ -36,7 +36,6 @@ export const SidePresentation = (props) => {
             {props.doclist && props.doclist.length && props.doclist.map((doc, index) => <li className="doclist" key={index} ><span onClick={e=>props.joinDoc(e)}>#{doc['doc_name']}</span></li>)}
           </ul>
 
-          <button onClick={props.addDoc}>Create New Doc</button>
       </div>
     )
 }

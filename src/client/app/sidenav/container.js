@@ -95,10 +95,10 @@ export class SideContainer extends React.Component {
               alert('Cannot create room because room already exists. Try another name or join the existing room!');
             } else {
               context.saveroom(room, function(roomname){
-                console.log('roommmm', context.props.doclist.concat(roomname.data))
+                console.log('roomname',roomname.data)
                 context.props.dispatch({
                   type: 'UPDATE_DOC_LIST',
-                  doclist: context.props.doclist.concat(roomname.data)
+                  doclist: context.props.doclist.concat(roomname.data[0])
                 })
                 context.saveroomtouser(username, room, function(userroom){
                   console.log('saved user room', userroom);
