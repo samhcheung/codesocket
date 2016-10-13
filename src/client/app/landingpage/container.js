@@ -98,15 +98,16 @@ export class LandingContainer extends React.Component {
 		    "letterSpacing": 1.5,
 		    "fontWeight": 300,
 		    "margin": 40
-	    	
     	},
     	tagline: {
+        "margin": 80,
 	    	"fontSize": 44,
 		    "fontWeight": 300,
 		    "fontFamily": "Ubuntu",
     		"color": "rgb(225, 225, 225)",
     	},
     	cta: {
+        "padding": 10,
 		    "margin": 40,
 		    "fontFamily": "Ubuntu",
 	    	"fontSize": 24,

@@ -3,31 +3,40 @@ import {Link} from 'react-router';
 import Modal from 'react-modal';
 
 const navstyle = {
-  mainheader: {
-    //height:'60px',
-    padding:'15px',
-    background:'rgb(244, 244, 244)'
-  },
+  logo:{
+        "fontSize": 20,
+        "fontFamily": "Fredoka One",
+        "letterSpacing": 1.5,
+        "fontWeight": 300,
+      },
   navbuttons: {
-    'padding':'15px',
-    'backgroundColor': 'rgb(12,12,12)',
-    "marginBottom": '10px',
-    "fontFamily": "Lato, sans-serif",
+    'padding':'20px',
+    'backgroundColor': 'rgb(38, 38, 38)',
+    'borderBottom': '1.5px solid',
+    'borderColor' : 'rgb(80, 80, 80)',
+    "fontFamily": "Ubuntu, sans-serif",
     "color": "rgb(225, 225, 225)",
     "fontSize": 14,
     "fontWeight": 300
+  },
+  loginbutton: {
+    margin: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 15,
+    paddingRight: 15
   }
 }
 export const NavPresentation = (props) => {
     return (
       <div className='loadingscreen'>
         <div className="row" style={navstyle.navbuttons}>
-          <div className="col-sm-2 text-center"><Link >Rooms</Link></div>
+          <div className="col-sm-2 text-center" style={navstyle.logo}><i className="fa fa-code"/> CodeSocket</div>
+          <div className="col-sm-2 text-center"></div>
           <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
           <div className="col-sm-2 text-center" id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
-          <div className="col-sm-2 text-center">History</div>
-          <div className="col-sm-2 text-center"> {props.userName}</div>
-          <div className="col-sm-2 text-center"><Link href="auth/github">Login</Link></div>
+          <div className="col-sm-2 text-center">{props.userName}</div>
+          <div className="col-sm-2 text-center"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
         </div>
         
         <Modal
