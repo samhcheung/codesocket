@@ -4,21 +4,21 @@ import {Link} from 'react-router';
 
 const editorstyle = {
   buttons: {
-    'borderStyle': 'solid',
-    'borderWidth': '1.5px',
-    'borderColor':'rgb(199, 199, 199)',
-    'padding': '10px',
-    'borderRadius': '4px',
-    'margin': '0px 5px 5px 5px',
+    borderStyle: 'solid',
+    borderWidth: '1.5px',
+    borderColor:'rgb(199, 199, 199)',
+    padding: '10px',
+    borderRadius: '4px',
+    margin: '0px 5px 5px 5px',
     // 'zIndex': 5
   },
   editor: {
-    'margin': '5px',
-    'color': 'white',
-    'background': '#222',
-    'fontFamily': 'courier',
-    'borderRadius': '4px',
-    fontSize: '1.5em'
+    margin: '5px',
+    color: 'white',
+    background: '#222',
+    fontFamily: 'courier',
+    borderRadius: '4px',
+    fontSize: '1.25em'
   }
 }
 // 

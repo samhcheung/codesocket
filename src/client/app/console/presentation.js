@@ -12,13 +12,16 @@ const consoleStyle = {
     // 'whiteSpace': 'pre-wrap'
   },
   styling: {
-    listStyle: 'none'
+    listStyle: 'none',
+
   }
 };
 const consoleFrame = {
   // border: '1px solid black',
   marginTop: '10px',
-  marginLeft: '-20px'
+  marginLeft: '-20px',
+  color: 'white',
+  fontSize: '1.1em'
 };
 
 const ConsolePresentation = (props) => {

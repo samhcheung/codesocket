@@ -26,10 +26,11 @@ const otherVideo = {
 };
 const roomLabel = {
   textAlign: 'center',
-  border: '1px solid gray',
   padding: '10px',
   borderRadius: '4px',
-  margin: '0px 0px 12px 0px'
+  margin: '0px 0px 10px 0px',
+  fontSize: '1.25em',
+  color: 'white'
 
 }
 
@@ -41,7 +42,7 @@ const VideoPresentation = (props) => {
   return (
     <div>
       <div style={roomLabel}>
-        RoomName
+        Room: {props.room}
       </div>
       <div id="videos" className="row" style={videoContainer}>
         <video id="localVideo" autoPlay muted style={{...ownVideo, ...mirrorVideo}} className=""></video>
