@@ -15,7 +15,7 @@ export class SideContainer extends React.Component {
     console.log('join doc')
     e.preventDefault();
     var context = this;
-    var room = e.target.textContent;
+    var room = e.target.textContent.slice(1);
     context.props.dispatch({
       type: 'UPDATE_ROOM', 
       room: room
@@ -37,6 +37,7 @@ export class SideContainer extends React.Component {
           userName: username
         });
         context.saveroomtouser(username, room, function(userroom){
+          console.log('in saveroomtouser', room)
           hashHistory.push('/loading');
           hashHistory.push('/doc/' + room);
         })
