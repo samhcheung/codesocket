@@ -6,11 +6,11 @@ const editorstyle = {
   runButton: {
     borderStyle: 'solid',
     borderWidth: '1.5px',
-    borderColor:'rgb(199, 199, 199)',
+    //borderColor:'rgb(199, 199, 199)',
     padding: '10px',
     borderRadius: '4px',
     margin: '0px 5px 5px 5px',
-    background: '#262626',
+    //background: '#262626',
   },
   saveButton: {
     borderStyle: 'solid',

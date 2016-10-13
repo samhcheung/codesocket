@@ -15,7 +15,8 @@ const roomLabel = {
 
 }
 const videoContainer = {
-  'marginTop': '15px'
+  marginTop: '15px',
+  width: '60%'
 };
 const mirrorVideo = {
   transform: 'rotateY(180deg)',
@@ -42,7 +43,7 @@ const VideoPresentation = (props) => {
     <div>
       <div id="videos" className="row" style={videoContainer}>
         <video id="localVideo" autoPlay muted style={{...ownVideo, ...mirrorVideo}} className=""></video>
-        <video id="remoteVideo" autoPlay style={videoStyle} className="col-sm-12" poster="public/video_photo.jpg" ></video>
+        <video id="remoteVideo" autoPlay className="col-sm-12" poster="public/video_photo.jpg" ></video>
       </div>
     </div>
   )

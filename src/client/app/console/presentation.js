@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 
 const consoleStyle = {
   height: { 
-    'height': '65%',
+    'height': '75%',
     overflow: 'auto'
   },
   width: {
