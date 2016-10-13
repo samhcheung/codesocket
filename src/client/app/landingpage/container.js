@@ -36,7 +36,7 @@ export class LandingContainer extends React.Component {
 		context.tagline1.textContent += text1[i];
   	  }
 
-  	  if(i === 5){
+  	  if(i === 8){
 	  	context.tagline2.textContent = '|';
   	  	next2();
   	  }
@@ -44,7 +44,6 @@ export class LandingContainer extends React.Component {
   	  i++;
 
   	  if (i < text1.length ) {
-  	  	console.log('i', i)
   	    var typing = setTimeout(next1, 100);
   	  }
   	  
@@ -60,7 +59,6 @@ export class LandingContainer extends React.Component {
   	  j++;
 
   	  if (j < text2.length ) {
-  	  	console.log('j', j)
   	    var typing = setTimeout(next2, 100);
   	  }
   	  
@@ -135,7 +133,7 @@ export class LandingContainer extends React.Component {
 			<div className="text-center" style={style.body.logo}>CodeSocket</div> 
 			<div className="text-center" ref={(c) => this.tagline = c}  style={style.body.tagline}>
 				<div ref={(c) => this.tagline1 = c}></div>
-				<div ref={(c) => this.tagline2 = c}></div>
+				<div ref={(c) => this.tagline2 = c}> </div>
 			
 			</div>
 
