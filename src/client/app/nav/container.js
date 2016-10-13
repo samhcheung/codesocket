@@ -8,9 +8,6 @@ import querystring from 'querystring';
 
 export class NavContainer extends React.Component {
 
-  static propTypes = {
-  };
-
   constructor (props) {
     super(props);
   }
@@ -175,7 +172,9 @@ export class NavContainer extends React.Component {
 
   openModal() { 
     var context = this;
-    context.props.dispatch({
+    console.log('what is context', context);
+    console.log('what is this:', context.context.store.dispatch)
+    context.context.store.dispatch({
       type: 'DOC_SELECTION_MODAL', 
       modalopen: true
     });  
@@ -210,6 +209,8 @@ export class NavContainer extends React.Component {
     )
   }
 }
+
+NavContainer.contextTypes = { store: React.PropTypes.object }
 
 function mapStateToProps(state){
   return {
