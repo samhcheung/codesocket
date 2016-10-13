@@ -3,21 +3,37 @@ import {Link} from 'react-router';
 
 const consoleStyle = {
   height: { 
-    'maxHeight': '40%',
+    'height': '90%',
     overflow: 'auto'
   },
   width: {
-    'marginRight': '20px'
+    'marginRight': '10px'
+
+    // 'whiteSpace': 'pre-wrap'
+  },
+  styling: {
+    listStyle: 'none',
+
   }
+};
+const consoleFrame = {
+  // border: '1px solid black',
+  marginTop: '0px',
+  paddingTop: '10px',
+  //marginLeft: '-20px',
+  color: 'white',
+  fontSize: '1.1em',
+  //background: '#000'
 };
 
 const ConsolePresentation = (props) => {
     return (
-      <div className='loadingscreen'>
-        <button onClick={e=>props.runCode(e)} id="run">Run the code!</button>
-        <button id="save">Save the code!</button>
-        <div>Console Output:</div>
-        <div id="console" className="ql-editor" style={Object.assign(consoleStyle.height, consoleStyle.width)}></div>
+      <div style={consoleFrame}>
+        <div style={{textAlign: 'center'}}><i className="fa fa-code fa-1x"></i> Javascript Console Output</div>
+        <ul id="console" 
+          className="ql-editor" 
+          style={Object.assign(consoleStyle.height, consoleStyle.width, consoleStyle.styling)}>
+        </ul>
       </div>
       )
 }

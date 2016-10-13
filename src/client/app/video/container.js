@@ -71,7 +71,6 @@ class VideoContainer extends React.Component {
     //room = prompt('Enter room name:');
     var room = this.props.room;
 
-    document.querySelector('#room-name').innerHTML = 'Welcome to room: ' + JSON.stringify(room);
     var socket = this.props.socket;
     //var socket = this.props.socket;
     console.log('socket inside video container', socket);
@@ -440,7 +439,7 @@ class VideoContainer extends React.Component {
     return (
       <div>
         <div className="body-container">
-          <VideoPresentation userName={this.props.userName}/>
+          <VideoPresentation userName={this.props.userName} />
         </div>
       </div>
     )
