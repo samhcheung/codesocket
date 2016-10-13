@@ -9,19 +9,18 @@ const navstyle = {
     background:'rgb(244, 244, 244)'
   },
   navbuttons: {
-    padding:'15px',
-    "borderStyle": 'solid',
-    "borderWidth": '1.5px',
-    "borderColor":'rgb(199, 199, 199)',
-    "marginBottom": '10px'
+    'padding':'15px',
+    'backgroundColor': 'rgb(12,12,12)',
+    "marginBottom": '10px',
+    "fontFamily": "Lato, sans-serif",
+    "color": "rgb(225, 225, 225)",
+    "fontSize": 14,
+    "fontWeight": 300
   }
 }
 export const NavPresentation = (props) => {
     return (
       <div className='loadingscreen'>
-        <div className="row" style={navstyle.mainheader}>
-          <div className="text-center" ><Link to="/">Code Socket</Link></div>
-        </div>
         <div className="row" style={navstyle.navbuttons}>
           <div className="col-sm-2 text-center"><Link >Rooms</Link></div>
           <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>

@@ -6,12 +6,13 @@ import Home from './home/container';
 import DocContainer from './doc/container';
 import { connect } from 'react-redux'
 import LoadingContainer from './loading/container';
+import LandingContainer from './landingpage/container';
 
 
 var routes = (
   <Router history={hashHistory}>
     <Route path='/' component={Home}>
-      <IndexRoute />
+      <IndexRoute component={LandingContainer}/>
       <Route path='/doc' />
       <Route path='/doc/:roomname' component={DocContainer} />
       <Route path='/loading' component={LoadingContainer}/>
