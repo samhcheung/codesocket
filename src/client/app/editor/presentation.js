@@ -15,11 +15,11 @@ const editorstyle = {
   saveButton: {
     borderStyle: 'solid',
     borderWidth: '1.5px',
-    borderColor:'rgb(199, 199, 199)',
+    borderColor: 'rgb(199, 199, 199)',
     padding: '10px',
     borderRadius: '4px',
     margin: '0px 5px 5px 5px',
-    background: '#262626',
+    backgroundColor: '#262626',
     color: 'white'
     // 'zIndex': 5
   },
@@ -30,6 +30,7 @@ const editorstyle = {
     fontFamily: 'courier',
     borderRadius: '4px',
     fontSize: '1.25em'
+
   },
   room: {
     color: 'white',
@@ -42,7 +43,7 @@ const editorstyle = {
 const EditorPresentation = (props) => {
   return (
     <div>
-      <div className="row" style={{paddingTop: '10px'}}>
+      <div className="row" style={{paddingTop: '20px'}}>
         <div style={editorstyle.runButton} 
           className="btn btn-success text-center col-sm-2" 
           onClick={e=>props.runCode(e)} 

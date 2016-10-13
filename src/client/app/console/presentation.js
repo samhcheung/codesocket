@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 
 const consoleStyle = {
   height: { 
-    'height': '75%',
+    'height': '90%',
     overflow: 'auto'
   },
   width: {
@@ -29,7 +29,7 @@ const consoleFrame = {
 const ConsolePresentation = (props) => {
     return (
       <div style={consoleFrame}>
-        <div style={{textAlign: 'center'}}>Javascript Console Output</div>
+        <div style={{textAlign: 'center'}}><i className="fa fa-code fa-1x"></i> Javascript Console Output</div>
         <ul id="console" 
           className="ql-editor" 
           style={Object.assign(consoleStyle.height, consoleStyle.width, consoleStyle.styling)}>

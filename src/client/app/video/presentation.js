@@ -15,8 +15,11 @@ const roomLabel = {
 
 }
 const videoContainer = {
-  marginTop: '15px',
-  width: '60%'
+  margin: '10px',
+  paddingTop: '10px'
+  //border: '2px solid gray',
+  //borderRadius: '10px'
+  //width: '60%'
 };
 const mirrorVideo = {
   transform: 'rotateY(180deg)',
@@ -24,14 +27,18 @@ const mirrorVideo = {
   MozTransform:'rotateY(180deg)' /* Firefox */
 }
 const ownVideo = {
-  right: 15,
-  top: 15,
-  width: '35%',
-  zIndex: 5,
-  position: 'absolute'
+  //right: 15,
+  //top: 15,
+  width: '47%',
+  borderRadius: '10px',
+  marginRight: '5px'
+  //zIndex: 5,
+  //position: 'absolute'
 };
 const otherVideo = {
-
+  width: '47%',
+  borderRadius: '10px',
+  marginLeft: '5px'
 };
 
 // <button id="stop-video">Stop Video Call</button>
@@ -43,7 +50,7 @@ const VideoPresentation = (props) => {
     <div>
       <div id="videos" className="row" style={videoContainer}>
         <video id="localVideo" autoPlay muted style={{...ownVideo, ...mirrorVideo}} className=""></video>
-        <video id="remoteVideo" autoPlay className="col-sm-12" poster="public/video_photo.jpg" ></video>
+        <video id="remoteVideo" autoPlay style={otherVideo}  poster="public/video_photo.jpg" ></video>
       </div>
     </div>
   )

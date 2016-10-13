@@ -84,8 +84,7 @@ export class DocContainer extends React.Component {
         <div className="body-container">
           <div style={{background: '#262626'}}className="row">
             <div className="col-sm-1"></div>
-            <div className="col-sm-6"><EditorContainer /></div>
-            <div className="col-sm-1"></div>
+            <div className="col-sm-7"><EditorContainer /></div>
             <div style={{background: 'black'}} className="col-sm-4">
               <VideoContainer />
               <ConsoleContainer /> 
