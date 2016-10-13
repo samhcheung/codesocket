@@ -200,13 +200,14 @@ export class NavContainer extends React.Component {
 
 
   render() {
-    return(
-      <div>
-        <div className="body-container">
-          <NavPresentation doclist={this.props.doclist} isOpen={this.props.modalopen} openModal= {this.openModal.bind(this)} closeModal= {this.closeModal.bind(this)} addDoc={this.addDoc.bind(this)} joinDoc={this.joinDoc.bind(this)} userName={this.props.userName}/>
+      return(
+        <div>
+          <div className="body-container">
+            <NavPresentation doclist={this.props.doclist} isOpen={this.props.modalopen} openModal= {this.openModal.bind(this)} closeModal= {this.closeModal.bind(this)} addDoc={this.addDoc.bind(this)} joinDoc={this.joinDoc.bind(this)} userName={this.props.userName}/>
+          </div>
         </div>
-      </div>
-    )
+      )
+
   }
 }
 
