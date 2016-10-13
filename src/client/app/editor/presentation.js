@@ -21,20 +21,31 @@ const editorstyle = {
     fontSize: '1.25em'
   }
 }
-// 
+
 // <div className="text-center col-sm-3"></div>
 const EditorPresentation = (props) => {
-    return (
-      <div>
-        <div className="row" style={{marginLeft: '-25px'}}>
-          <div className="text-center col-sm-2"></div>
-          <div style={editorstyle.buttons} className="btn btn-default text-center col-sm-4" onClick={e=>props.runCode(e)} id="run" >Run</div>
-          <div style={editorstyle.buttons} className="btn btn-default text-center col-sm-4" onClick={e=>props.saveCode(e)} id="savebutton" >Save</div>
-          <div className="text-center col-sm-2"></div>
+  return (
+    <div>
+      <div className="row" style={{marginLeft: '0px'}}>
+        <div style={editorstyle.buttons} 
+          className="btn btn-default text-center col-sm-2" 
+          onClick={e=>props.runCode(e)} 
+          id="run" >
+          <i className="fa fa-play fa-1x"></i>
+          <span> Run</span>
         </div>
-        <div id="editor" spellCheck="false" style={editorstyle.editor} className="row"></div>
+        <div style={editorstyle.buttons} 
+          className="btn btn-default text-center col-sm-2" 
+          onClick={e=>props.saveCode(e)} 
+          id="savebutton" >
+          <i className="fa fa-floppy-o fa-1x"></i>
+          <span> Save</span>
+        </div>
+        <div className="text-center col-sm-8"></div>
       </div>
-      )
-}
+      <div id="editor" spellCheck="false" style={editorstyle.editor} className="row"></div>
+    </div>
+  );
+};
 
 export default EditorPresentation;

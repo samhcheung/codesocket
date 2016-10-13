@@ -5,6 +5,15 @@ const videoStyle = {
   //width: '50%'
 }
 
+const roomLabel = {
+  textAlign: 'center',
+  padding: '10px',
+  borderRadius: '4px',
+  margin: '0px 0px 8px 0px',
+  fontSize: '1.25em',
+  color: 'white'
+
+}
 const videoContainer = {
   
   'marginLeft': '-35px'
@@ -16,23 +25,14 @@ const mirrorVideo = {
 }
 const ownVideo = {
   right: 15,
-  top: 55,
-  width: '30%',
+  top: 53,
+  width: '35%',
   zIndex: 5,
   position: 'absolute'
 };
 const otherVideo = {
 
 };
-const roomLabel = {
-  textAlign: 'center',
-  padding: '10px',
-  borderRadius: '4px',
-  margin: '0px 0px 10px 0px',
-  fontSize: '1.25em',
-  color: 'white'
-
-}
 
 // <button id="stop-video">Stop Video Call</button>
 // <button id="call-video">Start Video Call</button>

@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 
 const consoleStyle = {
   height: { 
-    'height': '60%',
+    'height': '65%',
     overflow: 'auto'
   },
   width: {
@@ -18,10 +18,12 @@ const consoleStyle = {
 };
 const consoleFrame = {
   // border: '1px solid black',
-  marginTop: '10px',
+  marginTop: '0px',
+  paddingTop: '10px',
   marginLeft: '-20px',
   color: 'white',
-  fontSize: '1.1em'
+  fontSize: '1.1em',
+  background: '#000'
 };
 
 const ConsolePresentation = (props) => {
