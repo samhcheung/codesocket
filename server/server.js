@@ -159,7 +159,11 @@ app.get('/', function(req, res) {
 app.get('/doclist', function(req, res) {
   console.log('yooo----', req.user, '<=== req.user from doclist in server.js');
   helper.fetchMyrooms(req, function(docs){
-    res.send(docs);
+    if(docs){
+      res.send(docs);
+    } else {
+      res.send(null);
+    }
   })
 })
 

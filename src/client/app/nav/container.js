@@ -183,10 +183,14 @@ export class NavContainer extends React.Component {
     axios.get('/doclist', {params: {user: context.props.userName}})
     .then(function(docs){
       console.log('client got docs back', docs)
-      context.props.dispatch({
-        type: 'UPDATE_DOC_LIST', 
-        doclist: docs.data
-      });
+      if(docs.data.length) {
+        context.props.dispatch({
+          type: 'UPDATE_DOC_LIST', 
+          doclist: docs.data
+        });
+      } else {
+        console.log('nothing in doclist')
+      }
     })
 
 

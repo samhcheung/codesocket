@@ -110,24 +110,15 @@ function fetchrooms(callback){
 }
 
 function fetchMyrooms(req, callback){
-  // db.User.findOne({
-  //   where: {
-  //     user_name: user
-  //   }
-  // })
-  // .then(function(foundUser){
-    console.log('found req', req)
-    console.log('found user', req.user)
     if(req.user){
       req.user.getDocs()
       .then(function(docs){
         console.log('docs', docs);
         callback(docs);
-        // res.send(docs);
       })
-
+    } else {
+      callback(null);
     }
-  // })
 }
 
 function checkLogin(req, res, next) {

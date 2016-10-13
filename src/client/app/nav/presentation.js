@@ -95,6 +95,7 @@ export const NavPresentation = (props) => {
           onRequestClose={props.closeModal}
         >
           <h1>Document List</h1>
+          {props.doclist && props.doclist.length === 0 && <div>You do not have any documents. Click Create New Doc button below to get started.</div>}
           {props.doclist && props.doclist.map((doc, index) => <li className="doclist" key={index} ><span onClick={e=>props.joinDoc(e)}>{doc['doc_name']}</span></li>)}
           <button onClick={props.closeModal}>Close</button>
           <button onClick={props.addDoc}>Create New Doc</button>
