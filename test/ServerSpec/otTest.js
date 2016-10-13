@@ -10,7 +10,7 @@ const options = {
 };
 var {oTransform} = require('../../src/client/app/utils/otransform.js');
 
-
+console.log('otransform', oTransform)
 
 describe('Socket.io', () => {
   var socket;

@@ -465,12 +465,14 @@ io.on('connection', function(socket){
 
       // docExists(socket.id, room, function(exists){
       //   if(exists){
+        console.log('before findone. room:', room)
       db.Doc.findOne({where: {
         doc_name: room
       }})
       .then(function(doc) {
         //console.log('found doc', doc)
-        if (JSON.parse(doc['doc_content'])) {
+        console.log('doc-----------------', doc)
+        if (doc && JSON.parse(doc['doc_content'])) {
           serverState[room] = JSON.parse(doc['doc_content'])[0].insert;
         }
         io.to(socket.id).emit('found latest doc', doc);
