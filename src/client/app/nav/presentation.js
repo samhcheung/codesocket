@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import {Link} from 'react-router';
 import Modal from 'react-modal';
 
+
 const navstyle = {
   logo:{
     "fontSize": 22,
@@ -47,22 +48,7 @@ const navstyle = {
   }
 
 }
-          // <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
-          // <div className="col-sm-2 text-center" id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
-          // <div className="col-sm-2 text-center">{props.userName}</div>
-          // <div className="col-sm-2 text-center"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
 
-
-          // <div className="row" style={navstyle.navcontainer}>
-          //   <div className="row" style={navstyle.navbuttons}>
-          //     <div className="col-sm-2 text-center" style={navstyle.logo}><i className="fa fa-code"/> CodeSocket</div>
-          //     <div className="col-sm-2 text-center"></div>
-          //     <div className="col-sm-2 text-center" onClick={e=>props.addDoc(e)}>Add New Doc</div>
-          //     <div className="col-sm-2 text-center" id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
-          //     <div className="col-sm-2 text-center">{props.userName}</div>
-          //     <div className="col-sm-2 text-center"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
-          //   </div>
-          // </div>
 export const NavPresentation = (props) => {
     return (
       <div className='loadingscreen'>
@@ -96,13 +82,13 @@ export const NavPresentation = (props) => {
         >
           <h1>Document List</h1>
           {props.doclist && props.doclist.length === 0 && <div>You do not have any documents. Click Create New Doc button below to get started.</div>}
-          {props.doclist && props.doclist.map((doc, index) => <li className="doclist" key={index} ><span onClick={e=>props.joinDoc(e)}>{doc['doc_name']}</span></li>)}
+          {props.doclist && props.doclist.length && props.doclist.map((doc, index) => <li className="doclist" key={index} ><span onClick={e=>props.joinDoc(e)}>{doc['doc_name']}</span></li>)}
           <button onClick={props.closeModal}>Close</button>
           <button onClick={props.addDoc}>Create New Doc</button>
         </Modal>
-        </div>
-      )
   
+      </div>
+    )
 }
 
 export default NavPresentation;
