@@ -40,8 +40,11 @@ export class LandingContainer extends React.Component {
 		context.tagline1.textContent += text1[i];
   	  }
 
-  	  if(i === 9){
-	  	context.tagline2.textContent = '|';
+  	  if(i === 10){
+        var parent = document.getElementById("taglineParent");
+        var child = document.getElementById("filler");
+        parent.removeChild(child);
+	  	  context.tagline2.textContent = '|';
   	  	next2();
   	  }
 
@@ -118,9 +121,10 @@ export class LandingContainer extends React.Component {
 
     return (
     	<div style={style.body}>
-			<div className="text-center" ref={(c) => this.tagline = c}  style={style.body.tagline}>
+			<div id="taglineParent" className="text-center" ref={(c) => this.tagline = c}  style={style.body.tagline}>
 				<div ref={(c) => this.tagline1 = c}></div>
 				<div ref={(c) => this.tagline2 = c}></div>
+        <br id="filler"></br>
 			</div>
 
       {!this.props.userName && 
@@ -150,7 +154,7 @@ export class LandingContainer extends React.Component {
     					<div className="col-md-4 text-center">
     						<i className="fa fa-laptop fa-5x" aria-hidden="true"/>
     						<br></br>
-    						Execute the code in one click
+    						Execute the code in the same view
     					</div>
 
     				</div>
