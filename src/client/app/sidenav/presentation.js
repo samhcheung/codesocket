@@ -16,8 +16,13 @@ const style = {
   title: {
     "marginTop": 0,
     "marginBottom": 0,
-    "fontSize": '1.25em',
-    "padding": 10,
+    "marginLeft": 0,
+    "marginRight": 0,
+    "fontSize": '1em',
+    "paddingLeft": 15 ,
+    "paddingRight": 15 ,
+    "paddingBottom": 10 ,
+    "paddingTop": 10 ,
     // "borderLeft": '3px solid',
     //"borderColor": 'rgb(198, 61, 43)',
     "color": "rgb(155, 155, 155)",
@@ -26,11 +31,16 @@ const style = {
   list: {
     "listStyleType": "none",
     "backgroundColor": 'rgb(50, 50, 50)',
+    margin: 0,
+    marginTop: 10,
+    paddingLeft: 15
   },
-  doclist: {
+  doclistitem: {
     "cursor": 'pointer',
-    "padding": "5px",
+    "paddingTop": "5px",
+    "paddingBottom": "5px",
     "color": "rgb(225, 225, 225)",
+    overflow: 'auto'
   },
   button: {
     "border": "none",
@@ -45,13 +55,13 @@ export const SidePresentation = (props) => {
     return (
       <div className='loadingscreen' style={style}>
   
-          <h1 className="text-center" style={style.title}>Your Projects  <button onClick={(e)=>{props.addDoc(e)}} style={style.button}><i className="fa fa-plus-circle" aria-hidden="true"></i></button>
+          <div className="" style={style.title}>Your Projects  <button onClick={(e)=>{props.addDoc(e)}} style={style.button}><i className="fa fa-plus-circle" aria-hidden="true"></i></button>
 
-          </h1>
+          </div>
           {props.doclist && props.doclist.length === 0 && <div>You do not have any projects. Click Create New Doc button below to get started.</div>}
           
           <ul style={style.list}>
-            {props.doclist && props.doclist.length && props.doclist.map((doc, index) => <li style={style.doclist} className="doclist" key={index} ><span onClick={e=>props.joinDoc(e)}>#{doc['doc_name']}</span></li>)}
+            {props.doclist && props.doclist.length && props.doclist.map((doc, index) => <li style={style.doclistitem} className="doclist" key={index} ><span onClick={e=>props.joinDoc(e)}>#{doc['doc_name']}</span></li>)}
           </ul>
 
       </div>

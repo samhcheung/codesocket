@@ -21,14 +21,15 @@ export class LandingContainer extends React.Component {
   type(text) {
   	console.log('in type')
   	var context = this;
-	  	context.tagline1.textContent = '|';
-      var text1 = text[0];
-      var text2 = text[1];
+    context.tagline1.textContent = '|';
+    var text1 = text[0];
+    var text2 = text[1];
     var i = 0;
     var j = 0;
 
     function next1() {
       //console.log('context', context.tagline1)
+      if(context.tagline1) {
   		context.tagline1.textContent = context.tagline1.textContent.slice(0, context.tagline1.textContent.length - 1);
   	  if(i !== text1.length - 1){
   	  	context.tagline1.textContent += text1[i] + '|';
@@ -49,7 +50,7 @@ export class LandingContainer extends React.Component {
   	  if (i < text1.length ) {
   	    var typing = setTimeout(next1, 100);
   	  }
-  	  
+  	  }
   	}
 
   	function next2() {
