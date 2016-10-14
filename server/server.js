@@ -158,7 +158,7 @@ app.get('/', function(req, res) {
 
 app.get('/doclist', function(req, res) {
   console.log('yooo----', req.user, '<=== req.user from doclist in server.js');
-  helper.fetchMyrooms(req, function(docs){
+  helper.fetchrooms(req, function(docs){
     if(docs){
       res.send(docs);
     } else {
