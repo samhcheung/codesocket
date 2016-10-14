@@ -5,6 +5,7 @@ import NavPresentation from './presentation'
 import axios from 'axios'
 import Modal from 'react-modal';
 import querystring from 'querystring';
+import LandingContainer from '../landingpage/container';
 
 export class NavContainer extends React.Component {
 
@@ -180,12 +181,17 @@ export class NavContainer extends React.Component {
     });  
 
     //fetch list of rooms
-    axios.get('/doclist')
+    axios.get('/doclist', {params: {user: context.props.userName}})
     .then(function(docs){
-      context.props.dispatch({
-        type: 'UPDATE_DOC_LIST', 
-        doclist: docs.data
-      });
+      console.log('client got docs back', docs)
+      if(docs.data.length) {
+        context.props.dispatch({
+          type: 'UPDATE_DOC_LIST', 
+          doclist: docs.data
+        });
+      } else {
+        console.log('nothing in doclist')
+      }
     })
 
 
@@ -206,8 +212,7 @@ export class NavContainer extends React.Component {
             <NavPresentation doclist={this.props.doclist} isOpen={this.props.modalopen} openModal= {this.openModal.bind(this)} closeModal= {this.closeModal.bind(this)} addDoc={this.addDoc.bind(this)} joinDoc={this.joinDoc.bind(this)} userName={this.props.userName}/>
           </div>
         </div>
-      )
-
+    )
   }
 }
 

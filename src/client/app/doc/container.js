@@ -76,6 +76,15 @@ export class DocContainer extends React.Component {
     //   socket: null
     // });
   }
+      // <Sidebar sidebar={<li>heyy</li>}
+      //     open={true}
+      //     docked = {true}
+      //     // onSetOpen={this.onSetSidebarOpen}
+      //     >
+      //   <b>ntMain coent 
+        // </b>
+      
+      // </Sidebar>
 
   render () {
 
@@ -97,6 +106,7 @@ export class DocContainer extends React.Component {
             </div>
           </div>
         </div>
+
       </div>
     );
 

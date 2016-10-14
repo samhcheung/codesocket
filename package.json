@@ -50,6 +50,7 @@
     "react-modal": "^1.4.0",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
+    "react-sidebar": "^2.2.1",
     "redis": "^2.6.2",
     "redux": "^3.6.0",
     "require": "^2.4.20",

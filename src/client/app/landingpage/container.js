@@ -137,7 +137,7 @@ export class LandingContainer extends React.Component {
     	<div style={style.body}>
 			<div className="text-center" ref={(c) => this.tagline = c}  style={style.body.tagline}>
 				<div ref={(c) => this.tagline1 = c}></div>
-				<div ref={(c) => this.tagline2 = c}> </div>
+				<div ref={(c) => this.tagline2 = c}></div>
 			
 			</div>
   			<div className="text-center">
