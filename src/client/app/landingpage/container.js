@@ -16,15 +16,19 @@ export class LandingContainer extends React.Component {
   	document.body.style.backgroundColor = 'rgb(38, 38, 38)'
   }
   componentDidMount() {
-  	this.type();
+  	if(!this.props.userName){
+      this.type(['Real-time collaborative coding', 'for your engineering team']);
+    } else {
+      this.type(['Welcome to CodeSocket,', this.props.userName])
+    }
   }
 
-  type() {
+  type(text) {
   	console.log('in type')
   	var context = this;
 	  	context.tagline1.textContent = '|';
-	  	var text1 = 'Real-time collaborative coding';
-	  	var text2 = 'for your engineering team';
+	  	var text1 = text[0];
+	  	var text2 = text[1];
   	var i = 0;
   	var j = 0;
 
@@ -36,7 +40,7 @@ export class LandingContainer extends React.Component {
 		context.tagline1.textContent += text1[i];
   	  }
 
-  	  if(i === 8){
+  	  if(i === 9){
 	  	context.tagline2.textContent = '|';
   	  	next2();
   	  }
