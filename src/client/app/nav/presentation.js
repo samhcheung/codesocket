@@ -48,6 +48,8 @@ const navstyle = {
   }
 
 }
+            // <div className="pull-right" style={navstyle.eachnavbutton} id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
+            // <div className="pull-right" style={navstyle.eachnavbutton} onClick={e=>props.addDoc(e)}>Add New Doc</div>
 
 export const NavPresentation = (props) => {
     return (
@@ -59,8 +61,6 @@ export const NavPresentation = (props) => {
             {!props.userName ? <div className="pull-right"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
             : <div className="pull-right"><a href="logout" className="" style={navstyle.loginbutton}>Logout</a></div>}
             <div className="pull-right" style={navstyle.eachnavbutton}>{props.userName}</div>
-            <div className="pull-right" style={navstyle.eachnavbutton} id="openModal" onClick={e=>props.openModal(e)}>Work on Existing Doc</div>
-            <div className="pull-right" style={navstyle.eachnavbutton} onClick={e=>props.addDoc(e)}>Add New Doc</div>
           </div>
         </div>
       </div>

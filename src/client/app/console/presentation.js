@@ -21,7 +21,7 @@ const consoleFrame = {
   marginTop: '0px',
   paddingTop: '10px',
   //marginLeft: '-20px',
-  color: 'white',
+  color: "rgb(155, 155, 155)",
   fontSize: '1.1em',
   //background: '#000'
 };

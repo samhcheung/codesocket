@@ -36,7 +36,8 @@ const editorstyle = {
   room: {
     // 'borderBottom': '1px solid',
     // 'borderColor' : 'rgb(80, 80, 80)',
-    color: 'white',
+    padding:5,
+    "color": "rgb(155, 155, 155)",
     fontSize: '1.25em'
   }
 }

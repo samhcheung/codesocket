@@ -10,11 +10,6 @@ export class LandingContainer extends React.Component {
     super(props);
   }
 
-  componentWillMount() {
-  	// document.body.style.backgroundColor = 'rgb(30,30,30)'
-  	// document.body.style.backgroundColor = 'rgb(13,1132,12)'
-  	document.body.style.backgroundColor = 'rgb(38, 38, 38)'
-  }
   componentDidMount() {
   	if(!this.props.userName){
       this.type(['Real-time collaborative coding', 'for your engineering team']);
@@ -27,12 +22,13 @@ export class LandingContainer extends React.Component {
   	console.log('in type')
   	var context = this;
 	  	context.tagline1.textContent = '|';
-	  	var text1 = text[0];
-	  	var text2 = text[1];
-  	var i = 0;
-  	var j = 0;
+      var text1 = text[0];
+      var text2 = text[1];
+    var i = 0;
+    var j = 0;
 
-  	function next1() {
+    function next1() {
+      //console.log('context', context.tagline1)
   		context.tagline1.textContent = context.tagline1.textContent.slice(0, context.tagline1.textContent.length - 1);
   	  if(i !== text1.length - 1){
   	  	context.tagline1.textContent += text1[i] + '|';
