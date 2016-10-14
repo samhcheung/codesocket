@@ -4,13 +4,17 @@ import Modal from 'react-modal';
 
 
 const style = {
+  "height":'93%',
   "fontFamily": "Ubuntu",
-  "backgroundColor": "rgb(198, 61, 43)",
+  //"backgroundColor": "rgb(198, 61, 43)",
+  "backgroundColor": 'rgb(80, 80, 80)',
   "margin": 0,
   "padding": 0,
   "color": "white",
+  "borderRight": '1px solid',
+  "borderColor": 'rgb(80, 80, 80)',
   title: {
-    "margin": 20,
+    "margin": 0,
     "fontSize": 16,
   },
   list: {
@@ -18,7 +22,8 @@ const style = {
   },
   button: {
     "border": "none",
-    "backgroundColor": "rgb(198, 61, 43)"
+    "backgroundColor": "rgb(198, 61, 43)",
+    "backgroundColor": "rgb(80, 80, 80)"
   }
 }
 

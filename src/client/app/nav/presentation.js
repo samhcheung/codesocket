@@ -20,7 +20,7 @@ const navstyle = {
   },
   navcontainer: {
     'lineHeight': '70px',
-    'backgroundColor': 'rgb(38, 38, 38)',
+    'backgroundColor': 'rgb(28, 28, 28)',
     'marginLeft': 60,
     'marginRight': 60
   },
@@ -54,7 +54,7 @@ export const NavPresentation = (props) => {
       <div className='loadingscreen'>
       <div style={navstyle.topheader} className="row">
         <div className="" style={navstyle.navcontainer}>
-          <a href="/" style={navstyle.logo}><i className="fa fa-code"/> CodeSocket</a>
+          <a href="/#" style={navstyle.logo}><i className="fa fa-code"/> CodeSocket</a>
           <div className="pull-right" style={navstyle.navbuttons}>
             {!props.userName ? <div className="pull-right"><a href="auth/github" className="" style={navstyle.loginbutton}>Login</a></div>
             : <div className="pull-right"><a href="logout" className="" style={navstyle.loginbutton}>Logout</a></div>}

@@ -10,7 +10,11 @@ export class HomeContainer extends React.Component {
   constructor (props) {
     super(props);
   }
-
+  componentWillMount() {
+    // document.body.style.backgroundColor = 'rgb(30,30,30)'
+    // document.body.style.backgroundColor = 'rgb(13,1132,12)'
+    document.body.style.backgroundColor = 'rgb(28, 28, 28)'
+  }
   render() {
     return (
       <div>

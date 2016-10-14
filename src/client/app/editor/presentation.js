@@ -9,7 +9,7 @@ const editorstyle = {
     //borderColor:'rgb(199, 199, 199)',
     padding: '10px',
     borderRadius: '4px',
-    margin: '0px 5px 5px 5px',
+    // margin: '0px 5px 5px 5px',
     //background: '#262626',
   },
   saveButton: {
@@ -18,7 +18,7 @@ const editorstyle = {
     borderColor: 'rgb(199, 199, 199)',
     padding: '10px',
     borderRadius: '4px',
-    margin: '0px 5px 5px 5px',
+    // margin: '0px 5px 5px 5px',
     backgroundColor: '#262626',
     color: 'white'
     // 'zIndex': 5
@@ -27,15 +27,17 @@ const editorstyle = {
     margin: '5px',
     color: 'white',
     //background: '#222',
+    height: '75%',
     fontFamily: 'courier',
     borderRadius: '4px',
     fontSize: '1.25em'
 
   },
   room: {
+    // 'borderBottom': '1px solid',
+    // 'borderColor' : 'rgb(80, 80, 80)',
     color: 'white',
-    fontSize: '1.25em',
-    margin: '8px 0px 0px 0px'
+    fontSize: '1.25em'
   }
 }
 
@@ -43,26 +45,28 @@ const editorstyle = {
 const EditorPresentation = (props) => {
   return (
     <div>
+      <div className="row text-center " style={editorstyle.room}>Room: {props.room}</div>
       <div className="row" style={{paddingTop: '20px'}}>
-        <div style={editorstyle.runButton} 
-          className="btn btn-success text-center col-sm-2" 
-          onClick={e=>props.runCode(e)} 
-          id="run" >
-          <i className="fa fa-play fa-1x"></i>
-          <span> Run</span>
+        <div className="col-sm-3"></div>
+        <div className="col-sm-6">
+          <div style={editorstyle.runButton} 
+            className="btn btn-success text-center col-sm-5" 
+            onClick={e=>props.runCode(e)} 
+            id="run" >
+            <i className="fa fa-play fa-1x"></i>
+            <span> Run</span>
+          </div>
+          <div className="col-sm-2"></div>
+          <div style={editorstyle.saveButton} 
+            className="btn btn-success text-center col-sm-5" 
+            onClick={e=>props.saveCode(e)} 
+            id="savebutton" >
+            <i className="fa fa-floppy-o fa-1x"></i>
+            <span> Save</span>
+          </div>
         </div>
-        <div style={editorstyle.saveButton} 
-          className="btn btn-success text-center col-sm-2" 
-          onClick={e=>props.saveCode(e)} 
-          id="savebutton" >
-          <i className="fa fa-floppy-o fa-1x"></i>
-          <span> Save</span>
-        </div>
-        <div style={editorstyle.room} className="text-center col-sm-7">
-          <span>
-            You are in room: {props.room}
-          </span>
-        </div>
+
+        <div className="col-sm-3"></div>
       </div>
       <div id="editor" spellCheck="false" style={editorstyle.editor} className="row"></div>
     </div>

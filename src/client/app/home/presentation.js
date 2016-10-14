@@ -13,7 +13,7 @@ const HomePresentation = (props) => {
         {
           props.user ?
           <div className="row">
-            <div className="col-sm-2">
+            <div className="col-sm-2" style={{padding:0}}>
             <SideNav />
             </div>
 
