@@ -54,37 +54,16 @@ export class LandingContainer extends React.Component {
   	  if(j !== text2.length - 1){
   	  	context.tagline2.textContent += text2[j] + '|';
   	  } else {
-		context.tagline2.textContent += text2[j];
+		    context.tagline2.textContent += text2[j];
   	  }
+
   	  j++;
 
   	  if (j < text2.length ) {
   	    var typing = setTimeout(next2, 100);
   	  }
-  	  
   	}
-
   	next1();
-
-	  	// clearTimeout(typing);
-
-
-  	  //   window.counter++;
-  	  //   var char = Math.floor(Math.random()*10) + '';
-  	  //   var index = Math.floor(Math.random() * (this.props.quill.getText().length -2)) + 1;
-  	  //   console.log('=================GET TEXT', this.props.quill.getText(), this.props.quill.getText().length)
-  	  //   var op = [{retain: index}, {insert: char}];
-  	  //   if(window.counter=== 10) {
-  	  //     window.counter = 0;
-  	  //   }
-  	  //   var op = [{retain: 2}, {insert: ''+window.counter}];
-
-  	  //   console.log('op', op)
-
-  	  //   this.props.quill.updateContents({ops: op}, 'user');
-  	  // }
-  	  // var freq = Math.floor(Math.random()*500 + 300)
-  	  // this.typenow = setInterval(starttyping.bind(this), freq);
   }
 
   render () {
@@ -138,43 +117,49 @@ export class LandingContainer extends React.Component {
 			<div className="text-center" ref={(c) => this.tagline = c}  style={style.body.tagline}>
 				<div ref={(c) => this.tagline1 = c}></div>
 				<div ref={(c) => this.tagline2 = c}></div>
-			
 			</div>
-  			<div className="text-center">
-  				<a href="auth/github" className="btn btn-default" style={style.body.cta}>
-  					<i className="fa fa-github fa-1x" style={style.body.github}/>Sign in with GitHub</a>
-  			</div>
 
-  			<div>
-  				<div className="row" style={style.body.valueprops}>
+      {!this.props.userName && 
+        <div>
+    			<div className="text-center">
+    				<a href="auth/github" className="btn btn-default" style={style.body.cta}>
+    					<i className="fa fa-github fa-1x" style={style.body.github}/>Sign in with GitHub
+            </a>
+    			</div>
+       
 
-  					<div className="col-md-4 text-center">
-  						<i className="fa fa-keyboard-o fa-5x" aria-hidden="true"/>
-  						<br></br>
-  						Robust real-time collaborative editing
-  					</div>
+    			<div>
+    				<div className="row" style={style.body.valueprops}>
 
-  					<div className="col-md-4 text-center">
-  						<i className="fa fa-video-camera fa-5x" aria-hidden="true"/>
-  						<br></br>
-  						Video chat with your coding partner
-  					</div>
+    					<div className="col-md-4 text-center">
+    						<i className="fa fa-keyboard-o fa-5x" aria-hidden="true"/>
+    						<br></br>
+    						Robust real-time collaborative editing
+    					</div>
 
-  					<div className="col-md-4 text-center">
-  						<i className="fa fa-laptop fa-5x" aria-hidden="true"/>
-  						<br></br>
-  						Execute the code in one click
-  					</div>
+    					<div className="col-md-4 text-center">
+    						<i className="fa fa-video-camera fa-5x" aria-hidden="true"/>
+    						<br></br>
+    						Video chat with your coding partner
+    					</div>
 
-  				</div>
-  			</div>
-     	</div>
+    					<div className="col-md-4 text-center">
+    						<i className="fa fa-laptop fa-5x" aria-hidden="true"/>
+    						<br></br>
+    						Execute the code in one click
+    					</div>
+
+    				</div>
+    			</div>
+        </div>
+
+         } 
+         </div>
     );
 
   }
 }
 
-//export default DocContainer;
 
 function mapStateToProps(state){
   return {
