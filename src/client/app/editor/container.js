@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import EditorPresentation from './presentation'
 import axios from 'axios'
 var Quill = require('quill');
-import {oTransform as oTransform} from '../utils/otransform.js'
+var {oTransform} = require('../utils/otransform.js')
 
 export class EditorContainer extends React.Component {
 
@@ -240,7 +240,8 @@ export class EditorContainer extends React.Component {
             var inflightString = JSON.stringify(context.props.inFlightOp);
             var inflight = JSON.parse(inflightString)
 
-            oTransform(transformedOp, inflight, function(newTransformedOp, newBridge){
+            
+            (transformedOp, inflight, function(newTransformedOp, newBridge){
 
               context.props.dispatch({
                 type: 'UPDATE_INCOMINGOP', 
