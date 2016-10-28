@@ -240,8 +240,7 @@ export class EditorContainer extends React.Component {
             var inflightString = JSON.stringify(context.props.inFlightOp);
             var inflight = JSON.parse(inflightString)
 
-            
-            (transformedOp, inflight, function(newTransformedOp, newBridge){
+            oTransform(transformedOp, inflight, function(newTransformedOp, newBridge){
 
               context.props.dispatch({
                 type: 'UPDATE_INCOMINGOP', 
